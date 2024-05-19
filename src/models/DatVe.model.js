@@ -3,7 +3,6 @@ export class DatVe {
   danhSachVe = [];
   tenCumRap = "";
   tenPhim = "";
-  tenRap = "";
   ngayChieu = "";
   gioChieu = "";
   hinhAnh = "";

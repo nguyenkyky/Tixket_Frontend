@@ -262,7 +262,6 @@ function Checkout(props) {
                 thongTinDatVe.ngayChieu = thongTinPhim?.ngayChieu;
                 thongTinDatVe.tenCumRap = thongTinPhim?.tenCumRap;
                 thongTinDatVe.tenPhim = thongTinPhim?.tenPhim;
-                thongTinDatVe.tenRap = thongTinPhim?.tenRap;
                 thongTinDatVe.hinhAnh = thongTinPhim?.hinhAnh;
                 thongTinDatVe.tongTien = tongTien;
                 console.log("thongTinDatVe", thongTinDatVe);
