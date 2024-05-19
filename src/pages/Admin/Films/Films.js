@@ -1,0 +1,226 @@
+import React, { Fragment } from "react";
+import { Button, Table, Modal } from "antd";
+import {
+  AudioOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  CalendarOutlined,
+} from "@ant-design/icons";
+import { Input, Space } from "antd";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import {
+  layDanhSachPhimAction,
+  xoaPhimAction,
+  timKiemPhimAction,
+} from "../../../redux/actions/QuanLyPhimAction";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+function Films(props) {
+  const navigate = useNavigate();
+  const { Search } = Input;
+  const { arrFilmDefault } = useSelector((state) => state.QuanLyPhimReducer);
+
+  const onSearch = (value) => {
+    dispatch(timKiemPhimAction(value));
+  };
+
+  const handleDelete = (film) => {
+    Modal.confirm({
+      title: `Bạn có chắc muốn xóa phim ${film.tenPhim}?`,
+      okText: "Đồng ý",
+      okType: "danger",
+      cancelText: "Hủy",
+      onOk: () => {
+        dispatch(xoaPhimAction(film.maPhim));
+        toast.success(`Đã xóa phim ${film.tenPhim} thành công!`);
+      },
+    });
+  };
+  const columns = [
+    {
+      title: "Mã Phim",
+      dataIndex: "maPhim",
+      sorter: (a, b) => a.maPhim - b.maPhim,
+      // sortDirections: ["descend"],
+      defaultSortOrder: "descend",
+      width: "10%",
+    },
+    {
+      title: "Tên Phim",
+      dataIndex: "tenPhim",
+      width: "15%",
+
+      filters: [
+        {
+          text: "Joe",
+          value: "Joe",
+        },
+        {
+          text: "Jim",
+          value: "Jim",
+        },
+        {
+          text: "Submenu",
+          value: "Submenu",
+          children: [
+            {
+              text: "Green",
+              value: "Green",
+            },
+            {
+              text: "Black",
+              value: "Black",
+            },
+          ],
+        },
+      ],
+      onFilter: (value, record) => record.tenPhim.indexOf(value) === 0,
+      sorter: (a, b) => {
+        let phimA = a.tenPhim.toLowerCase().trim();
+        let phimB = b.tenPhim.toLowerCase().trim();
+        if (phimA > phimB) {
+          return 1;
+        }
+        return -1;
+      },
+    },
+    {
+      title: "Diễn viên",
+      dataIndex: "dienVien",
+      width: "10%",
+
+      render: (text, film) => {
+        const dienVienStr = film.dienVien.join(", ");
+        return (
+          <Fragment>
+            {dienVienStr.length > 50
+              ? dienVienStr.substr(0, 50) + "..."
+              : dienVienStr}
+          </Fragment>
+        );
+      },
+    },
+    {
+      title: "Mô tả",
+      dataIndex: "moTa",
+      width: "40%",
+
+      render: (text, film) => {
+        return (
+          <Fragment>
+            {film.moTa.length > 50
+              ? film.moTa.substr(0, 100) + "..."
+              : film.moTa}
+          </Fragment>
+        );
+      },
+    },
+
+    {
+      title: "Hình Ảnh",
+      dataIndex: "hinhAnh",
+      render: (text, film) => {
+        return (
+          <Fragment>
+            <img src={film.hinhAnh} width={50} height={50} alt="..." />
+          </Fragment>
+        );
+      },
+      width: "10%",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (text, film) => {
+        return (
+          <Fragment>
+            <NavLink
+              key="1"
+              className="mr-2 text-2xl"
+              to={`/admin/films/edit/${film.maPhim}/${film.tenPhim}`}
+              onClick={() => {
+                localStorage.setItem("film", JSON.stringify(film));
+              }}
+            >
+              <EditOutlined style={{ color: "blue" }} />
+            </NavLink>
+            <DeleteOutlined
+              key="2"
+              className="text-2xl mr-2"
+              style={{ color: "red", cursor: "pointer" }}
+              onClick={() => handleDelete(film)}
+            />
+            <NavLink
+              key="3"
+              className="text-2xl mr-2"
+              to={`/admin/films/detail/${film.maPhim}/${film.tenPhim}`}
+              onClick={() => {
+                localStorage.setItem("film", JSON.stringify(film));
+              }}
+            >
+              <EyeOutlined style={{ color: "blue", cursor: "pointer" }} />
+            </NavLink>
+            <NavLink
+              key="4"
+              className="text-2xl"
+              to={`/admin/calendar/create/${film.maPhim}/${film.tenPhim}`}
+              onClick={() => {
+                localStorage.setItem("film", JSON.stringify(film));
+              }}
+            >
+              <CalendarOutlined style={{ color: "blue", cursor: "pointer" }} />
+            </NavLink>
+          </Fragment>
+        );
+      },
+      width: "10%",
+    },
+  ];
+  const data = arrFilmDefault;
+  const onChange = (pagination, filters, sorter, extra) => {
+    console.log("params", pagination, filters, sorter, extra);
+  };
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const action = layDanhSachPhimAction();
+    dispatch(action);
+  }, []);
+  return (
+    <div>
+      <ToastContainer />
+      <h3 className="text-3xl mb-5">Quản lý Phim</h3>
+      <Button
+        className="mb-5"
+        onClick={() => {
+          navigate("/admin/films/addnew");
+        }}
+      >
+        Thêm phim
+      </Button>
+      <Search
+        className="mb-5"
+        placeholder="Tìm kiếm phim hoặc diễn viên"
+        enterButton="Search"
+        size="large"
+        onSearch={onSearch}
+      />
+      <Table
+        columns={columns}
+        dataSource={data}
+        onChange={onChange}
+        showSorterTooltip={{
+          target: "sorter-icon",
+        }}
+      />
+    </div>
+  );
+}
+
+export default Films;

@@ -1,0 +1,86 @@
+import {
+  SET_CHI_TIET_PHONG_VE,
+  SET_THONG_TIN_DAT_VE,
+  CHUYEN_TRANG_KET_QUA_DAT_VE,
+  DAT_VE,
+} from "./types/QuanLyDatVeType";
+import { quanLyDatVeService } from "../../services/QuanLyDatVeService";
+import { DatVe } from "../../models/DatVe.model";
+import { connection } from "../../index";
+export const layChiTietPhongVeAction = (maLichChieu) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyDatVeService.layChiTietPhongVe(maLichChieu);
+
+      if (result.status === 200) {
+        // console.log("phongve", result);
+        dispatch({
+          type: SET_CHI_TIET_PHONG_VE,
+          chiTietPhongVe: result.data.data,
+        });
+      }
+    } catch (errors) {
+      console.log("errors", errors.response?.data);
+    }
+  };
+};
+
+export const kiemTraDatVeAction = (thongTinDatVe = new DatVe()) => {
+  return async (dispatch) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await quanLyDatVeService.kiemTraDatVe(thongTinDatVe);
+        if (result.status === 200) {
+          console.log("result", result);
+          resolve(result);
+        }
+      } catch (errors) {
+        console.log("errors", errors.response?.data.gheKhongHopLe);
+        dispatch({
+          type: "GHE_DA_DUOC_NGUOI_KHAC_DAT",
+          gheKhongHopLe: errors.response?.data.gheKhongHopLe,
+        });
+        reject(errors.response?.data);
+      }
+    });
+  };
+};
+export const datVeAction = (thongTinDatVe = new DatVe()) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: "DISPLAY_LOADING" });
+      const result = await quanLyDatVeService.datVe(thongTinDatVe);
+      if (result.status === 200) {
+        dispatch({
+          type: SET_THONG_TIN_DAT_VE,
+          thongTinDatVe: thongTinDatVe,
+        });
+
+        await dispatch(layChiTietPhongVeAction(thongTinDatVe.maLichChieu));
+        await dispatch({ type: "HOAN_TAT_DAT_VE" });
+        await dispatch({ type: "HIDE_LOADING" });
+
+        let userLogin = getState().QuanLyNguoiDungReducer.userLogin;
+        connection.invoke("datVeThanhCong", userLogin.taiKhoan);
+        dispatch({ type: CHUYEN_TRANG_KET_QUA_DAT_VE });
+      }
+    } catch (errors) {
+      dispatch({ type: "HIDE_LOADING" });
+      console.log("errors", errors.response?.data);
+    }
+  };
+};
+
+export const datGheAction = (ghe, maLichChieu) => {
+  return async (dispatch, getState) => {
+    dispatch({
+      type: DAT_VE,
+      gheDangChon: ghe,
+    });
+    let danhSachGheDangDat = getState().QuanLyDatVeReducer.danhSachGheDangDat;
+    let taiKhoan = getState().QuanLyNguoiDungReducer.userLogin.taiKhoan;
+    danhSachGheDangDat = JSON.stringify(danhSachGheDangDat);
+
+    connection.invoke("datGhe", taiKhoan, danhSachGheDangDat);
+  };
+};

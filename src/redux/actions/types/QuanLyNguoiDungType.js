@@ -1,0 +1,2 @@
+export const DANG_NHAP_ACTION = "DANG_NHAP_ACTION";
+export const THONG_TIN_DAT_VE = "THONG_TIN_DAT_VE";

@@ -1,0 +1,4 @@
+export const SET_CHI_TIET_PHONG_VE = "SET_CHI_TIET_PHONG_VE";
+export const DAT_VE = "DAT_VE";
+export const SET_THONG_TIN_DAT_VE = "SET_THONG_TIN_DAT_VE";
+export const CHUYEN_TRANG_KET_QUA_DAT_VE = "CHUYEN_TRANG_KET_QUA_DAT_VE";

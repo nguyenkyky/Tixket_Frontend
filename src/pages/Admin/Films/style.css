@@ -1,0 +1,33 @@
+/* style.css */
+/* .detail-container {
+    padding: 20px;
+  }
+  
+  .detail-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .detail-title {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  .detail-info {
+    margin: 10px 0;
+  }
+  
+  .detail-info strong {
+    display: inline-block;
+    width: 120px;
+  }
+   */
+
+   /* style.css */
+.custom-tag {
+    font-size: 16px; /* Tăng kích thước chữ */
+    padding: 5px 10px; /* Tăng padding */
+    height: auto; /* Đặt chiều cao tự động để phù hợp với nội dung */
+  }
+  

@@ -1,0 +1,47 @@
+.ghe { /* Ghe thuong */
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin:15px;
+    background-color: rgb(123, 122, 122);
+    color: #fff;
+  }
+
+  .gheDaDat {
+    background-color: rgb(172, 82, 82) !important;
+    cursor: no-drop;
+  }
+
+  .gheDangDat {
+    background-color: rgb(18, 176, 18) !important;
+  }
+
+  .gheVip {
+    background-color: rgb(104, 140, 238);
+  }
+
+  .gheMinhDat {
+    background-color: rgb(199, 235, 241) !important;
+    -webkit-box-shadow: 1px 1px 16px -5px rgb(214, 179, 113) ;
+    box-shadow: 1px 1px 16px -5px rgb(177, 146, 90);
+    color: orange !important;
+    border: 1px solid rgb(192, 155, 87);
+  }
+
+  .gheKhachDangDat{
+    background-color: rgb(26, 57, 151) ;
+    
+  }
+
+  .ml-20 {
+    margin-left: 70px !important;
+  }
+
+   .p-5 .ant-tabs .ant-tabs-nav {
+    margin-left: 140px;
+  }
+
+
+  

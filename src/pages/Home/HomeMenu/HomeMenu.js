@@ -1,0 +1,159 @@
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Radio, Space, Tabs } from "antd";
+import { NavLink } from "react-router-dom";
+import icon from "../../../assets/image/images.png";
+import moment from "moment";
+import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+
+dayjs.extend(advancedFormat);
+
+const HomeMenu = ({ heThongRapChieu }) => {
+  // console.log("props", heThongRapChieu);
+  const [tabPosition, setTabPosition] = useState("left");
+  const changeTabPosition = (e) => {
+    setTabPosition(e.target.value);
+  };
+
+  const [activeKey, setActiveKey] = useState("-1");
+
+  const onChange = (key) => {
+    setActiveKey(key);
+  };
+
+  const getNextSevenDays = () => {
+    return new Array(7)
+      .fill(null)
+      .map((_, i) => dayjs().add(i, "day").format("YYYY-MM-DD"));
+  };
+  const nextSevenDays = getNextSevenDays(); // Mảng các ngày dưới dạng "YYYY-MM-DD"
+
+  const renderHeThongRap = () => {
+    return heThongRapChieu?.map((heThongRap, index) => {
+      return (
+        <Tabs.TabPane
+          tab={
+            <img
+              src={heThongRap.logo}
+              className="rounded-full"
+              alt={heThongRap.logo}
+              width="50px"
+            />
+          }
+          key={index}
+        >
+          <Tabs tabPosition={tabPosition}>
+            {heThongRap.cumRapChieu?.map((cumRap, index) => {
+              return (
+                <Tabs.TabPane
+                  tab={
+                    <div style={{ width: "320px" }} className="flex">
+                      <img
+                        src={cumRap.hinhAnh}
+                        alt={icon}
+                        width="50"
+                        height="50"
+                      />
+                      <div className="text-left ml-2">
+                        {cumRap.tenCumRap}
+                        <p className="text-red-400">Chi tiết</p>
+                      </div>
+                    </div>
+                  }
+                  key={index}
+                >
+                  <Tabs
+                    type="card"
+                    items={nextSevenDays.map((date, i) => {
+                      // Kiểm tra và lọc các phim có lịch chiếu phù hợp với ngày đã chọn
+                      const filteredMovies = cumRap.danhSachPhim
+                        .slice(0, 6)
+                        .reduce((acc, phim, index) => {
+                          const lichChieuPhuHop =
+                            phim.lstLichChieuTheoPhim.filter(
+                              (lichChieu) =>
+                                dayjs(lichChieu.ngayChieuGioChieu).format(
+                                  "YYYY-MM-DD"
+                                ) === date
+                            );
+                          if (lichChieuPhuHop.length > 0) {
+                            const movieDetails = (
+                              <div key={index} className="mt-5 ">
+                                <div className="flex">
+                                  <img
+                                    src={phim.hinhAnh}
+                                    alt={phim.hinhAnh}
+                                    width="100"
+                                    height="100"
+                                    onError={(e) => {
+                                      e.target.onError = null;
+                                      e.target.src =
+                                        "https://i.ibb.co/cTfFTYP/Layer-2.png";
+                                    }}
+                                  />
+                                  <div className="ml-2">
+                                    <h1 className="text-xl text-red-500">
+                                      {phim.tenPhim}
+                                    </h1>
+                                    <p>120 phút</p>
+                                  </div>
+                                </div>
+                                <div className="grid grid-cols-6 gap-2">
+                                  {lichChieuPhuHop
+                                    ?.slice(0, 12)
+                                    .map((lichChieu, idx) => (
+                                      <NavLink
+                                        to={`/checkout/${lichChieu.maLichChieu}`}
+                                        key={idx}
+                                        className="border border-gray-300 p-2 text-center mt-2"
+                                      >
+                                        {moment(
+                                          lichChieu.ngayChieuGioChieu
+                                        ).format("hh:mm A")}
+                                      </NavLink>
+                                    ))}
+                                </div>
+                              </div>
+                            );
+                            acc.push(movieDetails);
+                          }
+                          return acc;
+                        }, []);
+
+                      // Nếu không có suất chiếu nào phù hợp, hiển thị thông báo
+                      if (filteredMovies.length === 0) {
+                        filteredMovies.push(
+                          <div key="no-shows" className="mt-5 text-red-500">
+                            Xin lỗi, không có suất chiếu vào ngày này, hãy chọn
+                            một ngày khác.
+                          </div>
+                        );
+                      }
+
+                      return {
+                        label: dayjs(date).format("ddd D-M"),
+                        key: `tab-${i + 1}`,
+                        children: filteredMovies,
+                      };
+                    })}
+                  />
+                </Tabs.TabPane>
+              );
+            })}
+          </Tabs>
+        </Tabs.TabPane>
+      );
+    });
+  };
+
+  return (
+    <>
+      <Tabs tabPosition={tabPosition} activeKey={activeKey} onChange={onChange}>
+        {renderHeThongRap()}
+      </Tabs>
+    </>
+  );
+};
+
+export default HomeMenu;
