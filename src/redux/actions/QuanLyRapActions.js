@@ -35,3 +35,17 @@ export const layThongTinChiTietPhim = (id) => {
     }
   };
 };
+
+export const layLichChieuTheoRapAction = (tenHeThongRap, maCumRap) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyRapService.layLichChieuTheoRap(
+        tenHeThongRap,
+        maCumRap
+      );
+      console.log("result", result);
+    } catch (errors) {
+      console.log("errors", errors.response?.data);
+    }
+  };
+};

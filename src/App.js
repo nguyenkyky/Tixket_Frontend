@@ -29,6 +29,7 @@ import AddNew from "./pages/Admin/Films/AddNew";
 import Edit from "./pages/Admin/Films/Edit";
 import DetailPhim from "./pages/Admin/Films/DetailPhim";
 import Create from "./pages/Admin/Calendar/Create";
+
 export const history = createBrowserHistory();
 
 function App() {
@@ -116,6 +117,11 @@ function App() {
           path="/admin/calendar/create/:id/:tenPhim"
           exact
           element={<AdminTemplate childComponent={<Create />} />}
+        />
+        <Route
+          path="/admin/calendar"
+          exact
+          element={<AdminTemplate childComponent={<Calendar />} />}
         />
         <Route
           path="/admin/users"

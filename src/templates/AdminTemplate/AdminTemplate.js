@@ -11,14 +11,16 @@ import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./style.css";
+
 const { Header, Content, Footer, Sider } = Layout;
 
-function getItem(label, key, icon, children) {
+function getItem(label, key, icon, children, onClick) {
   return {
     key,
     icon,
     children,
     label,
+    onClick,
   };
 }
 
@@ -44,7 +46,9 @@ const AdminTemplate = ({ childComponent }) => {
         <NavLink to="/admin/films/addnew"></NavLink>
       ),
     ]),
-    getItem("Lịch chiếu", "5", <DesktopOutlined />),
+    getItem("Lịch chiếu", "5", <DesktopOutlined />, null, () =>
+      navigate("/admin/calendar")
+    ),
     getItem("User", "sub2", <UserOutlined />, [
       getItem("Tom", "6"),
       getItem("Bill", "7"),
