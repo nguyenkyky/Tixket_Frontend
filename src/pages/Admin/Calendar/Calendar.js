@@ -11,22 +11,19 @@ import {
   Tabs,
 } from "antd";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { quanLyRapService } from "../../../services/QuanLyRapService";
-import { useFormik } from "formik";
-import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import { quanLyPhimService } from "../../../services/QuanLyPhimService";
-import { layDanhSachHeThongRapAction } from "../../../redux/actions/QuanLyRapActions";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import dayjs from "dayjs";
-import moment from "moment";
+import moment from "moment-timezone";
 
 dayjs.extend(advancedFormat);
 
 function Calendar(props) {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [state, setState] = useState({
     heThongRapChieu: [],
     cumRapChieu: [],
@@ -72,14 +69,32 @@ function Calendar(props) {
     }
   };
 
-  console.log(state.lichChieu.danhSachPhim);
-
   const getNextSevenDays = () => {
-    return new Array(7)
+    return new Array(14)
       .fill(null)
       .map((_, i) => dayjs().add(i, "day").format("YYYY-MM-DD"));
   };
   const nextSevenDays = getNextSevenDays();
+
+  const handleDelete = async (maLichChieu) => {
+    await quanLyPhimService.xoaLichChieuPhim(maLichChieu);
+    setState((prevState) => ({
+      ...prevState,
+      lichChieu: {
+        ...prevState.lichChieu,
+        danhSachPhim: prevState.lichChieu.danhSachPhim.map((phim) => ({
+          ...phim,
+          lstLichChieuTheoPhim: phim.lstLichChieuTheoPhim.filter(
+            (lichChieu) => lichChieu.maLichChieu !== maLichChieu
+          ),
+        })),
+      },
+    }));
+  };
+
+  const handleAddLichChieu = (maPhim) => {
+    navigate(`/admin/calendar/create/${maPhim}`);
+  };
 
   const renderLichChieu = () => {
     const { lichChieu } = state;
@@ -89,7 +104,6 @@ function Calendar(props) {
         items={nextSevenDays.map((date, i) => {
           const filteredMovies = lichChieu.danhSachPhim?.reduce(
             (acc, phim, index) => {
-              console.log(phim);
               const lichChieuPhuHop = phim.lstLichChieuTheoPhim.filter(
                 (lichChieu) =>
                   dayjs(lichChieu.ngayChieuGioChieu).format("YYYY-MM-DD") ===
@@ -118,13 +132,28 @@ function Calendar(props) {
                       {lichChieuPhuHop?.map((lichChieu, idx) => (
                         <div
                           key={idx}
-                          className="border border-gray-300 p-2 text-center mt-2"
+                          className="relative border border-gray-300 p-2 text-center mt-2 mr-2"
                         >
-                          {moment(lichChieu.ngayChieuGioChieu).format(
-                            "hh:mm A"
-                          )}
+                          <span
+                            className="absolute text-white bg-red-500 rounded-full px-2  cursor-pointer"
+                            style={{ right: "-10px", top: "-10px" }}
+                            onClick={() => handleDelete(lichChieu.maLichChieu)}
+                          >
+                            x
+                          </span>
+                          {moment(lichChieu.ngayChieuGioChieu)
+                            .tz("Asia/Ho_Chi_Minh")
+                            .format("hh:mm A")}
                         </div>
                       ))}
+                      <div className="flex items-center justify-center mt-2">
+                        <Button
+                          className="bg-blue-500 text-white"
+                          onClick={() => handleAddLichChieu(phim.maPhim)}
+                        >
+                          Thêm lịch chiếu phim
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 );
@@ -156,7 +185,7 @@ function Calendar(props) {
   useEffect(() => {
     async function fetchData() {
       const response = await quanLyRapService.layThongTinHeThongRap();
-      console.log(response.data.data);
+
       setState({ ...state, heThongRapChieu: response.data.data });
     }
     fetchData();

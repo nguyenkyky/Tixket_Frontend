@@ -114,7 +114,7 @@ function App() {
           element={<AdminTemplate childComponent={<Edit />} />}
         />
         <Route
-          path="/admin/calendar/create/:id/:tenPhim"
+          path="/admin/calendar/create/:id"
           exact
           element={<AdminTemplate childComponent={<Create />} />}
         />

@@ -169,10 +169,7 @@ function Films(props) {
             <NavLink
               key="4"
               className="text-2xl"
-              to={`/admin/calendar/create/${film.maPhim}/${film.tenPhim}`}
-              onClick={() => {
-                localStorage.setItem("film", JSON.stringify(film));
-              }}
+              to={`/admin/calendar/create/${film.maPhim}`}
             >
               <CalendarOutlined style={{ color: "blue", cursor: "pointer" }} />
             </NavLink>

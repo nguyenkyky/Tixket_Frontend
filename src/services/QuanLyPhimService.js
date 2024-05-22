@@ -36,6 +36,9 @@ export class QuanLyPhimService extends baseService {
   taoLichChieuPhim = (thongTinLichChieu) => {
     return this.post(`api/lichchieuphim/post`, thongTinLichChieu);
   };
+  xoaLichChieuPhim = (maLichChieu) => {
+    return this.delete(`api/lichchieuphim/delete?maLichChieu=${maLichChieu}`);
+  };
 }
 
 export const quanLyPhimService = new QuanLyPhimService();

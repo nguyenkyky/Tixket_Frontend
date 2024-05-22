@@ -17,10 +17,8 @@ import { quanLyPhimService } from "../../../services/QuanLyPhimService";
 
 function Create(props) {
   const { id, tenPhim } = useParams();
-  let film = {};
-  if (localStorage.getItem("film")) {
-    film = JSON.parse(localStorage.getItem("film"));
-  }
+  const [film, setFilm] = useState({});
+
   const formik = useFormik({
     initialValues: {
       tenHeThongRap: "",
@@ -82,7 +80,8 @@ function Create(props) {
   useEffect(() => {
     async function fetchData() {
       const response = await quanLyRapService.layThongTinHeThongRap();
-      // const data = await response.json();
+      const result = await quanLyPhimService.layThongTinPhim(id);
+      setFilm(result.data);
       setState({ ...state, heThongRapChieu: response.data.data });
     }
     fetchData();
