@@ -14,3 +14,14 @@ export const getCarouselAction = async (dispatch) => {
     console.log("errors", errors);
   }
 };
+
+export const saveDanhSachBannerAction = (data) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyPhimService.saveDanhSachBanner(data);
+      dispatch(getCarouselAction);
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};

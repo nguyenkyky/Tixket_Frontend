@@ -36,6 +36,7 @@ import AddNewHeThongRap from "./pages/Admin/CumRap/AddNewHeThongRap";
 import EditHeThongRap from "./pages/Admin/CumRap/EditHeThongRap";
 import EditCumRap from "./pages/Admin/CumRap/EditCumRap";
 import AddNewCumRap from "./pages/Admin/CumRap/AddNewCumRap";
+import Banner from "./pages/Admin/Banner/Banner";
 export const history = createBrowserHistory();
 
 function App() {
@@ -169,6 +170,11 @@ function App() {
           path="/admin/cumrap/edit/:maHeThongRap/:maCumRap"
           exact
           element={<AdminTemplate childComponent={<EditCumRap />} />}
+        />
+        <Route
+          path="/admin/banner"
+          exact
+          element={<AdminTemplate childComponent={<Banner />} />}
         />
       </Routes>
     </Router>

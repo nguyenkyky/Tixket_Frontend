@@ -9,6 +9,9 @@ export class QuanLyPhimService extends baseService {
   layDanhSachBanner = () => {
     return this.getBanner(`banner/all`);
   };
+  saveDanhSachBanner = (data) => {
+    return this.post(`banner/post`, data);
+  };
 
   layDanhSachPhim = () => {
     return this.get(`api/phim/all`);
