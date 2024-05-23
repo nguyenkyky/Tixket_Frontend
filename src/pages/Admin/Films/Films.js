@@ -1,18 +1,13 @@
-import React, { Fragment } from "react";
-import { Button, Table, Modal } from "antd";
+import React, { Fragment, useEffect, useState } from "react";
+import { Button, Table, Modal, Input } from "antd";
 import {
-  AudioOutlined,
   EditOutlined,
   DeleteOutlined,
   EyeOutlined,
   CalendarOutlined,
 } from "@ant-design/icons";
-import { Input, Space } from "antd";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, NavLink } from "react-router-dom";
 import {
   layDanhSachPhimAction,
   xoaPhimAction,
@@ -25,6 +20,24 @@ function Films(props) {
   const navigate = useNavigate();
   const { Search } = Input;
   const { arrFilmDefault } = useSelector((state) => state.QuanLyPhimReducer);
+  const dispatch = useDispatch();
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const action = layDanhSachPhimAction();
+    dispatch(action);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (arrFilmDefault) {
+      const dataWithKey = arrFilmDefault.map((film) => ({
+        ...film,
+        key: film.maPhim,
+      }));
+      setData(dataWithKey);
+    }
+  }, [arrFilmDefault]);
 
   const onSearch = (value) => {
     dispatch(timKiemPhimAction(value));
@@ -42,12 +55,12 @@ function Films(props) {
       },
     });
   };
+
   const columns = [
     {
       title: "Mã Phim",
       dataIndex: "maPhim",
       sorter: (a, b) => a.maPhim - b.maPhim,
-      // sortDirections: ["descend"],
       defaultSortOrder: "descend",
       width: "10%",
     },
@@ -55,46 +68,16 @@ function Films(props) {
       title: "Tên Phim",
       dataIndex: "tenPhim",
       width: "15%",
-
-      filters: [
-        {
-          text: "Joe",
-          value: "Joe",
-        },
-        {
-          text: "Jim",
-          value: "Jim",
-        },
-        {
-          text: "Submenu",
-          value: "Submenu",
-          children: [
-            {
-              text: "Green",
-              value: "Green",
-            },
-            {
-              text: "Black",
-              value: "Black",
-            },
-          ],
-        },
-      ],
-      onFilter: (value, record) => record.tenPhim.indexOf(value) === 0,
       sorter: (a, b) => {
         let phimA = a.tenPhim.toLowerCase().trim();
         let phimB = b.tenPhim.toLowerCase().trim();
-        if (phimA > phimB) {
-          return 1;
-        }
-        return -1;
+        return phimA.localeCompare(phimB);
       },
     },
     {
       title: "Diễn viên",
       dataIndex: "dienVien",
       width: "10%",
-
       render: (text, film) => {
         const dienVienStr = film.dienVien.join(", ");
         return (
@@ -110,7 +93,6 @@ function Films(props) {
       title: "Mô tả",
       dataIndex: "moTa",
       width: "40%",
-
       render: (text, film) => {
         return (
           <Fragment>
@@ -121,7 +103,6 @@ function Films(props) {
         );
       },
     },
-
     {
       title: "Hình Ảnh",
       dataIndex: "hinhAnh",
@@ -179,16 +160,7 @@ function Films(props) {
       width: "10%",
     },
   ];
-  const data = arrFilmDefault;
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const action = layDanhSachPhimAction();
-    dispatch(action);
-  }, []);
   return (
     <div>
       <ToastContainer />
@@ -211,7 +183,6 @@ function Films(props) {
       <Table
         columns={columns}
         dataSource={data}
-        onChange={onChange}
         showSorterTooltip={{
           target: "sorter-icon",
         }}

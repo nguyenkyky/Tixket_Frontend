@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
-  DesktopOutlined,
-  FileOutlined,
   PieChartOutlined,
   ScheduleOutlined,
   UserOutlined,
   FundProjectionScreenOutlined,
+  FileOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
@@ -37,35 +36,51 @@ const AdminTemplate = ({ childComponent }) => {
   const items = [
     getItem("Film", "sub1", <PieChartOutlined />, [
       getItem(
-        "Danh sách phim",
+        <NavLink className="ml-10" to="/admin/films">
+          Danh sách phim
+        </NavLink>,
         "/admin/films",
-        <NavLink to="/admin/films"></NavLink>
+        null
       ),
       getItem(
-        "Tạo phim mới",
+        <NavLink className="ml-10" to="/admin/films/addnew">
+          Tạo phim mới
+        </NavLink>,
         "/admin/films/addnew",
-        <NavLink to="/admin/films/addnew"></NavLink>
+        null
       ),
     ]),
-    getItem("Lịch chiếu", "5", <ScheduleOutlined />, null, () =>
-      navigate("/admin/calendar")
+    getItem(
+      <NavLink to="/admin/calendar">Lịch chiếu</NavLink>,
+      "/admin/calendar",
+      <ScheduleOutlined />
     ),
-    getItem("Users", "6", <UserOutlined />, null, () =>
-      navigate("/admin/users")
+    getItem(
+      <NavLink to="/admin/users">Users</NavLink>,
+      "/admin/users",
+      <UserOutlined />
     ),
     getItem("Cụm rạp", "sub3", <FundProjectionScreenOutlined />, [
       getItem(
-        "Danh sách cụm rạp",
+        <NavLink className="ml-10" to="/admin/cumrap">
+          Danh sách rạp
+        </NavLink>,
         "/admin/cumrap",
-        <NavLink to="/admin/cumrap"></NavLink>
+        null
       ),
       getItem(
-        "Tạo cụm rạp mới",
-        "/admin/cumrap/addnew",
-        <NavLink to="/admin/cumrap/addnew"></NavLink>
+        <NavLink className="ml-10" to="/admin/cumrap/create">
+          Tạo rạp mới
+        </NavLink>,
+        "/admin/cumrap/create",
+        null
       ),
     ]),
-    getItem("Banner", "11", <FileOutlined />),
+    getItem(
+      <NavLink to="/admin/banner">Banner</NavLink>,
+      "/admin/banner",
+      <FileOutlined />
+    ),
   ];
 
   useEffect(() => {
@@ -112,7 +127,7 @@ const AdminTemplate = ({ childComponent }) => {
           collapsed={collapsed}
           onCollapse={(value) => setCollapsed(value)}
         >
-          <div className="fixed " style={{ width: "200px" }}>
+          <div className="fixed" style={{ width: "200px" }}>
             <div className="logo p-5 flex justify-center">
               <NavLink
                 rel="noopener noreferrer"
@@ -193,12 +208,12 @@ const AdminTemplate = ({ childComponent }) => {
                           </a>
                         </li>
                         <li>
-                          <a
-                            href="/order/history"
+                          <NavLink
+                            to="/order/history"
                             className="block px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
                             Lịch sử giao dịch
-                          </a>
+                          </NavLink>
                         </li>
                       </ul>
                       <div className="">

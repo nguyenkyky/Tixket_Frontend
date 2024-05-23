@@ -31,6 +31,11 @@ import DetailPhim from "./pages/Admin/Films/DetailPhim";
 import Create from "./pages/Admin/Calendar/Create";
 import EditUser from "./pages/Admin/Users/EditUser";
 import OrderHistory from "./pages/Admin/Users/OrderHistory";
+import CumRap from "./pages/Admin/CumRap/CumRap";
+import AddNewHeThongRap from "./pages/Admin/CumRap/AddNewHeThongRap";
+import EditHeThongRap from "./pages/Admin/CumRap/EditHeThongRap";
+import EditCumRap from "./pages/Admin/CumRap/EditCumRap";
+import AddNewCumRap from "./pages/Admin/CumRap/AddNewCumRap";
 export const history = createBrowserHistory();
 
 function App() {
@@ -141,9 +146,29 @@ function App() {
           element={<AdminTemplate childComponent={<EditUser />} />}
         />
         <Route
-          path="/calendar"
+          path="/admin/cumrap"
           exact
-          element={<AdminTemplate childComponent={<Calendar />} />}
+          element={<AdminTemplate childComponent={<CumRap />} />}
+        />
+        <Route
+          path="/admin/cumrap/create"
+          exact
+          element={<AdminTemplate childComponent={<AddNewHeThongRap />} />}
+        />
+        <Route
+          path="/admin/cumrap/create/:maHeThongRap"
+          exact
+          element={<AdminTemplate childComponent={<AddNewCumRap />} />}
+        />
+        <Route
+          path="/admin/cumrap/edit/:maHeThongRap"
+          exact
+          element={<AdminTemplate childComponent={<EditHeThongRap />} />}
+        />
+        <Route
+          path="/admin/cumrap/edit/:maHeThongRap/:maCumRap"
+          exact
+          element={<AdminTemplate childComponent={<EditCumRap />} />}
         />
       </Routes>
     </Router>

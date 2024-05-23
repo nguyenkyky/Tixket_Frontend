@@ -1,18 +1,9 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Button, Table, Modal } from "antd";
-import {
-  AudioOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-  CalendarOutlined,
-} from "@ant-design/icons";
-import { Input, Space } from "antd";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { NavLink } from "react-router-dom";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Input } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   layThongTinAllNguoiDungAction,
   timKiemNguoiDungAction,
@@ -28,6 +19,24 @@ function Users(props) {
     (state) => state.QuanLyNguoiDungReducer
   );
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+  const dispatch = useDispatch();
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const action = layThongTinAllNguoiDungAction();
+    dispatch(action);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (danhSachNguoiDung) {
+      const dataWithKey = danhSachNguoiDung.map((user, index) => ({
+        ...user,
+        key: user.taiKhoan,
+      }));
+      setData(dataWithKey);
+    }
+  }, [danhSachNguoiDung]);
 
   const handleDelete = (user) => {
     if (user.taiKhoan === userLogin.taiKhoan) {
@@ -51,12 +60,11 @@ function Users(props) {
     const action = timKiemNguoiDungAction(value);
     dispatch(action);
   };
+
   const columns = [
     {
       title: "Tài khoản",
       dataIndex: "taiKhoan",
-      // sorter: (a, b) => a.taiKhoan - b.taiKhoan,
-      // sortDirections: ["descend"],
       defaultSortOrder: "descend",
       width: "10%",
     },
@@ -64,7 +72,6 @@ function Users(props) {
       title: "Họ Tên",
       dataIndex: "hoTen",
       width: "10%",
-
       sorter: (a, b) => {
         let userA = a.hoTen.toLowerCase().trim();
         let userB = b.hoTen.toLowerCase().trim();
@@ -101,7 +108,6 @@ function Users(props) {
         );
       },
     },
-
     {
       title: "Lịch sử đặt vé",
       dataIndex: "lichSuDatVe",
@@ -141,14 +147,6 @@ function Users(props) {
       width: "8%",
     },
   ];
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const action = layThongTinAllNguoiDungAction();
-    dispatch(action);
-  }, []);
-
-  const data = danhSachNguoiDung;
 
   return (
     <div>

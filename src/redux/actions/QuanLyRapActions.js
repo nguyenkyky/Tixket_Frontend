@@ -49,3 +49,87 @@ export const layLichChieuTheoRapAction = (tenHeThongRap, maCumRap) => {
     }
   };
 };
+
+export const capNhatThongTinHeThongRapAction = (values, navigate) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyRapService.capNhatThongTinHeThongRap(values);
+      alert("Cập nhật thông tin hệ thống rạp thành công");
+      dispatch(layDanhSachHeThongRapAction());
+      navigate("/admin/cumrap");
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const capNhatThongTinCumRapAction = (values, navigate) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyRapService.capNhatThongTinCumRap(values);
+      if (result) {
+        alert("Cập nhật thông tin cụm rạp thành công");
+        dispatch(layDanhSachHeThongRapAction());
+        navigate("/admin/cumrap");
+      }
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const addHeThongRapAction = (values, navigate) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyRapService.addHeThongRap(values);
+      if (result) {
+        alert("Thêm mới hệ thống rạp thành công");
+        dispatch(layDanhSachHeThongRapAction());
+        navigate("/admin/cumrap");
+      }
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const addCumRapAction = (values, navigate) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyRapService.addCumRap(values);
+      if (result) {
+        alert("Thêm mới cụm rạp thành công");
+        dispatch(layDanhSachHeThongRapAction());
+        navigate("/admin/cumrap");
+      }
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const deleteHeThongRapAction = (maHeThongRap) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyRapService.deleteHeThongRap(maHeThongRap);
+      if (result) {
+        dispatch(layDanhSachHeThongRapAction());
+      }
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const deleteCumRapAction = (maCumRap) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyRapService.deleteCumRap(maCumRap);
+      if (result) {
+        dispatch(layDanhSachHeThongRapAction());
+      }
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
