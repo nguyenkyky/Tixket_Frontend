@@ -12,6 +12,8 @@ if (localStorage.getItem(USER_LOGIN)) {
 const stateDefault = {
   userLogin: user,
   thongTinDatVe: {},
+  danhSachNguoiDung: [],
+  detailUser: {},
 };
 
 export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
@@ -41,6 +43,15 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
       return { ...state };
     }
 
+    case "THONG_TIN_ALL_NGUOI_DUNG": {
+      state.danhSachNguoiDung = action.danhSachNguoiDung;
+      return { ...state };
+    }
+
+    case "CHI_TIET_NGUOI_DUNG": {
+      state.detailUser = action.detailUser;
+      return { ...state };
+    }
     default:
       return { ...state };
   }

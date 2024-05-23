@@ -4,8 +4,9 @@ import {
   DesktopOutlined,
   FileOutlined,
   PieChartOutlined,
-  TeamOutlined,
+  ScheduleOutlined,
   UserOutlined,
+  FundProjectionScreenOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
@@ -46,17 +47,23 @@ const AdminTemplate = ({ childComponent }) => {
         <NavLink to="/admin/films/addnew"></NavLink>
       ),
     ]),
-    getItem("Lịch chiếu", "5", <DesktopOutlined />, null, () =>
+    getItem("Lịch chiếu", "5", <ScheduleOutlined />, null, () =>
       navigate("/admin/calendar")
     ),
-    getItem("User", "sub2", <UserOutlined />, [
-      getItem("Tom", "6"),
-      getItem("Bill", "7"),
-      getItem("Alex", "8"),
-    ]),
-    getItem("Cụm rạp", "sub3", <TeamOutlined />, [
-      getItem("Team 1", "9"),
-      getItem("Team 2", "10"),
+    getItem("Users", "6", <UserOutlined />, null, () =>
+      navigate("/admin/users")
+    ),
+    getItem("Cụm rạp", "sub3", <FundProjectionScreenOutlined />, [
+      getItem(
+        "Danh sách cụm rạp",
+        "/admin/cumrap",
+        <NavLink to="/admin/cumrap"></NavLink>
+      ),
+      getItem(
+        "Tạo cụm rạp mới",
+        "/admin/cumrap/addnew",
+        <NavLink to="/admin/cumrap/addnew"></NavLink>
+      ),
     ]),
     getItem("Banner", "11", <FileOutlined />),
   ];

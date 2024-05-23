@@ -22,14 +22,15 @@ import TicketHistory from "./pages/TicketHistory/TicketHistory";
 import Loading from "./components/Loading/Loading";
 import AdminTemplate from "./templates/AdminTemplate/AdminTemplate";
 import Dashboard from "./pages/Admin/Dashboard";
-import Users from "./pages/Admin/Users";
+import Users from "./pages/Admin/Users/Users";
 import Films from "./pages/Admin/Films/Films";
 import Calendar from "./pages/Admin/Calendar/Calendar";
 import AddNew from "./pages/Admin/Films/AddNew";
 import Edit from "./pages/Admin/Films/Edit";
 import DetailPhim from "./pages/Admin/Films/DetailPhim";
 import Create from "./pages/Admin/Calendar/Create";
-
+import EditUser from "./pages/Admin/Users/EditUser";
+import OrderHistory from "./pages/Admin/Users/OrderHistory";
 export const history = createBrowserHistory();
 
 function App() {
@@ -127,6 +128,17 @@ function App() {
           path="/admin/users"
           exact
           element={<AdminTemplate childComponent={<Users />} />}
+        />
+
+        <Route
+          path="/admin/users/orders/history/:taiKhoan"
+          exact
+          element={<AdminTemplate childComponent={<OrderHistory />} />}
+        />
+        <Route
+          path="/admin/users/edit/:taiKhoan"
+          exact
+          element={<AdminTemplate childComponent={<EditUser />} />}
         />
         <Route
           path="/calendar"

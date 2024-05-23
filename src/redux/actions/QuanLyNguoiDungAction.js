@@ -37,3 +37,76 @@ export const layThongTinDatVe = () => {
     }
   };
 };
+
+export const layThongTinAllNguoiDungAction = () => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.layThongTinAllNguoiDung();
+      if (result.status === 200) {
+        // console.log("success", result);
+        dispatch({
+          type: "THONG_TIN_ALL_NGUOI_DUNG",
+          danhSachNguoiDung: result.data,
+        });
+      }
+    } catch (error) {
+      console.log("error", error.response.data);
+    }
+  };
+};
+
+export const timKiemNguoiDungAction = (value) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.timKiemNguoiDung(value);
+      // console.log("result", result);
+      dispatch({
+        type: "THONG_TIN_ALL_NGUOI_DUNG",
+        danhSachNguoiDung: result.data.user,
+      });
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const chiTietNguoiDungAction = (value) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.timKiemNguoiDung(value);
+      // console.log("result", result);
+      dispatch({
+        type: "CHI_TIET_NGUOI_DUNG",
+        detailUser: result.data.user[0],
+      });
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const capNhatThongTinNguoiDungAction = (values, navigate) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.capNhatThongTinNguoiDung(
+        values
+      );
+      alert("Cập nhật thông tin người dùng thành công");
+      dispatch(layThongTinAllNguoiDungAction());
+      navigate("/admin/users");
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const xoaUserAction = (value) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.xoaNguoiDung(value);
+      console.log("result", result);
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
