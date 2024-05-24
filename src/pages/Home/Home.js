@@ -25,10 +25,13 @@ export default function Home(props) {
     dispatch(layDanhSachHeThongRapAction());
   }, []);
   return (
-    <div>
+    <div style={{ backgroundColor: "#FDFCF0" }}>
       <HomeCarousel />
 
-      <section className="text-gray-600 body-font">
+      <section
+        className="text-gray-600 body-font"
+        style={{ backgroundColor: "#FDFCF0" }}
+      >
         <div className="container px-5 py-24 mx-auto">
           <MultipleRowSlick arrFilm={arrFilm} />
         </div>

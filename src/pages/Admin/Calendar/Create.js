@@ -23,21 +23,31 @@ function Create(props) {
     initialValues: {
       tenHeThongRap: "",
       maPhim: id,
+      tenPhim: "",
+      hinhAnh: "",
+      hot: true,
+      dangChieu: true,
+      sapChieu: true,
       ngayChieuGioChieu: "",
       maRap: "",
       giaVe: 0,
-      thoiLuong: film.thoiLuong,
+      thoiLuong: 0,
     },
     onSubmit: async (values) => {
       console.log("values", values);
       try {
         const result = await quanLyPhimService.taoLichChieuPhim(values);
         console.log("result", result);
+        formik.resetForm();
+        alert("Tạo lịch chiếu thành công");
+        window.location.reload();
       } catch (e) {
+        alert("Tạo lịch chiếu thất bại");
         console.log("ERROR 500:", e.message);
       }
     },
   });
+
   const onChaneHeThongRap = async (value) => {
     formik.setFieldValue("tenHeThongRap", value);
     const result = await quanLyRapService.layThongTinCumRap(value);
@@ -81,6 +91,12 @@ function Create(props) {
     async function fetchData() {
       const response = await quanLyRapService.layThongTinHeThongRap();
       const result = await quanLyPhimService.layThongTinPhim(id);
+      formik.setFieldValue("tenPhim", result.data.tenPhim);
+      formik.setFieldValue("hinhAnh", result.data.hinhAnh);
+      formik.setFieldValue("hot", result.data.hot);
+      formik.setFieldValue("dangChieu", result.data.dangChieu);
+      formik.setFieldValue("sapChieu", result.data.sapChieu);
+      formik.setFieldValue("thoiLuong", result.data.thoiLuong);
       setFilm(result.data);
       setState({ ...state, heThongRapChieu: response.data.data });
     }

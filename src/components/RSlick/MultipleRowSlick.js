@@ -8,6 +8,7 @@ import {
   SET_PHIM_DANG_CHIEU,
   SET_PHIM_SAP_CHIEU,
 } from "../../redux/actions/types/QuanLyPhimType";
+import { NavLink } from "react-router-dom";
 // import styleSlick from "./MultipleRowSlick.module.css";
 
 function SampleNextArrow(props) {
@@ -45,8 +46,14 @@ const MultipleRowSlick = (props) => {
   const renderFilm = () => {
     return props.arrFilm.map((phim, index) => {
       return (
-        <div className="mt-8" key={index}>
+        <div className="mt-8 " key={index}>
           <FilmFlip item={phim} />
+          <div
+            className="rounded-xl text-center cursor-pointer py-2 bg-indigo-300 my-2 text-success-50 font-bold"
+            style={{ width: "300px" }}
+          >
+            <NavLink to={`/detail/${phim.maPhim}`}>CHI TIẾT</NavLink>
+          </div>
         </div>
       );
     });
