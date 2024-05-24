@@ -9,7 +9,7 @@ import HomeCarousel from "../../templates/HomeTemplate/Layout/HomeCarousel/HomeC
 // import LichChieuPhim from "../../components/LichChieuPhim/LichChieuPhim";
 export default function Home(props) {
   const { arrFilm } = useSelector((state) => state.QuanLyPhimReducer);
-  const { heThongRapChieu } = useSelector((state) => state.QuanLyRapReducer); //
+
   // console.log("arrFilm", arrFilm);
   const dispatch = useDispatch();
 
@@ -26,19 +26,21 @@ export default function Home(props) {
   }, []);
   return (
     <div style={{ backgroundColor: "#FDFCF0" }}>
-      <HomeCarousel />
+      <div id="home">
+        <HomeCarousel />
+      </div>
 
       <section
         className="text-gray-600 body-font"
         style={{ backgroundColor: "#FDFCF0" }}
       >
-        <div className="container px-5 py-24 mx-auto">
+        <div id="danh-sach-phim" className="container px-5 py-24 mx-auto">
           <MultipleRowSlick arrFilm={arrFilm} />
         </div>
       </section>
 
-      <div className="mx-36">
-        <HomeMenu heThongRapChieu={heThongRapChieu} />
+      <div id="lich-chieu" className="mx-36">
+        <HomeMenu />
       </div>
     </div>
   );

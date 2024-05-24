@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "./style.css";
-import Film from "../Film/Film";
 import FilmFlip from "../Film/FilmFlip";
 import { useDispatch, useSelector } from "react-redux";
 import {
   SET_PHIM_DANG_CHIEU,
   SET_PHIM_SAP_CHIEU,
 } from "../../redux/actions/types/QuanLyPhimType";
+import { Button, Input } from "antd";
+import { timKiemPhimAction } from "../../redux/actions/QuanLyPhimAction";
 import { NavLink } from "react-router-dom";
-// import styleSlick from "./MultipleRowSlick.module.css";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -34,6 +34,7 @@ function SamplePrevArrow(props) {
 }
 
 const MultipleRowSlick = (props) => {
+  const { Search } = Input;
   const { dangChieu, sapChieu } = useSelector(
     (state) => state.QuanLyPhimReducer
   );
@@ -43,61 +44,71 @@ const MultipleRowSlick = (props) => {
     sapChieu === true ? "active_Film" : "none_active_Film";
 
   const dispatch = useDispatch();
-  const renderFilm = () => {
-    return props.arrFilm.map((phim, index) => {
-      return (
-        <div className="mt-8 " key={index}>
-          <FilmFlip item={phim} />
-          <div
-            className="rounded-xl text-center cursor-pointer py-2 bg-indigo-300 my-2 text-success-50 font-bold"
-            style={{ width: "300px" }}
-          >
-            <NavLink to={`/detail/${phim.maPhim}`}>CHI TIẾT</NavLink>
-          </div>
-        </div>
-      );
-    });
+
+  const onSearch = (value) => {
+    dispatch(timKiemPhimAction(value));
   };
 
   const settings = {
     className: "center variable-width",
-    centerMode: true,
-    infinite: true,
+    centerMode: false,
+    infinite: false,
     centerPadding: "60px",
     slidesToShow: 2,
     speed: 500,
     rows: 2,
     slidesPerRow: 2,
-    // variableWidth: true,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
+
   return (
     <div className="slider-container">
-      <button
-        type="button"
-        className={`${activeClassDangChieu} px-8 py-3 font-semibold rounded-full text-white bg-gray-800 mr-6 border dark:text-gray-100`}
-        onClick={() => {
-          const action = { type: SET_PHIM_DANG_CHIEU };
-          dispatch(action);
-        }}
-      >
-        PHIM ĐANG CHIẾU
-      </button>
-      <button
-        type="button"
-        className={`${activeClassSapChieu} px-8 py-3 font-semibold rounded-full text-white bg-white text-gray-800 border dark:text-gray-100`}
-        onClick={() => {
-          const action = { type: SET_PHIM_SAP_CHIEU };
-          dispatch(action);
-        }}
-      >
-        PHIM SẮP CHIẾU
-      </button>
-
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center space-x-6">
+          <button
+            type="button"
+            className={`${activeClassDangChieu} px-8 py-3 font-semibold rounded-xl text-white bg-gray-800 border dark:text-gray-100`}
+            onClick={() => {
+              const action = { type: SET_PHIM_DANG_CHIEU };
+              dispatch(action);
+            }}
+          >
+            PHIM ĐANG CHIẾU
+          </button>
+          <button
+            type="button"
+            className={`${activeClassSapChieu} px-8 py-3 font-semibold rounded-xl text-white bg-white text-gray-800 border dark:text-gray-100`}
+            onClick={() => {
+              const action = { type: SET_PHIM_SAP_CHIEU };
+              dispatch(action);
+            }}
+          >
+            PHIM SẮP CHIẾU
+          </button>
+        </div>
+        <div className="flex items-center" style={{ width: "500px" }}>
+          <Search
+            className=""
+            placeholder="Tìm kiếm phim hoặc diễn viên"
+            enterButton="Search"
+            size="large"
+            onSearch={onSearch}
+          />
+        </div>
+      </div>
       <Slider {...settings}>
-        {renderFilm()}
-        {renderFilm()}
+        {props.arrFilm.map((phim, index) => (
+          <div className="mt-8" key={index}>
+            <FilmFlip item={phim} />
+            <div
+              className="rounded-xl text-center cursor-pointer py-2 bg-indigo-300 my-2 text-success-50 font-bold"
+              style={{ width: "300px" }}
+            >
+              <NavLink to={`/detail/${phim.maPhim}`}>CHI TIẾT</NavLink>
+            </div>
+          </div>
+        ))}
       </Slider>
     </div>
   );

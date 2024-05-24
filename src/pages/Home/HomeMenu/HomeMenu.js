@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Radio, Space, Tabs } from "antd";
 import { NavLink } from "react-router-dom";
 import icon from "../../../assets/image/images.png";
 import moment from "moment";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import { layDanhSachHeThongRapAction } from "../../../redux/actions/QuanLyRapActions";
 
 dayjs.extend(advancedFormat);
 
-const HomeMenu = ({ heThongRapChieu }) => {
-  // console.log("props", heThongRapChieu);
+const HomeMenu = () => {
+  const dispatch = useDispatch();
   const [tabPosition, setTabPosition] = useState("left");
   const changeTabPosition = (e) => {
     setTabPosition(e.target.value);
   };
 
-  const [activeKey, setActiveKey] = useState("-1");
+  const [activeKey, setActiveKey] = useState("0");
 
   const onChange = (key) => {
     setActiveKey(key);
@@ -28,6 +29,12 @@ const HomeMenu = ({ heThongRapChieu }) => {
       .map((_, i) => dayjs().add(i, "day").format("YYYY-MM-DD"));
   };
   const nextSevenDays = getNextSevenDays(); // Mảng các ngày dưới dạng "YYYY-MM-DD"
+
+  useEffect(() => {
+    dispatch(layDanhSachHeThongRapAction());
+  }, []);
+
+  const { heThongRapChieu } = useSelector((state) => state.QuanLyRapReducer);
 
   const renderHeThongRap = () => {
     return heThongRapChieu?.map((heThongRap, index) => {
@@ -93,10 +100,13 @@ const HomeMenu = ({ heThongRapChieu }) => {
                                     }}
                                   />
                                   <div className="ml-2">
-                                    <h1 className="text-xl text-red-500">
+                                    <NavLink
+                                      to={`/detail/${phim.maPhim}`}
+                                      className="text-xl text-red-500"
+                                    >
                                       {phim.tenPhim}
-                                    </h1>
-                                    <p>120 phút</p>
+                                    </NavLink>
+                                    <p>{phim.thoiLuong} phút</p>
                                   </div>
                                 </div>
                                 <div className="grid grid-cols-6 gap-2">
@@ -104,6 +114,7 @@ const HomeMenu = ({ heThongRapChieu }) => {
                                     ?.slice(0, 12)
                                     .map((lichChieu, idx) => (
                                       <NavLink
+                                        style={{ borderRadius: "5px" }}
                                         to={`/checkout/${lichChieu.maLichChieu}`}
                                         key={idx}
                                         className="border border-gray-300 p-2 text-center mt-2"

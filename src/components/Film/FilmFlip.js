@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import YouTube from "react-youtube";
+import { PlayCircleOutlined } from "@ant-design/icons";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
 import "./FilmFlip.css";
 import { Button } from "antd";
-import { PlayCircleOutlined } from "@ant-design/icons";
-import { NavLink } from "react-router-dom";
-import { history } from "../../App";
-import moment from "moment";
+
 function FilmFlip(props) {
   const { item } = props;
+  const navigate = useNavigate();
+
+  const handlePlayClick = () => {
+    navigate(`/detail/${item.maPhim}?tab=3`);
+  };
+
   return (
     <div className="flip-card bg-blue-300" style={{ height: 280 }}>
       <div style={{ height: 280 }}>
@@ -68,14 +75,11 @@ function FilmFlip(props) {
                 backgroundColor: "rgba(0,0,0,0)",
                 display: "flex",
                 justifyContent: "center",
-                // alignItems: "center",
+                alignItems: "center",
               }}
             >
-              <div>
-                <div className="rounded-full cursor-pointer mt-12">
-                  <PlayCircleOutlined style={{ fontSize: "50px" }} />
-                </div>
-                <div className="text-2xl mt-2 font-bold">{item.tenPhim}</div>
+              <div className="cursor-pointer mb-20" onClick={handlePlayClick}>
+                <PlayCircleOutlined style={{ fontSize: "50px" }} />
               </div>
             </div>
             <div className="flex ml-2">

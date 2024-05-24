@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./style.css";
 import { useDispatch } from "react-redux";
-
+import { HashLink } from "react-router-hash-link";
 export default function Header(props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch();
@@ -15,7 +15,10 @@ export default function Header(props) {
   console.log("isMenuOpen", isMenuOpen);
 
   return (
-    <header className="p-4 dark:bg-gray-600 dark:text-gray-800 bg-opacity-80 bg-white text-black fixed w-full z-10 top-0 text-xl">
+    <header
+      style={{ backgroundColor: "#FDFCF0", opacity: "0.9" }}
+      className="p-4 dark:bg-gray-600 dark:text-gray-800 bg-opacity-80 text-black fixed w-full z-10 top-0 text-xl"
+    >
       <div className="container flex justify-between h-16 mx-auto">
         <NavLink
           rel="noopener noreferrer"
@@ -32,31 +35,32 @@ export default function Header(props) {
         </NavLink>
         <ul className="items-stretch hidden space-x-3 lg:flex">
           <li className="flex">
-            <NavLink
-              to="/home"
+            <HashLink
+              smooth
+              to="/home#home"
               className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
               // activeClassName="border-b-2 border-white"
             >
               Trang chủ
-            </NavLink>
+            </HashLink>
           </li>
           <li className="flex">
-            <NavLink
-              to="/contact"
+            <HashLink
+              smooth
+              to="/home#danh-sach-phim"
               className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
-              // activeClassName="border-b-2 border-white"
+            >
+              Danh sách phim
+            </HashLink>
+          </li>
+          <li className="flex">
+            <HashLink
+              smooth
+              to="/home#lich-chieu"
+              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
             >
               Lịch chiếu
-            </NavLink>
-          </li>
-          <li className="flex">
-            <NavLink
-              to="/news"
-              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
-              // activeClassName="border-b-2 border-white"
-            >
-              Tin tức
-            </NavLink>
+            </HashLink>
           </li>
           <li className="flex">
             <NavLink
@@ -64,7 +68,7 @@ export default function Header(props) {
               className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
               // activeClassName="border-b-2 border-white"
             >
-              Lịch sử đặt vé
+              Tin tức
             </NavLink>
           </li>
         </ul>

@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./styles.css";
 import icon from "../../assets/image/images.png";
 import "../../assets/styles/circle.css";
-import { Radio, Space, Tabs } from "antd";
+import { Tabs, Rate } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useParams } from "react-router-dom";
+import { useRef } from "react";
+import { useParams, useLocation, NavLink } from "react-router-dom";
 import { layThongTinChiTietPhim } from "../../redux/actions/QuanLyRapActions";
 import moment from "moment";
-import { StarOutlined } from "@ant-design/icons";
-import { Rate } from "antd";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 
@@ -23,13 +22,31 @@ function Detail(props) {
   const nextSevenDays = getNextSevenDays(); // Mảng các ngày dưới dạng "YYYY-MM-DD"
   const filmDetail = useSelector((state) => state.QuanLyPhimReducer.filmDetail);
   const [activeTab, setActiveTab] = useState("1");
-  console.log("fimdetail", filmDetail);
 
   let { id } = useParams();
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const getYoutubeEmbedUrl = (url) => {
+    try {
+      const urlObj = new URL(url);
+      const urlParams = new URLSearchParams(urlObj.search);
+      return `https://www.youtube.com/embed/${urlParams.get("v")}`;
+    } catch (error) {
+      console.error("Invalid URL", error);
+      return "";
+    }
+  };
+
   useEffect(() => {
     dispatch(layThongTinChiTietPhim(id));
-  }, []);
+
+    const queryParams = new URLSearchParams(location.search);
+    const tab = queryParams.get("tab");
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [id, location.search]);
 
   const { TabPane } = Tabs;
   return (
@@ -64,7 +81,7 @@ function Detail(props) {
               </div>
             </div>
           </div>
-          <div className="col-span-4 ">
+          <div className="col-span-4 col-start-9">
             <p className="text-2xl text-white" style={{ marginLeft: "9%" }}>
               <Rate allowHalf value={filmDetail.danhGia / 2} />
             </p>
@@ -79,10 +96,10 @@ function Detail(props) {
         </div>
 
         <Tabs
-          defaultActiveKey="1"
+          activeKey={activeTab}
           centered
           className="mt-20"
-          onChange={setActiveTab}
+          onChange={(key) => setActiveTab(key)}
         >
           <TabPane
             tab={
@@ -98,8 +115,8 @@ function Detail(props) {
             style={{ minHeight: 300 }}
           >
             <div
-              className="mt-20 bg-white px-5 py-5 ml-72 w-2/3"
-              style={{ borderRadius: "10px" }}
+              className="mt-20 px-5 py-5 ml-72 w-2/3"
+              style={{ borderRadius: "10px", backgroundColor: "#FDFCF0" }}
             >
               <Tabs tabPosition="left">
                 {filmDetail.heThongRapChieu?.map((htr, index) => {
@@ -193,7 +210,70 @@ function Detail(props) {
             }
             key="2"
           >
-            Content of Tab 2
+            <div
+              className="mt-20 px-5 py-5 ml-72 w-2/3"
+              style={{ borderRadius: "10px", backgroundColor: "#FDFCF0" }}
+            >
+              <div className="grid grid-cols-12">
+                <div className="col-span-10 col-start-2">
+                  <div className="grid grid-cols-5">
+                    <img
+                      className="col-span-2"
+                      src={filmDetail.hinhAnh}
+                      style={{ height: 350, borderRadius: "10px" }}
+                      alt="123"
+                    />
+                    <div className="col-span-3 ml-5">
+                      <p className="text-xl text-black">
+                        Ngày khởi chiếu:{" "}
+                        {moment(filmDetail.ngayKhoiChieu).format("DD.MM.YYYY")}
+                      </p>
+                      <hr
+                        style={{ borderTop: "1px solid red", marginTop: "2px" }}
+                      />
+
+                      <p
+                        className="text-4xl text-black "
+                        style={{ lineHeight: "3.5rem" }}
+                      >
+                        {filmDetail.tenPhim}
+                      </p>
+                      <hr
+                        style={{ borderTop: "1px solid red", marginTop: "2px" }}
+                      />
+                      <div className="flex">
+                        <p className="text-black text-base font-medium">
+                          Đạo diễn:
+                        </p>
+                        <p className="text-black text-base ml-2">
+                          {filmDetail.daoDien}
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="text-black text-base font-medium">
+                          Diễn viên:
+                        </p>
+                        <p className="text-black text-base ml-2">
+                          {filmDetail.dienVien?.join(", ")}
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="text-black text-base font-medium">
+                          Thời lượng:
+                        </p>
+                        <p className="text-black text-base ml-2">
+                          {filmDetail.thoiLuong} phút
+                        </p>
+                      </div>
+
+                      <p className="text-black text-base mt-5">
+                        {filmDetail.moTa}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </TabPane>
           <TabPane
             tab={
@@ -202,12 +282,25 @@ function Detail(props) {
                   activeTab === "3" ? "text-red-600" : "text-white"
                 }`}
               >
-                Đánh giá
+                Trailer
               </span>
             }
             key="3"
           >
-            Content of Tab 3
+            <div
+              className="mt-20 px-5 py-5 ml-72 w-2/3"
+              style={{ borderRadius: "10px", backgroundColor: "#FDFCF0" }}
+            >
+              <iframe
+                width="100%"
+                height="500"
+                src={getYoutubeEmbedUrl(filmDetail.trailer)}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
           </TabPane>
         </Tabs>
       </div>
