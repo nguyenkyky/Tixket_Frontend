@@ -26,6 +26,7 @@ function EditUser(props) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
+      newTaiKhoan: detailUser.taiKhoan,
       taiKhoan: detailUser.taiKhoan,
       email: detailUser.email,
       soDT: detailUser.soDT,
@@ -57,9 +58,9 @@ function EditUser(props) {
           <div className="w-full lg:w-1/2">
             <Form.Item label="Username">
               <Input
-                name="taiKhoan"
+                name="newTaiKhoan"
                 onChange={formik.handleChange}
-                value={formik.values.taiKhoan}
+                value={formik.values.newTaiKhoan}
                 disabled
               />
             </Form.Item>

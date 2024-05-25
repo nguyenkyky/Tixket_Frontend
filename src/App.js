@@ -37,6 +37,7 @@ import EditHeThongRap from "./pages/Admin/CumRap/EditHeThongRap";
 import EditCumRap from "./pages/Admin/CumRap/EditCumRap";
 import AddNewCumRap from "./pages/Admin/CumRap/AddNewCumRap";
 import Banner from "./pages/Admin/Banner/Banner";
+import Profile from "./pages/Profile/Profile";
 export const history = createBrowserHistory();
 
 function App() {
@@ -69,15 +70,16 @@ function App() {
           exact
           element={<HomeTemplate childComponent={<Detail />} />}
         />
-        <Route
-          path="/profile"
-          exact
-          element={<HomeTemplate childComponent={<Detail />} />}
-        />
+
         <Route
           path="/login"
           exact
           element={<UserTempalte childComponent={<Login />} />}
+        />
+        <Route
+          path="/profile"
+          exact
+          element={<HomeTemplate childComponent={<Profile />} />}
         />
         <Route
           path="/register"
@@ -90,11 +92,7 @@ function App() {
           exact
           element={<CheckoutTemplate childComponent={<CheckoutTab />} />}
         />
-        <Route
-          path="/order/history/"
-          exact
-          element={<CheckoutTemplate childComponent={<TicketHistory />} />}
-        />
+
         <Route
           path="/admin"
           exact

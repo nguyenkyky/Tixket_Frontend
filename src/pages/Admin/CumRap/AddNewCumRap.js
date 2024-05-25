@@ -3,7 +3,15 @@ import { useDispatch } from "react-redux";
 import { useParams, useNavigate, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
-import { Button, DatePicker, Form, Input, InputNumber, Switch } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Switch,
+  Select,
+} from "antd";
 import { quanLyRapService } from "../../../services/QuanLyRapService";
 import { useFormik } from "formik";
 import { addCumRapAction } from "../../../redux/actions/QuanLyRapActions";
@@ -20,6 +28,7 @@ function AddNewCumRap(props) {
     enableReinitialize: true,
     initialValues: {
       maHeThongRap: maHeThongRap,
+      khuVuc: "",
       tenCumRap: "",
       maCumRap: "",
       diaChi: "",
@@ -57,6 +66,17 @@ function AddNewCumRap(props) {
                   value={tenHeThongRap}
                   disabled
                 />
+              </Form.Item>
+              <Form.Item label="Khu vực">
+                <Select
+                  name="khuVuc"
+                  onChange={(value) => formik.setFieldValue("khuVuc", value)}
+                >
+                  <Select.Option value="Hà Nội">Hà Nội</Select.Option>
+                  <Select.Option value="TP.Hồ Chí Minh">
+                    TP.Hồ Chí Minh
+                  </Select.Option>
+                </Select>
               </Form.Item>
               <Form.Item label="Tên cụm rạp">
                 <Input name="tenCumRap" onChange={formik.handleChange} />

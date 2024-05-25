@@ -1,22 +1,36 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { logo } from "../../../../assets/image/images.png";
-// import { history } from "../../../../App";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import "./style.css";
 import { useDispatch } from "react-redux";
 import { HashLink } from "react-router-hash-link";
+import "./style.css";
+
 export default function Header(props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = JSON.parse(localStorage.getItem("USER_LOGIN"));
-  console.log("isMenuOpen", isMenuOpen);
+  const dropdownRef = useRef(null);
+
+  // Hàm để đóng menu khi click ra bên ngoài
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    // Thêm event listener để đóng menu khi click ra bên ngoài
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Loại bỏ event listener khi component bị unmount
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <header
-      style={{ backgroundColor: "#FDFCF0", opacity: "0.9" }}
+      style={{ backgroundColor: "rgba(253, 252, 240, 0.9)" }}
       className="p-4 dark:bg-gray-600 dark:text-gray-800 bg-opacity-80 text-black fixed w-full z-10 top-0 text-xl"
     >
       <div className="container flex justify-between h-16 mx-auto">
@@ -39,7 +53,6 @@ export default function Header(props) {
               smooth
               to="/home#home"
               className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
-              // activeClassName="border-b-2 border-white"
             >
               Trang chủ
             </HashLink>
@@ -66,7 +79,6 @@ export default function Header(props) {
             <NavLink
               to="/order/history"
               className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
-              // activeClassName="border-b-2 border-white"
             >
               Tin tức
             </NavLink>
@@ -74,7 +86,7 @@ export default function Header(props) {
         </ul>
         <div className="items-center flex-shrink-0 hidden lg:flex">
           {userInfo ? (
-            <div>
+            <div ref={dropdownRef}>
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)} // Toggle menu
                 id="dropdownAvatarNameButton"
@@ -106,27 +118,21 @@ export default function Header(props) {
                   >
                     <li>
                       <a
-                        href="#"
+                        href="/profile"
                         className="block px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        Thông tin chung
+                        Thông tin cá nhân
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Thay đổi thông tin
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/order/history"
-                        className="block px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                      <button
+                        onClick={() =>
+                          navigate("/profile", { state: { tab: 2 } })
+                        }
+                        className="block px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 dark:hover:text-white w-full text-left"
                       >
                         Lịch sử giao dịch
-                      </a>
+                      </button>
                     </li>
                   </ul>
                   <div className="">
@@ -155,7 +161,6 @@ export default function Header(props) {
               )}
             </div>
           ) : (
-            // Nếu người dùng chưa đăng nhập, hiển thị nút đăng nhập và đăng ký
             <>
               <button
                 onClick={() => {

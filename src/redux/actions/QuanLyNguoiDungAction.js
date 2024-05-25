@@ -91,9 +91,11 @@ export const capNhatThongTinNguoiDungAction = (values, navigate) => {
       const result = await quanLyNguoiDungService.capNhatThongTinNguoiDung(
         values
       );
-      alert("Cập nhật thông tin người dùng thành công");
-      dispatch(layThongTinAllNguoiDungAction());
-      navigate("/admin/users");
+      if (result) {
+        alert("Cập nhật thông tin người dùng thành công");
+        dispatch(layThongTinAllNguoiDungAction());
+        navigate("/admin/users");
+      }
     } catch (errors) {
       console.log("errors", errors);
     }
