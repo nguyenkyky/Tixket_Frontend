@@ -1,0 +1,11 @@
+#lich-chieu .ant-select .ant-select-selector {
+    background-color: #8f6d6d;
+   
+}
+
+
+#lich-chieu .ant-select .ant-select-selector span {
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+}

@@ -19,12 +19,12 @@ import { Pagination } from "antd";
 
 export default function Profile() {
   let user = {};
+  const navigate = useNavigate();
   if (localStorage.getItem("USER_LOGIN")) {
     user = JSON.parse(localStorage.getItem("USER_LOGIN"));
   } else {
     navigate("/login");
   }
-  const navigate = useNavigate();
   const location = useLocation();
   const initialTab = location.state?.tab?.toString() || "1";
 

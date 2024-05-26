@@ -77,7 +77,7 @@ export default function Header(props) {
           </li>
           <li className="flex">
             <NavLink
-              to="/order/history"
+              to="/news"
               className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
             >
               Tin tức

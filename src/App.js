@@ -61,7 +61,7 @@ function App() {
           element={<HomeTemplate childComponent={<Contact />} />}
         />
         <Route
-          path="/news"
+          path="/news/:id"
           exact
           element={<HomeTemplate childComponent={<News />} />}
         />

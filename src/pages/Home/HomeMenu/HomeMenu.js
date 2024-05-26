@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Radio, Space, Tabs } from "antd";
+import { Radio, Space, Tabs, Select } from "antd";
 import { NavLink } from "react-router-dom";
 import icon from "../../../assets/image/images.png";
 import moment from "moment";
 import dayjs from "dayjs";
+import "./style.css";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import { layDanhSachHeThongRapAction } from "../../../redux/actions/QuanLyRapActions";
 
@@ -13,9 +14,15 @@ dayjs.extend(advancedFormat);
 const HomeMenu = () => {
   const dispatch = useDispatch();
   const [tabPosition, setTabPosition] = useState("left");
-  const changeTabPosition = (e) => {
-    setTabPosition(e.target.value);
+  const [selectedKhuVuc, setSelectedKhuVuc] = useState("Tất cả");
+
+  const onChangeKhuVuc = (value) => {
+    setSelectedKhuVuc(value);
+    setActiveKey("0");
   };
+
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const [activeKey, setActiveKey] = useState("0");
 
@@ -38,6 +45,13 @@ const HomeMenu = () => {
 
   const renderHeThongRap = () => {
     return heThongRapChieu?.map((heThongRap, index) => {
+      const filteredCumRapChieu = heThongRap.cumRapChieu?.filter(
+        (cumRap) =>
+          selectedKhuVuc === "Tất cả" || cumRap.khuVuc === selectedKhuVuc
+      );
+
+      if (filteredCumRapChieu.length === 0) return null;
+
       return (
         <Tabs.TabPane
           tab={
@@ -51,7 +65,7 @@ const HomeMenu = () => {
           key={index}
         >
           <Tabs tabPosition={tabPosition}>
-            {heThongRap.cumRapChieu?.map((cumRap, index) => {
+            {filteredCumRapChieu.map((cumRap, index) => {
               return (
                 <Tabs.TabPane
                   tab={
@@ -73,7 +87,6 @@ const HomeMenu = () => {
                   <Tabs
                     type="card"
                     items={nextSevenDays.map((date, i) => {
-                      // Kiểm tra và lọc các phim có lịch chiếu phù hợp với ngày đã chọn
                       const filteredMovies = cumRap.danhSachPhim
                         .slice(0, 6)
                         .reduce((acc, phim, index) => {
@@ -132,7 +145,6 @@ const HomeMenu = () => {
                           return acc;
                         }, []);
 
-                      // Nếu không có suất chiếu nào phù hợp, hiển thị thông báo
                       if (filteredMovies.length === 0) {
                         filteredMovies.push(
                           <div key="no-shows" className="mt-5 text-red-500">
@@ -159,11 +171,41 @@ const HomeMenu = () => {
   };
 
   return (
-    <>
-      <Tabs tabPosition={tabPosition} activeKey={activeKey} onChange={onChange}>
-        {renderHeThongRap()}
-      </Tabs>
-    </>
+    <div>
+      <div className="flex ml-12 mb-8">
+        <Select
+          style={{ width: 200, height: 40 }}
+          showSearch
+          placeholder="Chọn khu vực"
+          optionFilterProp="children"
+          onChange={onChangeKhuVuc}
+          filterOption={filterOption}
+          options={[
+            {
+              value: "Tất cả",
+              label: "Tất cả",
+            },
+            {
+              value: "Hà Nội",
+              label: "Hà Nội",
+            },
+            {
+              value: "TP.Hồ Chí Minh",
+              label: "TP.Hồ Chí Minh",
+            },
+          ]}
+        />
+      </div>
+      <div className="ml-8">
+        <Tabs
+          tabPosition={tabPosition}
+          activeKey={activeKey}
+          onChange={onChange}
+        >
+          {renderHeThongRap()}
+        </Tabs>
+      </div>
+    </div>
   );
 };
 
