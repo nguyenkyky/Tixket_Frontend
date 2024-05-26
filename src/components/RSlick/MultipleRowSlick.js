@@ -64,6 +64,9 @@ const MultipleRowSlick = (props) => {
 
   return (
     <div className="slider-container">
+      <div className="section-title mb-8">
+        <span className="text-3xl font-bold">MOVIE SELECTION</span>
+      </div>
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-6">
           <button

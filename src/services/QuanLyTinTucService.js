@@ -8,6 +8,9 @@ export class QuanLyTinTucService extends baseService {
   getData = (id) => {
     return this.get(`api/news/getData?id=${id}`);
   };
+  getAll = () => {
+    return this.get(`api/news/getAll`);
+  };
 }
 
 export const quanLyTinTucService = new QuanLyTinTucService();

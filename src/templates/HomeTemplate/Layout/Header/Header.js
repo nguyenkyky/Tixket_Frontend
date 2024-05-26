@@ -76,12 +76,13 @@ export default function Header(props) {
             </HashLink>
           </li>
           <li className="flex">
-            <NavLink
-              to="/news"
+            <HashLink
+              smooth
+              to="/home#news"
               className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
             >
               Tin tức
-            </NavLink>
+            </HashLink>
           </li>
         </ul>
         <div className="items-center flex-shrink-0 hidden lg:flex">

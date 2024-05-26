@@ -21,3 +21,40 @@
     @apply bg-white text-gray-800;
 
 }
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+  }
+  
+  .section-title::before,
+  .section-title::after {
+    content: '';
+    flex-grow: 1;
+    height: 2px;
+    background: black;
+    position: relative;
+    display: inline-block;
+    /* margin: 0 10px; */
+  }
+  
+  .section-title::before {
+    top: -5px;
+    box-shadow: 0 10px black;
+  }
+  
+  .section-title::after {
+    top: 5px;
+    box-shadow: 0 -10px black;
+  }
+  
+  .section-title span {
+    display: inline-block;
+    position: relative;
+    padding: 0 10px;
+    
+  }
+  

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HomeMenu from "./HomeMenu/HomeMenu";
+import TinTuc from "./TinTuc/TinTuc";
 import { useSelector, useDispatch } from "react-redux";
 import Film from "../../components/Film/Film";
 import MultipleRowSlick from "../../components/RSlick/MultipleRowSlick";
@@ -39,8 +40,11 @@ export default function Home(props) {
         </div>
       </section>
 
-      <div id="lich-chieu" className="mx-36">
+      <div id="lich-chieu" className="container px-5 mx-auto">
         <HomeMenu />
+      </div>
+      <div id="news" className="container px-5 py-24 mx-auto">
+        <TinTuc />
       </div>
     </div>
   );

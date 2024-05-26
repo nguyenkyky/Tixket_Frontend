@@ -1,15 +1,3 @@
-#lich-chieu .ant-select .ant-select-selector {
-    background-color: #8f6d6d;
-   
-}
-
-
-#lich-chieu .ant-select .ant-select-selector span {
-    color: white;
-    font-size: 18px;
-    font-weight: 500;
-}
-
 .section-title {
     display: flex;
     align-items: center;
@@ -46,5 +34,32 @@
     
   }
 
+  
+.news-card {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.news-card:hover {
+  transform: scale(1.05);
+}
+
+.news-card img {
+  border-bottom: 1px solid #333;
+}
+
+.news-card .p-4 {
+  padding: 16px;
+}
+
+.news-card .text-gray-400 {
+  color: #b3b3b3;
+}
+
+.news-card .text-white {
+  color: #ffffff;
+}
 
 

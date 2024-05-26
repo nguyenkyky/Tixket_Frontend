@@ -57,7 +57,7 @@ const HomeMenu = () => {
           tab={
             <img
               src={heThongRap.logo}
-              className="rounded-full"
+              className="rounded-full "
               alt={heThongRap.logo}
               width="50px"
             />
@@ -171,8 +171,11 @@ const HomeMenu = () => {
   };
 
   return (
-    <div>
-      <div className="flex ml-12 mb-8">
+    <div className="slider-container">
+      <div className="section-title mb-8">
+        <span className="text-3xl font-bold">SHOWTIMES</span>
+      </div>
+      <div className="flex mb-8">
         <Select
           style={{ width: 200, height: 40 }}
           showSearch
@@ -196,7 +199,7 @@ const HomeMenu = () => {
           ]}
         />
       </div>
-      <div className="ml-8">
+      <div className="render-tab" style={{ marginLeft: "-24px" }}>
         <Tabs
           tabPosition={tabPosition}
           activeKey={activeKey}
