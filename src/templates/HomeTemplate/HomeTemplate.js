@@ -9,7 +9,7 @@ export const HomeTemplate = ({ childComponent }) => {
     window.scrollTo(0, 0);
   });
   return (
-    <div>
+    <div className="home-template">
       <Header />
 
       {childComponent}

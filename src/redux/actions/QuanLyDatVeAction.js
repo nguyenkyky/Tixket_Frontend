@@ -35,7 +35,6 @@ export const kiemTraDatVeAction = (thongTinDatVe = new DatVe()) => {
           resolve(result);
         }
       } catch (errors) {
-        console.log("errors", errors.response?.data.gheKhongHopLe);
         dispatch({
           type: "GHE_DA_DUOC_NGUOI_KHAC_DAT",
           gheKhongHopLe: errors.response?.data.gheKhongHopLe,
@@ -45,6 +44,7 @@ export const kiemTraDatVeAction = (thongTinDatVe = new DatVe()) => {
     });
   };
 };
+
 export const datVeAction = (thongTinDatVe = new DatVe()) => {
   return async (dispatch, getState) => {
     try {
@@ -55,13 +55,20 @@ export const datVeAction = (thongTinDatVe = new DatVe()) => {
           type: SET_THONG_TIN_DAT_VE,
           thongTinDatVe: thongTinDatVe,
         });
+        let danhSachGheVuaDat = thongTinDatVe.danhSachVe;
+        danhSachGheVuaDat = JSON.stringify(danhSachGheVuaDat);
 
         await dispatch(layChiTietPhongVeAction(thongTinDatVe.maLichChieu));
         await dispatch({ type: "HOAN_TAT_DAT_VE" });
         await dispatch({ type: "HIDE_LOADING" });
 
         let userLogin = getState().QuanLyNguoiDungReducer.userLogin;
-        connection.invoke("datVeThanhCong", userLogin.taiKhoan);
+
+        connection.invoke(
+          "datVeThanhCong",
+          userLogin.taiKhoan,
+          danhSachGheVuaDat
+        );
         dispatch({ type: CHUYEN_TRANG_KET_QUA_DAT_VE });
       }
     } catch (errors) {
@@ -78,6 +85,7 @@ export const datGheAction = (ghe, maLichChieu) => {
       gheDangChon: ghe,
     });
     let danhSachGheDangDat = getState().QuanLyDatVeReducer.danhSachGheDangDat;
+
     let taiKhoan = getState().QuanLyNguoiDungReducer.userLogin.taiKhoan;
     danhSachGheDangDat = JSON.stringify(danhSachGheDangDat);
 

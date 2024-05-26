@@ -1,13 +1,14 @@
-.ghe { /* Ghe thuong */
-    width: 35px;
-    height: 35px;
+
+  .ghe {
+    width: 35px; /* Giảm kích thước ghế */
+    height: 35px; /* Giảm kích thước ghế */
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin:15px;
+    margin: 10px 12px 2px 12px;
     background-color: rgb(123, 122, 122);
     color: #fff;
-  }
+}
 
   .gheDaDat {
     background-color: rgb(172, 82, 82) !important;
@@ -44,4 +45,17 @@
   }
 
 
-  
+  .button-goback {
+    background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }

@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
 import { DAT_VE } from "../../redux/actions/types/QuanLyDatVeType";
 import {
   layChiTietPhongVeAction,
@@ -44,7 +44,11 @@ function Checkout(props) {
     dispatch(action);
 
     // Co client dat ve thanh cong se load lai danh sach phong ve
-    connection.on("datVeThanhCong", () => {
+    connection.on("datVeThanhCong", (danhSachGheKhachVuaDat) => {
+      dispatch({
+        type: "LOAI_BO_GHE_KHONG_HOP_LE",
+        gheKhongHopLe: danhSachGheKhachVuaDat,
+      });
       dispatch(action);
     });
     connection.invoke("layDanhSachGheDangDat");
@@ -136,7 +140,7 @@ function Checkout(props) {
   };
 
   return (
-    <div className="min-h-screen mt-5">
+    <div className="min-h-full mt-5">
       <div className="grid grid-cols-12">
         <div className="col-span-9">
           <div className="flex flex-col items-center mt-5">
@@ -162,7 +166,10 @@ function Checkout(props) {
                   <th className="w-1/6">Ghế khách đang đặt</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200 ">
+              <tbody
+                className=" divide-y divide-gray-200 "
+                style={{ backgroundColor: "#FDFCF0" }}
+              >
                 <tr>
                   <td className="">
                     <button className="ghe text-center ml-20">00</button>
@@ -355,11 +362,19 @@ function KetQuaDatVe() {
 }
 
 function CheckoutTab(props) {
+  const navigate = useNavigate();
   const { tabActive } = useSelector((state) => state.QuanLyDatVeReducer);
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-  const operations = <button>Extra option</button>;
+  const handleBack = () => {
+    navigate(-1);
+  };
+  const operations = (
+    <button className="button-goback" onClick={handleBack}>
+      Quay lại
+    </button>
+  );
   return (
-    <div>
+    <div style={{ backgroundColor: "#FDFCF0" }}>
       <Header />
       <div className="p-5 mt-24 ">
         <Tabs

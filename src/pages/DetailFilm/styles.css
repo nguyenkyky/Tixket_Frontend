@@ -1,30 +1,43 @@
 .image-container {
     position: relative;
-    min-height: '100vh';
-    min-width: '100vh';
-   
-    
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .image-container .detail-background {
-    width: 100vw;
-    height: 1400px;
-    object-fit: cover;
-    background-size: cover;
-    background-position: center;
-}
-
-.blur-effect {
-    padding-top: 150px;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 100%;
-    backdrop-filter: blur(5px);
-    background-color: rgba(37, 6, 6, 0.007); /* Có thể điều chỉnh màu nền và độ trong suốt */
+    object-fit: cover;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
 }
+
+.blur-effect {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px); /* Tăng giá trị làm mờ */
+    background-color: rgba(0, 0, 0, 0.7); /* Điều chỉnh màu nền và độ trong suốt */
+    
+}
+
+.content {
+    flex: 1;
+    overflow: auto; /* Cho phép nội dung cuộn nếu quá dài */
+    padding-bottom: 100px; /* Tạo khoảng cách dưới cùng để tránh che mất footer */
+}
+
 
 .ant-tabs-tabpane {
     min-height: 500px;
+  }
+
+.home-template  footer {
+    padding-top: 0;
   }

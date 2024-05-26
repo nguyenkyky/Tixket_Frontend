@@ -73,8 +73,11 @@ const HomeMenu = () => {
                       <img
                         src={cumRap.hinhAnh}
                         alt={icon}
-                        width="50"
-                        height="50"
+                        style={{
+                          width: 50,
+                          height: 60,
+                          borderRadius: "4px",
+                        }}
                       />
                       <div className="text-left ml-2">
                         {cumRap.tenCumRap}
@@ -104,8 +107,11 @@ const HomeMenu = () => {
                                   <img
                                     src={phim.hinhAnh}
                                     alt={phim.hinhAnh}
-                                    width="100"
-                                    height="100"
+                                    style={{
+                                      width: "100px",
+                                      height: "100px",
+                                      borderRadius: "4px",
+                                    }}
                                     onError={(e) => {
                                       e.target.onError = null;
                                       e.target.src =

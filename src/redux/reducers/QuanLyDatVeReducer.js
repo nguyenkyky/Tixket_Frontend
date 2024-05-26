@@ -57,6 +57,15 @@ export const QuanLyDatVeReducer = (state = stateDefault, action) => {
       state.gheDaDuocNguoiKhacDat = action.gheKhongHopLe;
       return { ...state };
     }
+
+    case "LOAI_BO_GHE_KHONG_HOP_LE": {
+      const gheKhongHopLe = action.gheKhongHopLe;
+      const danhSachGheDangDat = state.danhSachGheDangDat.filter(
+        (ghe) => !gheKhongHopLe.includes(ghe.maGhe)
+      );
+      return { ...state, danhSachGheDangDat };
+    }
+
     default:
       return { ...state };
   }

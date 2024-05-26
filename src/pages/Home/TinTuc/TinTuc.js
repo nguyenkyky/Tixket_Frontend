@@ -20,7 +20,7 @@ function TinTuc() {
   }, []);
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto">
       <div className="section-title my-8">
         <span className="text-3xl font-bold">NEWS</span>
       </div>
