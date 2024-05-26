@@ -13,7 +13,11 @@ import { DatVe } from "../../models/DatVe.model";
 import _ from "lodash";
 import style from "./Checkout.module.css";
 import "./Checkout.css";
-import { UserOutlined, UsergroupAddOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  UsergroupAddOutlined,
+  CheckCircleTwoTone,
+} from "@ant-design/icons";
 import { Tabs } from "antd";
 import moment from "moment";
 import { connection } from "../../index";
@@ -308,15 +312,14 @@ function Checkout(props) {
 }
 
 function KetQuaDatVe() {
+  const { tabActive } = useSelector((state) => state.QuanLyDatVeReducer);
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { thongTinDatVe } = useSelector(
     (state) => state.QuanLyNguoiDungReducer
   );
   const { thongTinVeVuaDat } = useSelector((state) => state.QuanLyDatVeReducer);
-  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-
-  // console.log("thongTinDatVe", thongTinDatVe);
-  // console.log("thongTinVeVuaDat", thongTinVeVuaDat);
 
   useEffect(() => {
     const action = layThongTinDatVe();
@@ -326,47 +329,94 @@ function KetQuaDatVe() {
   const tenGhe = thongTinVeVuaDat.danhSachVe?.map((ve) => ve.tenGhe).join(", ");
 
   return (
-    <section className="text-gray-600 body-font overflow-hidden">
-      <div className="container px-5 py-24 mx-auto">
-        <div className="lg:w-5/6 mx-auto flex flex-wrap">
-          <img
-            alt="ecommerce"
-            className="flex-shrink-0 rounded-lg w-80 h-80 object-cover object-center sm:mb-0 mb-4"
-            src={thongTinVeVuaDat.hinhAnh}
-          />
-          <div className="lg:w-2/3 w-full lg:pl-10 mt-6 lg:mt-0">
-            <h1 className="text-gray-900 text-3xl title-font font-medium mb-4">
-              {thongTinVeVuaDat.tenPhim}
-            </h1>
-            <p className="mb-4 text-xl">
-              Ngày chiếu:{" "}
-              {moment(thongTinVeVuaDat.ngayChieu).format(
-                "hh:mm A - DD-MM-YYYY"
-              )}
-            </p>
-            <p className="mb-4 text-xl">
-              Tên rạp: {thongTinVeVuaDat.tenCumRap} - {thongTinVeVuaDat.tenRap}
-            </p>
-            <p className="mb-4 text-xl">Địa điểm: {thongTinVeVuaDat.diaChi}</p>
-            <p className="mb-4 text-xl">Ghế: {tenGhe} </p>
-            <div className="flex">
-              <span className="title-font font-medium text-xl text-gray-900">
-                Tổng giá tiền: {thongTinVeVuaDat.tongTien}
-              </span>
-            </div>
-          </div>
-        </div>
+    <div className="payment-container w-1/2 px-5 py-12 mx-auto">
+      <div className="payment-header">
+        <CheckCircleTwoTone style={{ fontSize: "40px", color: "green" }} />
+        <h1 className="payment-title">Payment Successful !</h1>
+        <p className="payment-subtitle">
+          Thank you! Your payment of {thongTinVeVuaDat.tongTien} has been
+          received.
+        </p>
+        <p className="payment-order-id text-xl">
+          Order ID: {thongTinVeVuaDat.maLichChieu}
+        </p>
       </div>
-    </section>
+      <div className="payment-details flex flex-col space-y-4">
+        {thongTinVeVuaDat.danhSachVe.map((ticket, index) => {
+          console.log("thongtinvevuadat", thongTinVeVuaDat);
+          console.log("ticket", ticket);
+
+          const seat = _.first(ticket.danhSachGhe);
+          return (
+            <div
+              className="bg-white p-4 rounded-md shadow-md flex items-center justify-between mb-4 text-start"
+              key={index}
+            >
+              <img
+                src={thongTinVeVuaDat.hinhAnh}
+                alt={thongTinVeVuaDat.tenPhim}
+                className="w-32 h-32 rounded-md"
+              />
+              <div className="flex-1 ml-4">
+                <h3 className="text-xl font-bold">
+                  {thongTinVeVuaDat.tenPhim}
+                </h3>
+                <hr
+                  style={{
+                    borderTop: "1px solid red",
+                    marginTop: "2px",
+                    width: "80%",
+                  }}
+                />
+                <p className="text-gray-600">
+                  Địa điểm: {thongTinVeVuaDat.tenCumRap}
+                </p>
+                <p className="text-gray-600">
+                  Ngày đặt:{" "}
+                  {moment(ticket.ngayDat).format("hh:mm A - DD/MM/YYYY")}
+                </p>
+                <p className="text-gray-600">
+                  Ngày chiếu: {thongTinVeVuaDat.ngayChieu}
+                </p>
+                <p className="text-gray-600">Ghế: {tenGhe}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-green-600 font-bold text-lg">
+                  Giá vé: {thongTinVeVuaDat.tongTien}
+                </p>
+                <CheckCircleTwoTone
+                  style={{
+                    fontSize: "30px",
+                    marginTop: "12px",
+                    marginRight: "56px",
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <button
+        className="ok-button"
+        onClick={() => {
+          navigate("/home");
+          dispatch({ type: "RELOAD_CHECKOUT" });
+        }}
+      >
+        Trang chủ
+      </button>
+    </div>
   );
 }
 
 function CheckoutTab(props) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { tabActive } = useSelector((state) => state.QuanLyDatVeReducer);
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
   const handleBack = () => {
     navigate(-1);
+    dispatch({ type: "RELOAD_CHECKOUT" });
   };
   const operations = (
     <button className="button-goback" onClick={handleBack}>

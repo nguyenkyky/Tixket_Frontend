@@ -47,6 +47,10 @@ export const QuanLyDatVeReducer = (state = stateDefault, action) => {
       state.tabActive = 2;
       return { ...state };
     }
+    case "RELOAD_CHECKOUT": {
+      state.tabActive = 1;
+      return { ...state };
+    }
 
     case "DAT_GHE": {
       state.danhSachGheKhachDangDat = action.arrGheKhachDangDat;
