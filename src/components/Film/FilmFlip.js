@@ -97,8 +97,8 @@ function FilmFlip(props) {
             <div className="flex ml-2">
               <p className="mt-2 text-black font-bold">
                 Đạo diễn:{" "}
-                {item.daoDien.length > 25
-                  ? item.daoDien.substring(0, 25) + "..."
+                {item.daoDien?.length > 25
+                  ? item.daoDien?.substring(0, 25) + "..."
                   : item.daoDien}
               </p>
             </div>

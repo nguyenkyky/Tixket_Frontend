@@ -215,7 +215,7 @@ export default function Profile() {
                 <Form
                   onSubmitCapture={formik.handleSubmit}
                   labelCol={{
-                    span: 8,
+                    span: 12,
                   }}
                   wrapperCol={{
                     span: 14,
