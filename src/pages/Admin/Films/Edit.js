@@ -8,7 +8,16 @@ import {
   capNhatPhimAction,
 } from "../../../redux/actions/QuanLyPhimAction";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
-import { Button, DatePicker, Form, Input, InputNumber, Switch } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Switch,
+  Flex,
+  Tag,
+} from "antd";
 import { useFormik } from "formik";
 import moment from "moment";
 
@@ -18,13 +27,30 @@ function Edit(props) {
   const { thongTinPhim } = useSelector((state) => state.QuanLyPhimReducer);
   const navigate = useNavigate();
   const { TextArea } = Input;
-
+  const tagsData = [
+    "Hành động",
+    "Kinh dị",
+    "Phim hài",
+    "Hoạt hình",
+    "Tâm lý, tình cảm",
+  ];
   const [dienVienList, setDienVienList] = useState([]);
 
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  const handleChange = (tag, checked) => {
+    const nextSelectedTags = checked
+      ? [...selectedTags, tag]
+      : selectedTags.filter((t) => t !== tag);
+    console.log("You are interested in: ", nextSelectedTags);
+    setSelectedTags(nextSelectedTags);
+    formik.setFieldValue("theLoai", nextSelectedTags);
+  };
+
   useEffect(() => {
-    const fetchThongTinPhim = async () => {
-      await dispatch(layThongTinPhimAction(id));
-    };
+    async function fetchThongTinPhim() {
+      dispatch(layThongTinPhimAction(id));
+    }
 
     fetchThongTinPhim();
   }, [id, dispatch]);
@@ -33,6 +59,7 @@ function Edit(props) {
     if (Array.isArray(thongTinPhim.dienVien)) {
       setDienVienList(thongTinPhim.dienVien.map((dv) => ({ name: dv })));
     }
+    setSelectedTags(thongTinPhim?.theLoai);
   }, [thongTinPhim.dienVien]);
 
   const addDienVien = () => {
@@ -77,9 +104,11 @@ function Edit(props) {
       sapChieu: thongTinPhim?.sapChieu,
       hot: thongTinPhim?.hot,
       danhGia: thongTinPhim?.danhGia,
+      theLoai: [thongTinPhim?.theLoai],
     },
     onSubmit: (values) => {
       dispatch(capNhatPhimAction(values, navigate));
+      console.log(values);
     },
   });
 
@@ -174,6 +203,24 @@ function Edit(props) {
             </Form.Item>
           </div>
           <div className="w-full lg:w-1/2">
+            <Flex className="mb-4 ml-16" gap={4} wrap align="center">
+              <span className="text-base">Thể loại:</span>
+              {tagsData.map((tag) => (
+                <Tag.CheckableTag
+                  style={{
+                    fontSize: "16px",
+                    border: "1px solid red",
+                    padding: "1px",
+                    marginLeft: "8px",
+                  }}
+                  key={tag}
+                  checked={selectedTags?.includes(tag)}
+                  onChange={(checked) => handleChange(tag, checked)}
+                >
+                  {tag}
+                </Tag.CheckableTag>
+              ))}
+            </Flex>
             <Form.Item label="Thời lượng(phút)">
               <InputNumber
                 min={1}

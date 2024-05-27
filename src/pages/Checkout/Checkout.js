@@ -342,59 +342,46 @@ function KetQuaDatVe() {
         </p>
       </div>
       <div className="payment-details flex flex-col space-y-4">
-        {thongTinVeVuaDat.danhSachVe.map((ticket, index) => {
-          console.log("thongtinvevuadat", thongTinVeVuaDat);
-          console.log("ticket", ticket);
-
-          const seat = _.first(ticket.danhSachGhe);
-          return (
-            <div
-              className="bg-white p-4 rounded-md shadow-md flex items-center justify-between mb-4 text-start"
-              key={index}
-            >
-              <img
-                src={thongTinVeVuaDat.hinhAnh}
-                alt={thongTinVeVuaDat.tenPhim}
-                className="w-32 h-32 rounded-md"
-              />
-              <div className="flex-1 ml-4">
-                <h3 className="text-xl font-bold">
-                  {thongTinVeVuaDat.tenPhim}
-                </h3>
-                <hr
-                  style={{
-                    borderTop: "1px solid red",
-                    marginTop: "2px",
-                    width: "80%",
-                  }}
-                />
-                <p className="text-gray-600">
-                  Địa điểm: {thongTinVeVuaDat.tenCumRap}
-                </p>
-                <p className="text-gray-600">
-                  Ngày đặt:{" "}
-                  {moment(ticket.ngayDat).format("hh:mm A - DD/MM/YYYY")}
-                </p>
-                <p className="text-gray-600">
-                  Ngày chiếu: {thongTinVeVuaDat.ngayChieu}
-                </p>
-                <p className="text-gray-600">Ghế: {tenGhe}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-green-600 font-bold text-lg">
-                  Giá vé: {thongTinVeVuaDat.tongTien}
-                </p>
-                <CheckCircleTwoTone
-                  style={{
-                    fontSize: "30px",
-                    marginTop: "12px",
-                    marginRight: "56px",
-                  }}
-                />
-              </div>
-            </div>
-          );
-        })}
+        <div className="bg-white p-4 rounded-md shadow-md flex items-center justify-between mb-4 text-start">
+          <img
+            src={thongTinVeVuaDat.hinhAnh}
+            alt={thongTinVeVuaDat.tenPhim}
+            className="w-32 h-32 rounded-md"
+          />
+          <div className="flex-1 ml-4">
+            <h3 className="text-xl font-bold">{thongTinVeVuaDat.tenPhim}</h3>
+            <hr
+              style={{
+                borderTop: "1px solid red",
+                marginTop: "2px",
+                width: "80%",
+              }}
+            />
+            <p className="text-gray-600">
+              Địa điểm: {thongTinVeVuaDat.tenCumRap}
+            </p>
+            <p className="text-gray-600">
+              Ngày đặt: {moment().format("HH:mm  - DD/MM/YYYY")}
+            </p>
+            <p className="text-gray-600">
+              Ngày chiếu: {thongTinVeVuaDat.gioChieu} -{" "}
+              {thongTinVeVuaDat.ngayChieu}
+            </p>
+            <p className="text-gray-600">Ghế: {tenGhe}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-green-600 font-bold text-lg">
+              Giá vé: {thongTinVeVuaDat.tongTien}
+            </p>
+            <CheckCircleTwoTone
+              style={{
+                fontSize: "30px",
+                marginTop: "12px",
+                marginRight: "56px",
+              }}
+            />
+          </div>
+        </div>
       </div>
       <button
         className="ok-button"

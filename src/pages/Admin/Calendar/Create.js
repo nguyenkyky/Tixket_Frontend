@@ -32,6 +32,7 @@ function Create(props) {
       maRap: "",
       giaVe: 0,
       thoiLuong: 0,
+      theLoai: [],
     },
     onSubmit: async (values) => {
       console.log("values", values);
@@ -65,17 +66,11 @@ function Create(props) {
     formik.setFieldValue("maRap", value);
   };
   const onChangeDate = (value) => {
-    formik.setFieldValue(
-      "ngayChieuGioChieu",
-      value.format("DD/MM/YYYY hh:mm:ss")
-    );
+    formik.setFieldValue("ngayChieuGioChieu", value);
   };
 
   const onOk = (value) => {
-    formik.setFieldValue(
-      "ngayChieuGioChieu",
-      value.format("DD/MM/YYYY hh:mm:ss")
-    );
+    formik.setFieldValue("ngayChieuGioChieu", value);
   };
 
   const onChangeGiaVe = (value) => {
@@ -97,6 +92,8 @@ function Create(props) {
       formik.setFieldValue("dangChieu", result.data.dangChieu);
       formik.setFieldValue("sapChieu", result.data.sapChieu);
       formik.setFieldValue("thoiLuong", result.data.thoiLuong);
+      formik.setFieldValue("theLoai", result.data.theLoai);
+
       setFilm(result.data);
       setState({ ...state, heThongRapChieu: response.data.data });
     }
@@ -143,13 +140,7 @@ function Create(props) {
             />
           </Form.Item>
           <Form.Item label="Lịch chiếu">
-            <DatePicker
-              format="DD/MM/YYYY hh:mm:ss"
-              showWeek
-              showTime
-              onChange={onChangeDate}
-              onOk={onOk}
-            />
+            <DatePicker showWeek showTime onChange={onChangeDate} onOk={onOk} />
           </Form.Item>
           <Form.Item label="Giá vé">
             <InputNumber min={70000} max={200000} onChange={onChangeGiaVe} />

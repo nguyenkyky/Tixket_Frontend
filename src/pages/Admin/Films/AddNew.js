@@ -17,6 +17,8 @@ import {
   Switch,
   TreeSelect,
   Upload,
+  Flex,
+  Tag,
 } from "antd";
 import { useFormik } from "formik";
 
@@ -31,6 +33,24 @@ function AddNew(props) {
       return e;
     }
     return e?.fileList;
+  };
+
+  const tagsData = [
+    "Hành động",
+    "Kinh dị",
+    "Phim hài",
+    "Hoạt hình",
+    "Tâm lý, tình cảm",
+  ];
+
+  const [selectedTags, setSelectedTags] = useState([]);
+  const handleChange = (tag, checked) => {
+    const nextSelectedTags = checked
+      ? [...selectedTags, tag]
+      : selectedTags.filter((t) => t !== tag);
+    console.log("You are interested in: ", nextSelectedTags);
+    setSelectedTags(nextSelectedTags);
+    formik.setFieldValue("theLoai", nextSelectedTags);
   };
 
   const [dienVienList, setDienVienList] = useState([{ name: "" }]);
@@ -69,6 +89,7 @@ function AddNew(props) {
       sapChieu: true,
       hot: false,
       danhGia: 0,
+      theLoai: [],
     },
     onSubmit: (values) => {
       console.log("values", values);
@@ -145,6 +166,24 @@ function AddNew(props) {
             </Form.Item>
           </div>
           <div className="w-full lg:w-1/2">
+            <Flex className="mb-4 ml-16" gap={4} wrap align="center">
+              <span className="text-base">Thể loại:</span>
+              {tagsData.map((tag) => (
+                <Tag.CheckableTag
+                  style={{
+                    fontSize: "16px",
+                    border: "1px solid red",
+                    padding: "1px",
+                    marginLeft: "8px",
+                  }}
+                  key={tag}
+                  checked={selectedTags.includes(tag)}
+                  onChange={(checked) => handleChange(tag, checked)}
+                >
+                  {tag}
+                </Tag.CheckableTag>
+              ))}
+            </Flex>
             <Form.Item label="Thời lượng(phút)">
               <InputNumber
                 min={1}

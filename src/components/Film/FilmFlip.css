@@ -69,3 +69,13 @@
     margin-top: 20px;
   }
   
+
+
+  
+  .flip-card .flex.ml-2.justify-between {
+    align-items: center;
+  }
+  
+  .flip-card .flex.ml-2.justify-between p {
+    margin-right: auto;
+  }

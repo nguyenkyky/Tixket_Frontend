@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./styles.css";
 import icon from "../../assets/image/images.png";
 import "../../assets/styles/circle.css";
-import { Tabs, Rate } from "antd";
+import { Tabs, Rate, Tag } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef } from "react";
 import { useParams, useLocation, NavLink } from "react-router-dom";
@@ -33,7 +33,6 @@ function Detail(props) {
       const urlParams = new URLSearchParams(urlObj.search);
       return `https://www.youtube.com/embed/${urlParams.get("v")}`;
     } catch (error) {
-      console.error("Invalid URL", error);
       return "";
     }
   };
@@ -76,7 +75,7 @@ function Detail(props) {
                     {moment(filmDetail.ngayKhoiChieu).format("DD.MM.YYYY")}
                   </p>
                   <p
-                    className="text-4xl text-white "
+                    className="text-4xl text-white"
                     style={{ lineHeight: "3.5rem" }}
                   >
                     {filmDetail.tenPhim}
@@ -86,9 +85,9 @@ function Detail(props) {
               </div>
             </div>
             <div className="col-span-4 col-start-9">
-              <p className="text-2xl text-white" style={{ marginLeft: "9%" }}>
+              <div className="text-2xl text-white" style={{ marginLeft: "9%" }}>
                 <Rate allowHalf value={filmDetail.danhGia / 2} />
-              </p>
+              </div>
               <div className={`c100 p${filmDetail.danhGia * 10} big`}>
                 <span>{filmDetail.danhGia}</span>
                 <div className="slice">
@@ -282,6 +281,23 @@ function Detail(props) {
                           <p className="text-black text-base ml-2">
                             {filmDetail.thoiLuong} phút
                           </p>
+                        </div>
+                        <div className="flex">
+                          <p className="text-black text-base font-medium">
+                            Thể loại:
+                          </p>
+                          <div
+                            className="tags-container flex justify-start ml-2 "
+                            style={{ marginTop: "2px" }}
+                          >
+                            {filmDetail.theLoai
+                              ?.slice(0, 2)
+                              .map((tag, index) => (
+                                <Tag color="purple" key={index}>
+                                  {tag}
+                                </Tag>
+                              ))}
+                          </div>
                         </div>
 
                         <p className="text-black text-base mt-5">

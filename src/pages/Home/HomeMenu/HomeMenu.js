@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Radio, Space, Tabs, Select } from "antd";
+import { Radio, Space, Tabs, Select, Tag } from "antd";
 import { NavLink } from "react-router-dom";
 import icon from "../../../assets/image/images.png";
 import moment from "moment";
@@ -126,6 +126,15 @@ const HomeMenu = () => {
                                       {phim.tenPhim}
                                     </NavLink>
                                     <p>{phim.thoiLuong} phút</p>
+                                    <div className="tags-container flex justify-start mt-7">
+                                      {phim.theLoai
+                                        .slice(0, 2)
+                                        .map((tag, index) => (
+                                          <Tag color="purple" key={index}>
+                                            {tag}
+                                          </Tag>
+                                        ))}
+                                    </div>
                                   </div>
                                 </div>
                                 <div className="grid grid-cols-6 gap-2">
