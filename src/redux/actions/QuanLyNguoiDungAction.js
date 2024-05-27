@@ -13,10 +13,31 @@ export const dangNhapAction = (thongTinDangNhap, navigate) => {
           type: DANG_NHAP_ACTION,
           thongTinDangNhap: result.data,
         });
-        navigate(-1);
+        navigate("/home");
       }
     } catch (error) {
       console.log("error", error.response.data);
+    }
+  };
+};
+
+export const dangKyAction = (thongTinDangKy, navigate) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.dangKy(thongTinDangKy);
+      if (result) {
+        alert("Đăng ký thành công");
+        navigate("/login");
+      }
+    } catch (error) {
+      if (error.response.status === 402) {
+        alert("Username already exists");
+      }
+      if (error.response.status === 400) {
+        alert("Passwords do not match");
+      } else {
+        console.log("error", error.response.data);
+      }
     }
   };
 };

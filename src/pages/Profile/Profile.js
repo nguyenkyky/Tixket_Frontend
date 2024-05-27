@@ -173,7 +173,10 @@ export default function Profile() {
       avatar: user?.avatar,
       taiKhoan: user?.taiKhoan,
       newTaiKhoan: user?.taiKhoan,
-      maLoaiNguoiDung: user?.maLoaiNguoiDung,
+      maLoaiNguoiDung:
+        user?.maLoaiNguoiDung === "KhachHang"
+          ? "Khách Hàng"
+          : user?.maLoaiNguoiDung,
     },
     onSubmit: async (values) => {
       try {
@@ -215,7 +218,7 @@ export default function Profile() {
                 <Form
                   onSubmitCapture={formik.handleSubmit}
                   labelCol={{
-                    span: 8,
+                    span: 12,
                   }}
                   wrapperCol={{
                     span: 14,
