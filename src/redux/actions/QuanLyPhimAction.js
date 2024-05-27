@@ -69,10 +69,39 @@ export const timKiemPhimAction = (data) => {
   return async (dispatch) => {
     try {
       const result = await quanLyPhimService.timKiemPhim(data);
-      console.log("danh sach phim", result);
+      // console.log("danh sach phim", result);
       dispatch({
         type: SET_DANH_SACH_PHIM,
         arrFilm: result.data.phim,
+      });
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const getAllShowTimesAction = () => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyPhimService.getAllShowTimes();
+      // console.log("danh sach lich chieu", result);
+      dispatch({
+        type: "SET_ALL_SHOWTIMES",
+        arrShowTimes: result.data,
+      });
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const deleteShowtimeAction = (maLichChieu) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyPhimService.xoaLichChieuPhim(maLichChieu);
+      dispatch({
+        type: "DELETE_SHOWTIME",
+        payload: maLichChieu,
       });
     } catch (errors) {
       console.log("errors", errors);

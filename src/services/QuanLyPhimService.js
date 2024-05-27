@@ -42,6 +42,10 @@ export class QuanLyPhimService extends baseService {
   xoaLichChieuPhim = (maLichChieu) => {
     return this.delete(`api/lichchieuphim/delete?maLichChieu=${maLichChieu}`);
   };
+
+  getAllShowTimes = () => {
+    return this.get(`api/lichchieuphim/allshowtimes`);
+  };
 }
 
 export const quanLyPhimService = new QuanLyPhimService();

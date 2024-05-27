@@ -8,7 +8,7 @@ import { Button, Tag } from "antd";
 
 function FilmFlip(props) {
   const { item } = props;
-  console.log(item);
+
   const navigate = useNavigate();
 
   const handlePlayClick = () => {

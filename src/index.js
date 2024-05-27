@@ -9,6 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 import * as signalR from "@aspnet/signalr";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import AutoDeleteShowtimes from "./components/AutoDelete/AutoDeleteShowTimes";
 
 export const connection = new signalR.HubConnectionBuilder()
   .withUrl(`http://localhost:5296/datveHub`)
@@ -21,9 +22,8 @@ connection
   .then(() => {
     root.render(
       <Provider store={store}>
-        {/* <BrowserRouter> */}
+        <AutoDeleteShowtimes />
         <App />
-        {/* </BrowserRouter> */}
       </Provider>
     );
   })

@@ -5,7 +5,6 @@ import { NavLink } from "react-router-dom";
 
 function TinTuc() {
   const [news, setNews] = useState([]);
-  console.log(news);
 
   useEffect(() => {
     async function fetchData() {

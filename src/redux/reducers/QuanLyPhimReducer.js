@@ -5,6 +5,7 @@ const stateDefault = {
   arrFilmDefault: [],
   filmDetail: {},
   thongTinPhim: {},
+  arrShowTimes: [],
 };
 
 export const QuanLyPhimReducer = (state = stateDefault, action) => {
@@ -48,6 +49,20 @@ export const QuanLyPhimReducer = (state = stateDefault, action) => {
       state.thongTinPhim = action.thongTinPhim;
 
       return { ...state };
+    }
+
+    case "SET_ALL_SHOWTIMES": {
+      state.arrShowTimes = action.arrShowTimes;
+      return { ...state };
+    }
+
+    case "DELETE_SHOWTIME": {
+      return {
+        ...state,
+        arrShowTimes: state.arrShowTimes.filter(
+          (showtime) => showtime.maLichChieu !== action.payload
+        ),
+      };
     }
     default:
       return { ...state };
