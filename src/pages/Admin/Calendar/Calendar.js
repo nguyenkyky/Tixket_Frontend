@@ -39,6 +39,7 @@ function Calendar(props) {
         ...state,
         cumRapChieu: result.data.cumRapChieu,
         selectedHeThongRap: value,
+        selectedCumRap: "",
       });
     }
   };
@@ -66,6 +67,8 @@ function Calendar(props) {
         ...state,
         lichChieu: result.data,
       });
+    } else {
+      alert("Vui lòng chọn đúng cụm rạp");
     }
   };
 
