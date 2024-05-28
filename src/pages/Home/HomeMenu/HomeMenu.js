@@ -38,10 +38,28 @@ const HomeMenu = () => {
   const nextSevenDays = getNextSevenDays(); // Mảng các ngày dưới dạng "YYYY-MM-DD"
 
   useEffect(() => {
-    dispatch(layDanhSachHeThongRapAction());
-  }, []);
+
+    const fetchShowtimes = async () => { 
+       dispatch(layDanhSachHeThongRapAction());
+    }
+    fetchShowtimes();
+    // Đặt interval để gọi hàm mỗi phút
+    const interval = setInterval(() => {
+      fetchShowtimes();
+    }, 60000); // Kiểm tra mỗi phút
+
+    // Hàm dọn dẹp interval khi component bị unmount
+    return () => clearInterval(interval);
+  }, [dispatch]);
 
   const { heThongRapChieu } = useSelector((state) => state.QuanLyRapReducer);
+
+  const filterExpiredShowtimes = (lstLichChieuTheoPhim) => {
+    const currentTime = moment();
+    return lstLichChieuTheoPhim.filter((lichChieu) =>
+      currentTime.isBefore(moment(lichChieu.ngayChieuGioChieu))
+    );
+  };
 
   const renderHeThongRap = () => {
     return heThongRapChieu?.map((heThongRap, index) => {
@@ -93,13 +111,14 @@ const HomeMenu = () => {
                       const filteredMovies = cumRap.danhSachPhim
                         .slice(0, 6)
                         .reduce((acc, phim, index) => {
-                          const lichChieuPhuHop =
-                            phim.lstLichChieuTheoPhim.filter(
-                              (lichChieu) =>
-                                dayjs(lichChieu.ngayChieuGioChieu).format(
-                                  "YYYY-MM-DD"
-                                ) === date
-                            );
+                          const lichChieuPhuHop = filterExpiredShowtimes(
+                            phim.lstLichChieuTheoPhim
+                          ).filter(
+                            (lichChieu) =>
+                              dayjs(lichChieu.ngayChieuGioChieu).format(
+                                "YYYY-MM-DD"
+                              ) === date
+                          );
                           if (lichChieuPhuHop.length > 0) {
                             const movieDetails = (
                               <div key={index} className="mt-5 ">

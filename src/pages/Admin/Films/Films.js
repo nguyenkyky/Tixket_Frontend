@@ -157,7 +157,7 @@ function Films(props) {
           </Fragment>
         );
       },
-      width: "10%",
+      width: "15%",
     },
   ];
 

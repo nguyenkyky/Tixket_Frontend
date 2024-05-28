@@ -4,7 +4,6 @@ import icon from "../../assets/image/images.png";
 import "../../assets/styles/circle.css";
 import { Tabs, Rate, Tag } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { useRef } from "react";
 import { useParams, useLocation, NavLink } from "react-router-dom";
 import { layThongTinChiTietPhim } from "../../redux/actions/QuanLyRapActions";
 import moment from "moment";
@@ -38,14 +37,29 @@ function Detail(props) {
   };
 
   useEffect(() => {
-    dispatch(layThongTinChiTietPhim(id));
 
+    const fetchShowtimes = async () => {
+      dispatch(layThongTinChiTietPhim(id));
+    }
+    fetchShowtimes();
+    // Đặt interval để gọi hàm mỗi phút
+    const interval = setInterval(() => {
+      fetchShowtimes();
+    }, 60000); // Kiểm tra mỗi phút
+    
+    // Hàm dọn dẹp interval khi component bị unmount
+    return () => clearInterval(interval);
+
+   
+  }, [id]);
+
+  useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const tab = queryParams.get("tab");
     if (tab) {
       setActiveTab(tab);
     }
-  }, [id, location.search]);
+  },[location.search])
 
   const { TabPane } = Tabs;
   return (
@@ -161,12 +175,16 @@ function Detail(props) {
                                 <Tabs
                                   type="card"
                                   items={nextSevenDays.map((date, i) => {
+                                    const currentTime = moment();
                                     const children = cumRap.lichChieuPhim
                                       ?.filter(
                                         (lich) =>
                                           dayjs(lich.ngayChieuGioChieu).format(
                                             "YYYY-MM-DD"
-                                          ) === date
+                                          ) === date &&
+                                          moment(
+                                            lich.ngayChieuGioChieu
+                                          ).isAfter(currentTime)
                                       )
                                       ?.slice(0, 12)
                                       .map((lich, index) => (
