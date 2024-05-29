@@ -1,0 +1,148 @@
+.theater-container {
+  padding: 20px;
+  background-color: rgb(54, 51, 52);
+  border: 2px solid #ccc;
+  width: 60%;
+  margin: auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+.theater-container h1 {
+  color: #f5f5f5;
+}
+
+.theater-locations {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: rgb(54, 51, 52);
+}
+
+.location-item {
+  flex: 1;
+  cursor: pointer;
+}
+
+.theater-locations p {
+  margin-bottom: 10px;
+}
+
+.location-item:hover p,
+.location-item.selected p {
+  color: red;
+}
+
+.theater-locations div {
+  flex: 1;
+}
+
+.theater-locations .border-right {
+  flex: 1;
+  border-right: 1px solid #ccc;
+}
+
+.theater-locations div:last-child {
+  border-right: none;
+}
+
+.theater {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: rgb(54, 51, 52);
+}
+
+.theater div {
+  width: 22%;
+  margin: 5px;
+  padding: 10px;
+  background-color: #3a3a3a;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.selected-theater {
+  color: red;
+}
+
+.theater-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: rgb(54, 51, 52);
+}
+
+.theater-details div {
+  width: 22%;
+  margin: 5px;
+  padding: 10px;
+  background-color: #3a3a3a;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.ant-modal-root .ant-modal-content {
+  padding: 0;
+  width: 200%;
+  margin-left: -200px;
+}
+
+.modal-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  background-color: #FDFCF0;
+  border-radius: 5px;
+  height: 500px; /* Adjust as needed */
+  margin: auto; /* Center the modal content */
+  padding: 0;
+}
+
+.modal-image {
+  width: 100%;
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-radius: 5px;
+}
+
+.modal-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  color: white;
+  
+  
+  
+
+  border-radius: 5px;
+}
+
+.modal-info {
+  padding: 10px;
+  text-align: left;
+}
+
+.modal-info p {
+  margin: 5px 0;
+}
+
+
+.modal-schedule {
+  border-radius: 5px;
+  width: 100%;
+  background-color: #FDFCF0;
+}

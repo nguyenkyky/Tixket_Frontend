@@ -133,3 +133,27 @@ export const deleteCumRapAction = (maCumRap) => {
     }
   };
 };
+
+export const cumRapTheoKhuVucAction = (location, theater) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyRapService.layCumRapTheoKhuVuc(
+        location,
+        theater
+      );
+
+      if (result) {
+        dispatch({
+          type: "SET_CUM_RAP_THEO_KHU_VUC",
+          payload: result.data.data,
+        });
+      }
+    } catch (errors) {
+      dispatch({
+        type: "SET_CUM_RAP_THEO_KHU_VUC",
+        payload: [],
+      });
+      console.log("errors", errors);
+    }
+  };
+};

@@ -318,7 +318,7 @@ export default function Profile() {
 
       <Modal
         title="Đổi mật khẩu"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         footer={[

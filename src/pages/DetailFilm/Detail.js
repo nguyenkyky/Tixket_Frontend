@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./styles.css";
 import icon from "../../assets/image/images.png";
 import "../../assets/styles/circle.css";
-import { Tabs, Rate, Tag } from "antd";
+import { Tabs, Rate, Tag, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useLocation, NavLink } from "react-router-dom";
 import { layThongTinChiTietPhim } from "../../redux/actions/QuanLyRapActions";
@@ -21,6 +21,15 @@ function Detail(props) {
   const nextSevenDays = getNextSevenDays(); // Mảng các ngày dưới dạng "YYYY-MM-DD"
   const filmDetail = useSelector((state) => state.QuanLyPhimReducer.filmDetail);
   const [activeTab, setActiveTab] = useState("1");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [cumRap, setCumRap] = useState();
+  const showModal = (cumRap) => {
+    setCumRap(cumRap);
+    setIsModalVisible(true);
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   let { id } = useParams();
   const dispatch = useDispatch();
@@ -37,20 +46,17 @@ function Detail(props) {
   };
 
   useEffect(() => {
-
     const fetchShowtimes = async () => {
       dispatch(layThongTinChiTietPhim(id));
-    }
+    };
     fetchShowtimes();
     // Đặt interval để gọi hàm mỗi phút
     const interval = setInterval(() => {
       fetchShowtimes();
     }, 60000); // Kiểm tra mỗi phút
-    
+
     // Hàm dọn dẹp interval khi component bị unmount
     return () => clearInterval(interval);
-
-   
   }, [id]);
 
   useEffect(() => {
@@ -59,7 +65,7 @@ function Detail(props) {
     if (tab) {
       setActiveTab(tab);
     }
-  },[location.search])
+  }, [location.search]);
 
   const { TabPane } = Tabs;
   return (
@@ -166,7 +172,16 @@ function Detail(props) {
                                     />
                                     <div className="text-left ml-2">
                                       {cumRap.tenCumRap}
-                                      <p className="text-red-400">Chi tiết</p>
+                                      <div
+                                        style={{ width: "70px" }}
+                                        onClick={() => {
+                                          showModal(cumRap);
+                                        }}
+                                      >
+                                        <p className="text-red-400 text-base">
+                                          Chi tiết
+                                        </p>
+                                      </div>
                                     </div>
                                   </div>
                                 }
@@ -357,6 +372,35 @@ function Detail(props) {
           </Tabs>
         </div>
       </div>
+      <Modal
+        open={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        centered
+      >
+        <div className="modal-content">
+          <div
+            className="modal-image"
+            style={{
+              backgroundImage: `url(${cumRap?.hinhAnh})`,
+            }}
+          >
+            <div className="modal-overlay">
+              <div className="modal-info">
+                <p className="font-bold">{cumRap?.tenCumRap}</p>
+                <div className="flex">
+                  <p className="font-semibold">Địa chỉ: </p>
+                  <p style={{ marginLeft: "4px" }}> {cumRap?.diaChi}</p>
+                </div>
+                <div className="flex">
+                  <p className="font-semibold">Hotline: </p>
+                  <p style={{ marginLeft: "4px" }}> {cumRap?.hotline}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

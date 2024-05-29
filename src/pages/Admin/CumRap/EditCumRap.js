@@ -51,6 +51,7 @@ function EditCumRap(props) {
       maCumRap: cumRap?.maCumRap,
       newMaCumRap: cumRap?.maCumRap,
       diaChi: cumRap?.diaChi,
+      hotline: cumRap?.hotline,
       hinhAnh: cumRap?.hinhAnh,
       khuVuc: cumRap?.khuVuc,
     },
@@ -102,8 +103,6 @@ function EditCumRap(props) {
                 disabled
               />
             </Form.Item>
-          </div>
-          <div className="w-full lg:w-1/2">
             <Form.Item label="Tên cụm rạp">
               <Input
                 name="tenCumRap"
@@ -111,6 +110,8 @@ function EditCumRap(props) {
                 value={formik.values.tenCumRap}
               />
             </Form.Item>
+          </div>
+          <div className="w-full lg:w-1/2">
             <Form.Item label="Mã cụm rạp">
               <Input
                 name="newMaCumRap"
@@ -125,7 +126,13 @@ function EditCumRap(props) {
                 value={formik.values.diaChi}
               />
             </Form.Item>
-
+            <Form.Item label="Hotline">
+              <Input
+                name="hotline"
+                onChange={formik.handleChange}
+                value={formik.values.hotline}
+              />
+            </Form.Item>
             <Form.Item label="Hình ảnh">
               <Input
                 name="hinhanh"

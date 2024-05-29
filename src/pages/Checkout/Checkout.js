@@ -18,6 +18,8 @@ import {
   UsergroupAddOutlined,
   CheckCircleTwoTone,
 } from "@ant-design/icons";
+import HourglassTopIcon from "@mui/icons-material/HourglassTop";
+import { useTimer } from "react-timer-hook";
 import { Tabs } from "antd";
 import moment from "moment";
 import { connection } from "../../index";
@@ -41,8 +43,31 @@ function Checkout(props) {
     gheDaDuocNguoiKhacDat,
   } = useSelector((state) => state.QuanLyDatVeReducer);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   let { id } = useParams();
 
+  const expiryTimestamp = new Date();
+  expiryTimestamp.setMinutes(expiryTimestamp.getMinutes() + 5);
+  const { seconds, minutes, isRunning, start, pause, resume, restart } =
+    useTimer({
+      expiryTimestamp,
+      onExpire: () => {
+        toast.error("Hết thời gian đặt vé!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: {
+            fontSize: "20px",
+          },
+          toastClassName: "toast-center-center",
+          onClose: () => navigate(-1),
+        });
+      },
+    });
   useEffect(() => {
     const action = layChiTietPhongVeAction(id);
     dispatch(action);
@@ -207,7 +232,17 @@ function Checkout(props) {
           </div>
         </div>
         <div className="col-span-3">
-          <h3 className="text-green-400 text-center text-2xl">
+          <div className="countdown-timer text-center text-3xl font-bold mt-2 flex justify-center">
+            <div style={{ width: "50px" }}>
+              <HourglassTopIcon
+                style={{ fontSize: "40px", color: "green", marginRight: "4px" }}
+              />
+            </div>
+            <div className="mt-1">
+              0{minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+            </div>
+          </div>
+          <h3 className="text-green-400 text-center text-2xl mt-20">
             {danhSachGheDangDat
               .reduce((tongTienDatVe, gheDangDat, index) => {
                 return (tongTienDatVe += gheDangDat.giaVe);
@@ -260,30 +295,16 @@ function Checkout(props) {
           <div className="mb-0 h-full flex flex-col items-center">
             <div
               onClick={() => {
-                const tongTien = `${danhSachGheDangDat
-                  .reduce((tongTienDatVe, gheDangDat, index) => {
-                    return (tongTienDatVe += gheDangDat.giaVe);
-                  }, 0)
-                  .toLocaleString()} đ`;
-                const thongTinDatVe = new DatVe();
-                thongTinDatVe.maLichChieu = id;
-                thongTinDatVe.danhSachVe = danhSachGheDangDat;
-                thongTinDatVe.diaChi = thongTinPhim?.diaChi;
-                thongTinDatVe.gioChieu = thongTinPhim?.gioChieu;
-                thongTinDatVe.ngayChieu = thongTinPhim?.ngayChieu;
-                thongTinDatVe.tenCumRap = thongTinPhim?.tenCumRap;
-                thongTinDatVe.tenPhim = thongTinPhim?.tenPhim;
-                thongTinDatVe.hinhAnh = thongTinPhim?.hinhAnh;
-                thongTinDatVe.tongTien = tongTien;
-                console.log("thongTinDatVe", thongTinDatVe);
-                dispatch(kiemTraDatVeAction(thongTinDatVe))
-                  .then(() => {
-                    // Chỉ thực hiện datVeAction nếu kiemTraDatVeAction thành công
-                    dispatch(datVeAction(thongTinDatVe));
-                  })
-                  .catch((error) => {
-                    // Xử lý lỗi hoặc thông báo tại đây nếu kiemTraDatVeAction thất bại
-                    toast.error(error.message, {
+                const ngayChieuGioChieu = `${thongTinPhim.ngayChieu} ${thongTinPhim.gioChieu}`;
+                const ngayChieuGioChieuMoment = moment(
+                  ngayChieuGioChieu,
+                  "DD/MM/YYYY HH:mm"
+                );
+                const now = moment();
+                if (now.isAfter(ngayChieuGioChieuMoment)) {
+                  toast.error(
+                    "Thời gian chiếu phim đã vượt quá thời gian hiện tại. Vui lòng chọn phim khác.",
+                    {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -291,13 +312,53 @@ function Checkout(props) {
                       pauseOnHover: true,
                       draggable: true,
                       progress: undefined,
-                      onClose: () => window.location.reload(), // Tải lại trang sau khi toast đóng
                       style: {
                         fontSize: "20px",
                       },
-                      toastClassName: "toast-center-center", // Áp dụng class CSS cho toast
+                      toastClassName: "toast-center-center",
+                      onClose: () => navigate(-1),
+                    }
+                  );
+                } else {
+                  const tongTien = `${danhSachGheDangDat
+                    .reduce((tongTienDatVe, gheDangDat, index) => {
+                      return (tongTienDatVe += gheDangDat.giaVe);
+                    }, 0)
+                    .toLocaleString()} đ`;
+                  const thongTinDatVe = new DatVe();
+                  thongTinDatVe.maLichChieu = id;
+                  thongTinDatVe.danhSachVe = danhSachGheDangDat;
+                  thongTinDatVe.diaChi = thongTinPhim?.diaChi;
+                  thongTinDatVe.gioChieu = thongTinPhim?.gioChieu;
+                  thongTinDatVe.ngayChieu = thongTinPhim?.ngayChieu;
+                  thongTinDatVe.tenCumRap = thongTinPhim?.tenCumRap;
+                  thongTinDatVe.tenPhim = thongTinPhim?.tenPhim;
+                  thongTinDatVe.hinhAnh = thongTinPhim?.hinhAnh;
+                  thongTinDatVe.tongTien = tongTien;
+                  console.log("thongTinDatVe", thongTinDatVe);
+                  dispatch(kiemTraDatVeAction(thongTinDatVe))
+                    .then(() => {
+                      // Chỉ thực hiện datVeAction nếu kiemTraDatVeAction thành công
+                      dispatch(datVeAction(thongTinDatVe));
+                    })
+                    .catch((error) => {
+                      // Xử lý lỗi hoặc thông báo tại đây nếu kiemTraDatVeAction thất bại
+                      toast.error(error.message, {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        onClose: () => window.location.reload(), // Tải lại trang sau khi toast đóng
+                        style: {
+                          fontSize: "20px",
+                        },
+                        toastClassName: "toast-center-center", // Áp dụng class CSS cho toast
+                      });
                     });
-                  });
+                }
               }}
               className="bg-green-500 text-white w-full text-center py-3 font-bold text-2xl cursor-pointer"
             >
@@ -423,6 +484,7 @@ function CheckoutTab(props) {
           <TabPane tab="1. CHỌN GHẾ & THANH TOÁN" key="1">
             <Checkout />
           </TabPane>
+
           <TabPane tab="2. KẾT QUẢ ĐẶT VÉ" key="2">
             <KetQuaDatVe />
           </TabPane>

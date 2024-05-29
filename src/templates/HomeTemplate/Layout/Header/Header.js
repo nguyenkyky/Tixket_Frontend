@@ -31,7 +31,7 @@ export default function Header(props) {
   return (
     <header
       style={{ backgroundColor: "rgba(253, 252, 240, 0.9)" }}
-      className="p-4 dark:bg-gray-600 dark:text-gray-800 bg-opacity-80 text-black fixed w-full z-10 top-0 text-xl"
+      className="header-shadow p-4 dark:bg-gray-600 dark:text-gray-800 bg-opacity-80 text-black fixed w-full z-10 top-0 text-xl"
     >
       <div className="container flex justify-between h-16 mx-auto">
         <NavLink
@@ -83,6 +83,14 @@ export default function Header(props) {
             >
               Tin tức
             </HashLink>
+          </li>
+          <li className="flex">
+            <NavLink
+              to="/theater"
+              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
+            >
+              Hệ thống rạp
+            </NavLink>
           </li>
         </ul>
         <div className="items-center flex-shrink-0 hidden lg:flex">

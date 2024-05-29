@@ -38,6 +38,7 @@ import EditCumRap from "./pages/Admin/CumRap/EditCumRap";
 import AddNewCumRap from "./pages/Admin/CumRap/AddNewCumRap";
 import Banner from "./pages/Admin/Banner/Banner";
 import Profile from "./pages/Profile/Profile";
+import Theater from "./pages/Theater/Theater";
 export const history = createBrowserHistory();
 
 function App() {
@@ -56,9 +57,9 @@ function App() {
           element={<HomeTemplate childComponent={<Home />} />}
         />
         <Route
-          path="/contact"
+          path="/theater"
           exact
-          element={<HomeTemplate childComponent={<Contact />} />}
+          element={<HomeTemplate childComponent={<Theater />} />}
         />
         <Route
           path="/news/:id"

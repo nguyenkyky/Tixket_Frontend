@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import {
   PieChartOutlined,
@@ -25,6 +25,8 @@ function getItem(label, key, icon, children, onClick) {
 }
 
 const AdminTemplate = ({ childComponent }) => {
+  const dropdownRef = useRef(null);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
@@ -32,6 +34,22 @@ const AdminTemplate = ({ childComponent }) => {
   const dispatch = useDispatch();
 
   const userInfo = JSON.parse(localStorage.getItem("USER_LOGIN"));
+
+  // Hàm để đóng menu khi click ra bên ngoài
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    // Thêm event listener để đóng menu khi click ra bên ngoài
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Loại bỏ event listener khi component bị unmount
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const items = [
     getItem("Film", "sub1", <PieChartOutlined />, [
@@ -158,10 +176,11 @@ const AdminTemplate = ({ childComponent }) => {
               padding: 0,
               background: colorBgContainer,
             }}
+            className="dark:bg-gray-600 dark:text-gray-800 bg-opacity-80 text-black w-full z-10  text-xl"
           >
-            <div className="items-center flex-shrink-0 hidden lg:flex h-full justify-end">
+            <div className="items-center flex-shrink-0 hidden lg:flex justify-end mt-3">
               {userInfo ? (
-                <div className="user-infor mr-16">
+                <div ref={dropdownRef} className="user-infor mr-16">
                   <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)} // Toggle menu
                     id="dropdownAvatarNameButton"
@@ -193,27 +212,21 @@ const AdminTemplate = ({ childComponent }) => {
                       >
                         <li>
                           <a
-                            href="#"
+                            href="/profile"
                             className="block px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
-                            Thông tin chung
+                            Thông tin cá nhân
                           </a>
                         </li>
                         <li>
-                          <a
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Thay đổi thông tin
-                          </a>
-                        </li>
-                        <li>
-                          <NavLink
-                            to="/order/history"
-                            className="block px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                          <button
+                            onClick={() =>
+                              navigate("/profile", { state: { tab: 2 } })
+                            }
+                            className="block px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 dark:hover:text-white w-full text-left"
                           >
                             Lịch sử giao dịch
-                          </NavLink>
+                          </button>
                         </li>
                       </ul>
                       <div className="">

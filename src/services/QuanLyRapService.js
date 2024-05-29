@@ -24,6 +24,11 @@ export class QuanLyRapService extends baseService {
       `api/lichchieuphim/lichchieu?tenHeThongRap=${tenHeThongRap}&maCumRap=${maCumRap}`
     );
   };
+  layLichChieuTheoRap2 = (maHeThongRap, maCumRap) => {
+    return this.get(
+      `api/lichchieuphim/lichchieutheorap?maHeThongRap=${maHeThongRap}&maCumRap=${maCumRap}`
+    );
+  };
   layThongTinChiTietHeThongRap = (maHeThongRap) => {
     return this.get(
       `api/hethongrap/chitiethethongrap?maHeThongRap=${maHeThongRap}`
@@ -53,6 +58,11 @@ export class QuanLyRapService extends baseService {
   };
   deleteCumRap = (maCumRap) => {
     return this.delete(`api/hethongrap/deletecumrap?maCumRap=${maCumRap}`);
+  };
+  layCumRapTheoKhuVuc = (location, theater) => {
+    return this.get(
+      `api/hethongrap/cumraptheokhuvuc?location=${location}&theater=${theater}`
+    );
   };
 }
 

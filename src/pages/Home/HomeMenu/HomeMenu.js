@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Radio, Space, Tabs, Select, Tag } from "antd";
+import { Radio, Space, Tabs, Select, Tag, Modal } from "antd";
 import { NavLink } from "react-router-dom";
 import icon from "../../../assets/image/images.png";
 import moment from "moment";
@@ -13,12 +13,22 @@ dayjs.extend(advancedFormat);
 
 const HomeMenu = () => {
   const dispatch = useDispatch();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [cumRap, setCumRap] = useState();
   const [tabPosition, setTabPosition] = useState("left");
   const [selectedKhuVuc, setSelectedKhuVuc] = useState("Tất cả");
 
   const onChangeKhuVuc = (value) => {
     setSelectedKhuVuc(value);
     setActiveKey("0");
+  };
+
+  const showModal = (cumRap) => {
+    setCumRap(cumRap);
+    setIsModalVisible(true);
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   const filterOption = (input, option) =>
@@ -38,10 +48,9 @@ const HomeMenu = () => {
   const nextSevenDays = getNextSevenDays(); // Mảng các ngày dưới dạng "YYYY-MM-DD"
 
   useEffect(() => {
-
-    const fetchShowtimes = async () => { 
-       dispatch(layDanhSachHeThongRapAction());
-    }
+    const fetchShowtimes = async () => {
+      dispatch(layDanhSachHeThongRapAction());
+    };
     fetchShowtimes();
     // Đặt interval để gọi hàm mỗi phút
     const interval = setInterval(() => {
@@ -99,7 +108,14 @@ const HomeMenu = () => {
                       />
                       <div className="text-left ml-2">
                         {cumRap.tenCumRap}
-                        <p className="text-red-400">Chi tiết</p>
+                        <div
+                          style={{ width: "70px" }}
+                          onClick={() => {
+                            showModal(cumRap);
+                          }}
+                        >
+                          <p className="text-red-400 text-base">Chi tiết</p>
+                        </div>
                       </div>
                     </div>
                   }
@@ -242,6 +258,35 @@ const HomeMenu = () => {
           {renderHeThongRap()}
         </Tabs>
       </div>
+      <Modal
+        open={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        centered
+      >
+        <div className="modal-content">
+          <div
+            className="modal-image"
+            style={{
+              backgroundImage: `url(${cumRap?.hinhAnh})`,
+            }}
+          >
+            <div className="modal-overlay">
+              <div className="modal-info">
+                <p className="font-bold">{cumRap?.tenCumRap}</p>
+                <div className="flex">
+                  <p className="font-semibold">Địa chỉ: </p>
+                  <p style={{ marginLeft: "4px" }}> {cumRap?.diaChi}</p>
+                </div>
+                <div className="flex">
+                  <p className="font-semibold">Hotline: </p>
+                  <p style={{ marginLeft: "4px" }}> {cumRap?.hotline}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
