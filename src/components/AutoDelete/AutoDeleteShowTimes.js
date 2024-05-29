@@ -16,7 +16,7 @@ const AutoDeleteShowtimes = () => {
   useEffect(() => {
     // Hàm để lấy danh sách lịch chiếu
     const fetchShowtimes = async () => {
-      await dispatch(getAllShowTimesAction());
+      dispatch(getAllShowTimesAction());
     };
 
     // Gọi hàm lần đầu tiên khi component mount
