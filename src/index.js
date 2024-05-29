@@ -22,7 +22,7 @@ connection
   .then(() => {
     root.render(
       <Provider store={store}>
-        <AutoDeleteShowtimes />
+        {/* <AutoDeleteShowtimes />  */}
         <App />
       </Provider>
     );
