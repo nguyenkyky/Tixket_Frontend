@@ -36,6 +36,9 @@ export class QuanLyNguoiDungService extends baseService {
   doiMatKhau = (values) => {
     return this.post(`api/QuanLyNguoiDung/doiMatKhau`, values);
   };
+  setVip = (values) => {
+    return this.post(`api/QuanLyNguoiDung/setvip`, values);
+  };
 }
 
 export const quanLyNguoiDungService = new QuanLyNguoiDungService();

@@ -99,11 +99,16 @@ function Theater(props) {
         items={nextSevenDays.map((date, i) => {
           const filteredMovies = lichChieu?.danhSachPhim.reduce(
             (acc, phim, index) => {
-              const lichChieuPhuHop = phim.lstLichChieuTheoPhim.filter(
-                (lichChieu) =>
-                  dayjs(lichChieu.ngayChieuGioChieu).format("YYYY-MM-DD") ===
-                  date
-              );
+              const lichChieuPhuHop = phim.lstLichChieuTheoPhim
+                .filter(
+                  (lichChieu) =>
+                    dayjs(lichChieu.ngayChieuGioChieu).format("YYYY-MM-DD") ===
+                    date
+                )
+                .sort(
+                  (a, b) =>
+                    moment(a.ngayChieuGioChieu) - moment(b.ngayChieuGioChieu)
+                );
               if (lichChieuPhuHop.length > 0) {
                 const movieDetails = (
                   <div key={index} className="mt-5 ">

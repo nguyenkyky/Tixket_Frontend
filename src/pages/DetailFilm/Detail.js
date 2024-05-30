@@ -33,7 +33,6 @@ function Detail(props) {
 
   let { id } = useParams();
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const getYoutubeEmbedUrl = (url) => {
     try {
@@ -58,14 +57,6 @@ function Detail(props) {
     // Hàm dọn dẹp interval khi component bị unmount
     return () => clearInterval(interval);
   }, [id]);
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const tab = queryParams.get("tab");
-    if (tab) {
-      setActiveTab(tab);
-    }
-  }, [location.search]);
 
   const { TabPane } = Tabs;
   return (
@@ -200,6 +191,11 @@ function Detail(props) {
                                           moment(
                                             lich.ngayChieuGioChieu
                                           ).isAfter(currentTime)
+                                      )
+                                      ?.sort(
+                                        (a, b) =>
+                                          moment(a.ngayChieuGioChieu) -
+                                          moment(b.ngayChieuGioChieu)
                                       )
                                       ?.slice(0, 12)
                                       .map((lich, index) => (

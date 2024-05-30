@@ -39,6 +39,9 @@ import AddNewCumRap from "./pages/Admin/CumRap/AddNewCumRap";
 import Banner from "./pages/Admin/Banner/Banner";
 import Profile from "./pages/Profile/Profile";
 import Theater from "./pages/Theater/Theater";
+import NewsManage from "./pages/Admin/News/NewsManage";
+import AddNews from "./pages/Admin/News/AddNews";
+import EditNews from "./pages/Admin/News/EditNews";
 export const history = createBrowserHistory();
 
 function App() {
@@ -174,6 +177,21 @@ function App() {
           path="/admin/banner"
           exact
           element={<AdminTemplate childComponent={<Banner />} />}
+        />
+        <Route
+          path="/admin/news"
+          exact
+          element={<AdminTemplate childComponent={<NewsManage />} />}
+        />
+        <Route
+          path="/admin/news/create"
+          exact
+          element={<AdminTemplate childComponent={<AddNews />} />}
+        />
+        <Route
+          path="/admin/news/edit/:maTinTuc"
+          exact
+          element={<AdminTemplate childComponent={<EditNews />} />}
         />
       </Routes>
     </Router>

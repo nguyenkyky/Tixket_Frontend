@@ -4,15 +4,32 @@ import { PlayCircleOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import "./FilmFlip.css";
-import { Button, Tag } from "antd";
+import { Button, Tag, Modal } from "antd";
 
 function FilmFlip(props) {
   const { item } = props;
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
 
   const handlePlayClick = () => {
     navigate(`/detail/${item.maPhim}?tab=3`);
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const getYoutubeEmbedUrl = (url) => {
+    try {
+      const urlObj = new URL(url);
+      const urlParams = new URLSearchParams(urlObj.search);
+      return `https://www.youtube.com/embed/${urlParams.get("v")}`;
+    } catch (error) {
+      return "";
+    }
   };
 
   return (
@@ -90,7 +107,7 @@ function FilmFlip(props) {
                 alignItems: "center",
               }}
             >
-              <div className="cursor-pointer mb-20" onClick={handlePlayClick}>
+              <div className="cursor-pointer mb-20" onClick={showModal}>
                 <PlayCircleOutlined style={{ fontSize: "50px" }} />
               </div>
             </div>
@@ -113,6 +130,26 @@ function FilmFlip(props) {
           </div>
         </div>
       </div>
+      <Modal
+        open={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        centered
+      >
+        <div className="modal-content">
+          <div style={{ borderRadius: "10px", width: "100%" }}>
+            <iframe
+              width="100%"
+              height="500"
+              src={getYoutubeEmbedUrl(item.trailer)}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

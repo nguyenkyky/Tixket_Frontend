@@ -6,6 +6,7 @@ import {
   UserOutlined,
   FundProjectionScreenOutlined,
   FileOutlined,
+  WechatWorkOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
@@ -37,7 +38,7 @@ const AdminTemplate = ({ childComponent }) => {
 
   // Hàm để đóng menu khi click ra bên ngoài
   const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    if (dropdownRef?.current && !dropdownRef?.current.contains(event.target)) {
       setIsMenuOpen(false);
     }
   };
@@ -99,6 +100,22 @@ const AdminTemplate = ({ childComponent }) => {
       "/admin/banner",
       <FileOutlined />
     ),
+    getItem("Tin tức", "sub4", <WechatWorkOutlined />, [
+      getItem(
+        <NavLink className="ml-10" to="/admin/news">
+          Danh sách bài viết
+        </NavLink>,
+        "/admin/news",
+        null
+      ),
+      getItem(
+        <NavLink className="ml-10" to="/admin/news/create">
+          Tạo bài viết mới
+        </NavLink>,
+        "/admin/news/create",
+        null
+      ),
+    ]),
   ];
 
   useEffect(() => {

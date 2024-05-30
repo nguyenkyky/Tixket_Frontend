@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useParams, useNavigate } from "react-router-dom";
 import { DAT_VE } from "../../redux/actions/types/QuanLyDatVeType";
@@ -8,7 +8,10 @@ import {
   datGheAction,
   kiemTraDatVeAction,
 } from "../../redux/actions/QuanLyDatVeAction";
-import { layThongTinDatVe } from "../../redux/actions/QuanLyNguoiDungAction";
+import {
+  layThongTinDatVe,
+  setVipAction,
+} from "../../redux/actions/QuanLyNguoiDungAction";
 import { DatVe } from "../../models/DatVe.model";
 import _ from "lodash";
 import style from "./Checkout.module.css";
@@ -45,7 +48,7 @@ function Checkout(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { id } = useParams();
-
+  const [tongTien, setTongTien] = useState();
   const expiryTimestamp = new Date();
   expiryTimestamp.setMinutes(expiryTimestamp.getMinutes() + 5);
   const { seconds, minutes, isRunning, start, pause, resume, restart } =
@@ -64,10 +67,40 @@ function Checkout(props) {
             fontSize: "20px",
           },
           toastClassName: "toast-center-center",
-          onClose: () => navigate(-1),
+          onClose: () => {
+            dispatch({ type: "HOAN_TAT_DAT_VE" });
+            navigate(-1);
+          },
         });
       },
     });
+
+  const handleDatGhe = (ghe, id) => {
+    const action = datGheAction(ghe, id);
+    const currentGheCount = danhSachGheDangDat.length;
+
+    const isSelected = danhSachGheDangDat.some(
+      (item) => item.maGhe === ghe.maGhe
+    );
+    if (isSelected || currentGheCount < 10) {
+      dispatch(action);
+    } else {
+      toast.warning("Mỗi lần chỉ có thể đặt tối đa 10 vé!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {
+          fontSize: "20px",
+        },
+        toastClassName: "toast-center-center",
+      });
+    }
+  };
+
   useEffect(() => {
     const action = layChiTietPhongVeAction(id);
     dispatch(action);
@@ -90,12 +123,15 @@ function Checkout(props) {
       //Gop danh sach ghe khach dat o tat ca user
       let arrGheKhachDangDat = danhSachGheKhachDangDat.reduce(
         (result, item, index) => {
-          let arrGhe = JSON.parse(item.danhSachGheDangDat);
-
+          let arrGhe = JSON.parse(item.danhSachGheDangDat).map((ghe) => ({
+            ...ghe,
+            maLoaiNguoiDung: item.maLoaiNguoiDung,
+          }));
           return [...result, ...arrGhe];
         },
         []
       );
+      console.log(arrGheKhachDangDat);
 
       dispatch({
         type: "DAT_GHE",
@@ -139,16 +175,23 @@ function Checkout(props) {
       if (indexGheDangDat !== -1) {
         gheDangDat = "gheDangDat";
       }
+      let maLoaiNguoiDung =
+        danhSachGheKhachDangDat[indexGheKhachDangDat]?.maLoaiNguoiDung;
+      let gheKhachVip =
+        maLoaiNguoiDung === "Vip" || maLoaiNguoiDung === "Admin"
+          ? "gheKhachVip"
+          : "";
       return (
         <Fragment key={index}>
           <button
-            disabled={ghe.daDat}
-            onClick={() => {
-              const action = datGheAction(ghe, id);
-              dispatch(action);
-            }}
+            disabled={ghe.daDat || gheKhachVip}
+            // onClick={() => {
+            //   const action = datGheAction(ghe, id);
+            //   dispatch(action);
+            // }}
+            onClick={() => handleDatGhe(ghe, id)}
             key={index}
-            className={`ghe ${gheVip} ${gheDaDat} ${gheDangDat} ${gheMinhDat} ${gheKhachDangDat} text-center`}
+            className={`ghe ${gheVip} ${gheDaDat} ${gheDangDat} ${gheMinhDat} ${gheKhachDangDat} ${gheKhachVip} text-center`}
           >
             {ghe.daDat ? (
               gheMinhDat != "" ? (
@@ -166,6 +209,40 @@ function Checkout(props) {
         </Fragment>
       );
     });
+  };
+
+  const renderTotalPrice = () => {
+    const totalPrice = danhSachGheDangDat.reduce(
+      (tongTienDatVe, gheDangDat) => {
+        return (tongTienDatVe += gheDangDat.giaVe);
+      },
+      0
+    );
+
+    if (
+      userLogin.maLoaiNguoiDung === "Vip" ||
+      userLogin.maLoaiNguoiDung === "Admin"
+    ) {
+      const discountedPrice = totalPrice * 0.85;
+      // setTongTien(discountedPrice);
+      return (
+        <div className="relative mt-12">
+          <span className="text-green-400 text-center text-2xl mt-20">
+            {discountedPrice.toLocaleString()} đ
+          </span>
+          <span className="absolute top-0 right-0 text-red-500 text-sm">
+            -15%
+          </span>
+        </div>
+      );
+    } else {
+      // setTongTien(totalPrice);
+      return (
+        <span className="text-green-400 text-center text-2xl mt-20">
+          {totalPrice.toLocaleString()} đ
+        </span>
+      );
+    }
   };
 
   return (
@@ -242,14 +319,15 @@ function Checkout(props) {
               0{minutes}:{seconds < 10 ? `0${seconds}` : seconds}
             </div>
           </div>
-          <h3 className="text-green-400 text-center text-2xl mt-20">
+          {/* <h3 className="text-green-400 text-center text-2xl mt-20">
             {danhSachGheDangDat
               .reduce((tongTienDatVe, gheDangDat, index) => {
                 return (tongTienDatVe += gheDangDat.giaVe);
               }, 0)
               .toLocaleString()}{" "}
             đ
-          </h3>
+          </h3> */}
+          {renderTotalPrice()}
           <hr />
           <h3 className="text-xl mt-2">{thongTinPhim?.tenPhim}</h3>
           <p>Địa điểm: {thongTinPhim?.tenCumRap}</p>
@@ -320,11 +398,20 @@ function Checkout(props) {
                     }
                   );
                 } else {
-                  const tongTien = `${danhSachGheDangDat
-                    .reduce((tongTienDatVe, gheDangDat, index) => {
+                  let tongTien = danhSachGheDangDat.reduce(
+                    (tongTienDatVe, gheDangDat, index) => {
                       return (tongTienDatVe += gheDangDat.giaVe);
-                    }, 0)
-                    .toLocaleString()} đ`;
+                    },
+                    0
+                  );
+                  if (
+                    userLogin.maLoaiNguoiDung === "Vip" ||
+                    userLogin.maLoaiNguoiDung === "Admin"
+                  ) {
+                    tongTien = tongTien * 0.85;
+                  }
+
+                  console.log("tong tien", tongTien);
                   const thongTinDatVe = new DatVe();
                   thongTinDatVe.maLichChieu = id;
                   thongTinDatVe.danhSachVe = danhSachGheDangDat;
@@ -338,8 +425,18 @@ function Checkout(props) {
                   console.log("thongTinDatVe", thongTinDatVe);
                   dispatch(kiemTraDatVeAction(thongTinDatVe))
                     .then(() => {
-                      // Chỉ thực hiện datVeAction nếu kiemTraDatVeAction thành công
                       dispatch(datVeAction(thongTinDatVe));
+                      if (userLogin.tongChiTieu + tongTien > 10000000) {
+                        const taiKhoanSetVip = userLogin.taiKhoan;
+                        dispatch(setVipAction({ taiKhoanSetVip }));
+
+                        userLogin.maLoaiNguoiDung = "Vip";
+                      }
+                      userLogin.tongChiTieu = userLogin.tongChiTieu + tongTien;
+                      localStorage.setItem(
+                        "USER_LOGIN",
+                        JSON.stringify(userLogin)
+                      );
                     })
                     .catch((error) => {
                       // Xử lý lỗi hoặc thông báo tại đây nếu kiemTraDatVeAction thất bại

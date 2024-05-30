@@ -133,3 +133,14 @@ export const xoaUserAction = (value) => {
     }
   };
 };
+
+export const setVipAction = (value) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.setVip(value);
+      console.log("result", result);
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};

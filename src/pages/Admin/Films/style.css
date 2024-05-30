@@ -31,3 +31,9 @@
     height: auto; /* Đặt chiều cao tự động để phù hợp với nội dung */
   }
   
+
+.ant-modal-content .ant-modal-body .ant-modal-confirm-body,
+.ant-modal-content .ant-modal-body .ant-modal-confirm-btns
+ {
+  padding: 10px;
+}

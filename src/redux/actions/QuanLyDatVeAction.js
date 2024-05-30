@@ -87,8 +87,10 @@ export const datGheAction = (ghe, maLichChieu) => {
     let danhSachGheDangDat = getState().QuanLyDatVeReducer.danhSachGheDangDat;
 
     let taiKhoan = getState().QuanLyNguoiDungReducer.userLogin.taiKhoan;
+    let maLoaiNguoiDung =
+      getState().QuanLyNguoiDungReducer.userLogin.maLoaiNguoiDung;
     danhSachGheDangDat = JSON.stringify(danhSachGheDangDat);
 
-    connection.invoke("datGhe", taiKhoan, danhSachGheDangDat);
+    connection.invoke("datGhe", taiKhoan, maLoaiNguoiDung, danhSachGheDangDat);
   };
 };

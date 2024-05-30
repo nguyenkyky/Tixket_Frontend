@@ -10,7 +10,8 @@ function TinTuc() {
     async function fetchData() {
       try {
         const data = await quanLyTinTucService.getAll();
-        setNews(data.data);
+        const news8 = data.data.slice(0, 8);
+        setNews(news8);
       } catch (error) {
         console.log(error);
       }

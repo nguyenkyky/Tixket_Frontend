@@ -7,6 +7,6 @@ export class DatVe {
   gioChieu = "";
   hinhAnh = "";
   diaChi = "";
-  tongTien = "";
+  tongTien = 0;
   constructor() {}
 }

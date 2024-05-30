@@ -14,7 +14,7 @@ export default function Header(props) {
 
   // Hàm để đóng menu khi click ra bên ngoài
   const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    if (dropdownRef?.current && !dropdownRef?.current.contains(event.target)) {
       setIsMenuOpen(false);
     }
   };

@@ -18,13 +18,9 @@ import moment from "moment";
 import { Pagination } from "antd";
 
 export default function Profile() {
-  let user = {};
   const navigate = useNavigate();
-  if (localStorage.getItem("USER_LOGIN")) {
-    user = JSON.parse(localStorage.getItem("USER_LOGIN"));
-  } else {
-    navigate("/login");
-  }
+  const [user, setUser] = useState();
+
   const location = useLocation();
   const initialTab = location.state?.tab?.toString() || "1";
 
@@ -46,6 +42,12 @@ export default function Profile() {
   );
 
   useEffect(() => {
+    if (localStorage.getItem("USER_LOGIN")) {
+      let user = JSON.parse(localStorage.getItem("USER_LOGIN"));
+      setUser(user);
+    } else {
+      navigate("/login");
+    }
     const action = layThongTinDatVe();
     dispatch(action);
   }, []);
@@ -183,6 +185,8 @@ export default function Profile() {
         const result = await quanLyNguoiDungService.capNhatThongTinNguoiDung(
           values
         );
+        setUser(values);
+        localStorage.setItem("USER_LOGIN", JSON.stringify(values));
         toast.success("Cập nhật thông tin người dùng thành công!");
       } catch (error) {
         if (error.response && error.response.status === 400) {

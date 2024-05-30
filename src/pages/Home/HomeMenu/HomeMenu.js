@@ -129,12 +129,18 @@ const HomeMenu = () => {
                         .reduce((acc, phim, index) => {
                           const lichChieuPhuHop = filterExpiredShowtimes(
                             phim.lstLichChieuTheoPhim
-                          ).filter(
-                            (lichChieu) =>
-                              dayjs(lichChieu.ngayChieuGioChieu).format(
-                                "YYYY-MM-DD"
-                              ) === date
-                          );
+                          )
+                            .filter(
+                              (lichChieu) =>
+                                dayjs(lichChieu.ngayChieuGioChieu).format(
+                                  "YYYY-MM-DD"
+                                ) === date
+                            )
+                            .sort(
+                              (a, b) =>
+                                moment(a.ngayChieuGioChieu) -
+                                moment(b.ngayChieuGioChieu)
+                            );
                           if (lichChieuPhuHop.length > 0) {
                             const movieDetails = (
                               <div key={index} className="mt-5 ">
