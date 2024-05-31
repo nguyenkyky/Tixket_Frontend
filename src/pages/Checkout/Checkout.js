@@ -7,11 +7,13 @@ import {
   datVeAction,
   datGheAction,
   kiemTraDatVeAction,
+  createPaymentLinkAction,
 } from "../../redux/actions/QuanLyDatVeAction";
 import {
   layThongTinDatVe,
   setVipAction,
 } from "../../redux/actions/QuanLyNguoiDungAction";
+import { quanLyDatVeService } from "../../services/QuanLyDatVeService";
 import { DatVe } from "../../models/DatVe.model";
 import _ from "lodash";
 import style from "./Checkout.module.css";
@@ -45,6 +47,8 @@ function Checkout(props) {
     danhSachGheKhachDangDat,
     gheDaDuocNguoiKhacDat,
   } = useSelector((state) => state.QuanLyDatVeReducer);
+
+  const [orderId, setOrderId] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { id } = useParams();
@@ -104,6 +108,11 @@ function Checkout(props) {
   useEffect(() => {
     const action = layChiTietPhongVeAction(id);
     dispatch(action);
+    const fetchData = async () => {
+      const orderIdRecord = await quanLyDatVeService.orderId();
+      setOrderId(orderIdRecord.data);
+    };
+    fetchData();
 
     // Co client dat ve thanh cong se load lai danh sach phong ve
     connection.on("datVeThanhCong", (danhSachGheKhachVuaDat) => {
@@ -372,7 +381,7 @@ function Checkout(props) {
           <hr />
           <div className="mb-0 h-full flex flex-col items-center">
             <div
-              onClick={() => {
+              onClick={async () => {
                 const ngayChieuGioChieu = `${thongTinPhim.ngayChieu} ${thongTinPhim.gioChieu}`;
                 const ngayChieuGioChieuMoment = moment(
                   ngayChieuGioChieu,
@@ -423,38 +432,39 @@ function Checkout(props) {
                   thongTinDatVe.hinhAnh = thongTinPhim?.hinhAnh;
                   thongTinDatVe.tongTien = tongTien;
                   console.log("thongTinDatVe", thongTinDatVe);
-                  dispatch(kiemTraDatVeAction(thongTinDatVe))
-                    .then(() => {
-                      dispatch(datVeAction(thongTinDatVe));
-                      if (userLogin.tongChiTieu + tongTien > 10000000) {
-                        const taiKhoanSetVip = userLogin.taiKhoan;
-                        dispatch(setVipAction({ taiKhoanSetVip }));
+                  // dispatch(kiemTraDatVeAction(thongTinDatVe));
+                  dispatch(
+                    createPaymentLinkAction(
+                      tongTien,
+                      orderId,
+                      id,
+                      thongTinDatVe
+                    )
+                  );
 
-                        userLogin.maLoaiNguoiDung = "Vip";
-                      }
-                      userLogin.tongChiTieu = userLogin.tongChiTieu + tongTien;
-                      localStorage.setItem(
-                        "USER_LOGIN",
-                        JSON.stringify(userLogin)
-                      );
-                    })
-                    .catch((error) => {
-                      // Xử lý lỗi hoặc thông báo tại đây nếu kiemTraDatVeAction thất bại
-                      toast.error(error.message, {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        onClose: () => window.location.reload(), // Tải lại trang sau khi toast đóng
-                        style: {
-                          fontSize: "20px",
-                        },
-                        toastClassName: "toast-center-center", // Áp dụng class CSS cho toast
-                      });
-                    });
+                  // const response = await quanLyDatVeService.createPaymentLink(
+                  //   tongTien,
+                  //   orderId,
+                  //   id,
+                  //   thongTinDatVe
+                  // );
+                  // console.log("response", response);
+
+                  // localStorage.setItem(
+                  //   "THONG_TIN_DAT_VE",
+                  //   JSON.stringify(thongTinDatVe)
+                  // );
+                  // window.location.href = response.data.checkoutUrl;
+                  // dispatch(datVeAction(thongTinDatVe));
+                  // console.log("da dispatch datve");
+                  // if (userLogin.tongChiTieu + tongTien > 10000000) {
+                  //   const taiKhoanSetVip = userLogin.taiKhoan;
+                  //   dispatch(setVipAction({ taiKhoanSetVip }));
+
+                  //   userLogin.maLoaiNguoiDung = "Vip";
+                  // }
+                  // userLogin.tongChiTieu = userLogin.tongChiTieu + tongTien;
+                  // localStorage.setItem("USER_LOGIN", JSON.stringify(userLogin));
                 }
               }}
               className="bg-green-500 text-white w-full text-center py-3 font-bold text-2xl cursor-pointer"
@@ -559,6 +569,20 @@ function CheckoutTab(props) {
   const navigate = useNavigate();
   const { tabActive } = useSelector((state) => state.QuanLyDatVeReducer);
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+  const [isPaymentSuccess, setIsPaymentSuccess] = useState(false); // Thêm trạng thái quản lý thanh toán thành công
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    if (queryParams.get("payment") === "success") {
+      const thongTinDatVe = JSON.parse(
+        localStorage.getItem("THONG_TIN_DAT_VE")
+      );
+      if (thongTinDatVe) {
+        dispatch(datVeAction(thongTinDatVe));
+        setIsPaymentSuccess(true); // Cập nhật trạng thái thanh toán thành công
+      }
+    }
+  }, []);
   const handleBack = () => {
     navigate(-1);
     dispatch({ type: "RELOAD_CHECKOUT" });
@@ -575,7 +599,7 @@ function CheckoutTab(props) {
         <Tabs
           tabBarExtraContent={operations}
           defaultActiveKey="1"
-          activeKey={tabActive.toString()}
+          activeKey={isPaymentSuccess ? "2" : tabActive.toString()} // Chuyển đổi giữa các tab dựa trên trạng thái thanh toán thành công
           onChange={onChange}
         >
           <TabPane tab="1. CHỌN GHẾ & THANH TOÁN" key="1">

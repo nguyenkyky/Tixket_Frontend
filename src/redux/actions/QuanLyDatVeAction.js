@@ -94,3 +94,28 @@ export const datGheAction = (ghe, maLichChieu) => {
     connection.invoke("datGhe", taiKhoan, maLoaiNguoiDung, danhSachGheDangDat);
   };
 };
+
+export const createPaymentLinkAction = (
+  tongTien,
+  orderId,
+  id,
+  thongTinDatVe
+) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: "DISPLAY_LOADING" });
+      const response = await quanLyDatVeService.createPaymentLink({
+        tongTien,
+        orderId,
+        id,
+        thongTinDatVe,
+      });
+      localStorage.setItem("THONG_TIN_DAT_VE", JSON.stringify(thongTinDatVe));
+      window.location.href = response.data.checkoutUrl;
+      dispatch({ type: "HIDE_LOADING" });
+    } catch (e) {
+      dispatch({ type: "HIDE_LOADING" });
+      console.log(e);
+    }
+  };
+};

@@ -17,6 +17,12 @@ export class QuanLyDatVeService extends baseService {
   kiemTraDatVe = (thongTinDatVe = new DatVe()) => {
     return this.post(`api/phongve/kiemTraDatVe`, thongTinDatVe);
   };
+  orderId = () => {
+    return this.get(`api/phongve/orderid`);
+  };
+  createPaymentLink = (values) => {
+    return this.post(`create-payment-link`, values);
+  };
 }
 
 export const quanLyDatVeService = new QuanLyDatVeService();

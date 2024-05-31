@@ -42,6 +42,10 @@ import Theater from "./pages/Theater/Theater";
 import NewsManage from "./pages/Admin/News/NewsManage";
 import AddNews from "./pages/Admin/News/AddNews";
 import EditNews from "./pages/Admin/News/EditNews";
+import Success from "./pages/payment/Success";
+import Cancel from "./pages/payment/Cancel";
+import Test from "./pages/payment/Test";
+
 export const history = createBrowserHistory();
 
 function App() {
@@ -93,6 +97,11 @@ function App() {
 
         <Route
           path="checkout/:id"
+          exact
+          element={<CheckoutTemplate childComponent={<CheckoutTab />} />}
+        />
+        <Route
+          path="checkout/success/:id"
           exact
           element={<CheckoutTemplate childComponent={<CheckoutTab />} />}
         />
@@ -193,6 +202,17 @@ function App() {
           exact
           element={<AdminTemplate childComponent={<EditNews />} />}
         />
+        <Route
+          path="/payment-success"
+          exact
+          element={<HomeTemplate childComponent={<Success />} />}
+        />
+        <Route
+          path="/payment-cancel"
+          exact
+          element={<HomeTemplate childComponent={<Cancel />} />}
+        />
+        <Route path="/test" exact element={<Test />} />
       </Routes>
     </Router>
   );
