@@ -106,7 +106,7 @@ function Checkout(props) {
   };
 
   useEffect(() => {
-    const action = layChiTietPhongVeAction(id);
+    const action = layChiTietPhongVeAction(id, navigate);
     dispatch(action);
     const fetchData = async () => {
       const orderIdRecord = await quanLyDatVeService.orderId();
@@ -422,6 +422,7 @@ function Checkout(props) {
 
                   console.log("tong tien", tongTien);
                   const thongTinDatVe = new DatVe();
+                  thongTinDatVe.orderId = orderId;
                   thongTinDatVe.maLichChieu = id;
                   thongTinDatVe.danhSachVe = danhSachGheDangDat;
                   thongTinDatVe.diaChi = thongTinPhim?.diaChi;
@@ -488,10 +489,15 @@ function KetQuaDatVe() {
     (state) => state.QuanLyNguoiDungReducer
   );
   const { thongTinVeVuaDat } = useSelector((state) => state.QuanLyDatVeReducer);
-
+  const [orderId, setOrderId] = useState();
   useEffect(() => {
     const action = layThongTinDatVe();
     dispatch(action);
+    const fetchData = async () => {
+      const orderIdRecord = await quanLyDatVeService.orderId();
+      setOrderId(orderIdRecord.data);
+    };
+    fetchData();
   }, []);
 
   const tenGhe = thongTinVeVuaDat.danhSachVe?.map((ve) => ve.tenGhe).join(", ");
@@ -505,9 +511,7 @@ function KetQuaDatVe() {
           Thank you! Your payment of {thongTinVeVuaDat.tongTien} has been
           received.
         </p>
-        <p className="payment-order-id text-xl">
-          Order ID: {thongTinVeVuaDat.maLichChieu}
-        </p>
+        <p className="payment-order-id text-xl">Order ID: {orderId}</p>
       </div>
       <div className="payment-details flex flex-col space-y-4">
         <div className="bg-white p-4 rounded-md shadow-md flex items-center justify-between mb-4 text-start">
@@ -582,22 +586,17 @@ function CheckoutTab(props) {
         setIsPaymentSuccess(true); // Cập nhật trạng thái thanh toán thành công
       }
     }
+
+    return () => {
+      dispatch({ type: "RELOAD_CHECKOUT" }); // Reset tabActive về 1 khi component unmount
+    };
   }, []);
-  const handleBack = () => {
-    navigate(-1);
-    dispatch({ type: "RELOAD_CHECKOUT" });
-  };
-  const operations = (
-    <button className="button-goback" onClick={handleBack}>
-      Quay lại
-    </button>
-  );
+
   return (
     <div style={{ backgroundColor: "#FDFCF0" }}>
       <Header />
       <div className="p-5 mt-24 ">
         <Tabs
-          tabBarExtraContent={operations}
           defaultActiveKey="1"
           activeKey={isPaymentSuccess ? "2" : tabActive.toString()} // Chuyển đổi giữa các tab dựa trên trạng thái thanh toán thành công
           onChange={onChange}

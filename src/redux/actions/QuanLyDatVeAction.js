@@ -7,7 +7,7 @@ import {
 import { quanLyDatVeService } from "../../services/QuanLyDatVeService";
 import { DatVe } from "../../models/DatVe.model";
 import { connection } from "../../index";
-export const layChiTietPhongVeAction = (maLichChieu) => {
+export const layChiTietPhongVeAction = (maLichChieu, navigate) => {
   return async (dispatch) => {
     try {
       const result = await quanLyDatVeService.layChiTietPhongVe(maLichChieu);
@@ -20,6 +20,12 @@ export const layChiTietPhongVeAction = (maLichChieu) => {
         });
       }
     } catch (errors) {
+      if (errors.response.status === 403) {
+        alert("Vui lòng đăng nhập");
+        localStorage.removeItem("USER_LOGIN");
+        localStorage.removeItem("accessToken");
+        navigate("/login");
+      }
       console.log("errors", errors.response?.data);
     }
   };

@@ -11,6 +11,10 @@ export const getCarouselAction = async (dispatch) => {
       arrImg: result.data.data,
     });
   } catch (errors) {
+    // if (errors.response.status === 403) {
+    //   localStorage.removeItem("USER_LOGIN");
+    //   localStorage.removeItem("accessToken");
+    // }
     console.log("errors", errors);
   }
 };

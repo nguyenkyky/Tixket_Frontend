@@ -1,4 +1,5 @@
 export class DatVe {
+  orderId = 0;
   maLichChieu = 0;
   danhSachVe = [];
   tenCumRap = "";

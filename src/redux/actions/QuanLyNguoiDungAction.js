@@ -54,6 +54,11 @@ export const layThongTinDatVe = () => {
         });
       }
     } catch (error) {
+      if (error.response.status === 403) {
+        alert("Vui lòng đăng nhập");
+        localStorage.removeItem("USER_LOGIN");
+        localStorage.removeItem("accessToken");
+      }
       console.log("error", error.response.data);
     }
   };
