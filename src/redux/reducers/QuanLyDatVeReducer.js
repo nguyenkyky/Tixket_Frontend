@@ -12,6 +12,7 @@ const stateDefault = {
   tabActive: 1,
   danhSachGheKhachDangDat: [],
   gheDaDuocNguoiKhacDat: [],
+  orderId: 0,
 };
 
 export const QuanLyDatVeReducer = (state = stateDefault, action) => {
@@ -68,6 +69,11 @@ export const QuanLyDatVeReducer = (state = stateDefault, action) => {
         (ghe) => !gheKhongHopLe.includes(ghe.maGhe)
       );
       return { ...state, danhSachGheDangDat };
+    }
+
+    case "ORDER_ID": {
+      state.orderId = action.orderId;
+      return { ...state };
     }
 
     default:

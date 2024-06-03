@@ -125,3 +125,15 @@ export const createPaymentLinkAction = (
     }
   };
 };
+
+export const orderIdAction = () => {
+  return async (dispatch) => {
+    try {
+      const response = await quanLyDatVeService.orderId();
+
+      dispatch({ type: "ORDER_ID", orderId: response.data });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};

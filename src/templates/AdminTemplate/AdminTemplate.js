@@ -7,6 +7,7 @@ import {
   FundProjectionScreenOutlined,
   FileOutlined,
   WechatWorkOutlined,
+  LineChartOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
@@ -53,7 +54,12 @@ const AdminTemplate = ({ childComponent }) => {
   }, []);
 
   const items = [
-    getItem("Film", "sub1", <PieChartOutlined />, [
+    getItem(
+      <NavLink to="/admin/">Dashboard</NavLink>,
+      "/admin/",
+      <LineChartOutlined />
+    ),
+    getItem("Phim", "sub1", <PieChartOutlined />, [
       getItem(
         <NavLink className="ml-10" to="/admin/films">
           Danh sách phim

@@ -17,7 +17,7 @@ import Detail from "./pages/DetailFilm/Detail";
 import CheckoutTemplate from "./templates/CheckoutTemplate/CheckoutTemplate";
 import Checkout from "./pages/Checkout/Checkout";
 import { UserTempalte } from "./templates/UserTemplate/UserTemplate";
-import CheckoutTab from "./pages/Checkout/Checkout";
+import CheckoutTab from "./pages/Checkout/CheckoutTab";
 import TicketHistory from "./pages/TicketHistory/TicketHistory";
 import Loading from "./components/Loading/Loading";
 import AdminTemplate from "./templates/AdminTemplate/AdminTemplate";

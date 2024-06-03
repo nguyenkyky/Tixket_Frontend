@@ -8,6 +8,7 @@ import {
   datGheAction,
   kiemTraDatVeAction,
   createPaymentLinkAction,
+  orderIdAction,
 } from "../../redux/actions/QuanLyDatVeAction";
 import {
   layThongTinDatVe,
@@ -41,6 +42,8 @@ const { TabPane } = Tabs;
 
 function Checkout(props) {
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+  const { orderId } = useSelector((state) => state.QuanLyDatVeReducer);
+
   const {
     chiTietPhongVe,
     danhSachGheDangDat,
@@ -48,7 +51,6 @@ function Checkout(props) {
     gheDaDuocNguoiKhacDat,
   } = useSelector((state) => state.QuanLyDatVeReducer);
 
-  const [orderId, setOrderId] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { id } = useParams();
@@ -108,12 +110,8 @@ function Checkout(props) {
   useEffect(() => {
     const action = layChiTietPhongVeAction(id, navigate);
     dispatch(action);
-    const fetchData = async () => {
-      const orderIdRecord = await quanLyDatVeService.orderId();
-      setOrderId(orderIdRecord.data);
-    };
-    fetchData();
 
+    dispatch(orderIdAction());
     // Co client dat ve thanh cong se load lai danh sach phong ve
     connection.on("datVeThanhCong", (danhSachGheKhachVuaDat) => {
       dispatch({
@@ -480,139 +478,4 @@ function Checkout(props) {
   );
 }
 
-function KetQuaDatVe() {
-  const { tabActive } = useSelector((state) => state.QuanLyDatVeReducer);
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { thongTinDatVe } = useSelector(
-    (state) => state.QuanLyNguoiDungReducer
-  );
-  const { thongTinVeVuaDat } = useSelector((state) => state.QuanLyDatVeReducer);
-  const [orderId, setOrderId] = useState();
-  useEffect(() => {
-    const action = layThongTinDatVe();
-    dispatch(action);
-    const fetchData = async () => {
-      const orderIdRecord = await quanLyDatVeService.orderId();
-      setOrderId(orderIdRecord.data);
-    };
-    fetchData();
-  }, []);
-
-  const tenGhe = thongTinVeVuaDat.danhSachVe?.map((ve) => ve.tenGhe).join(", ");
-
-  return (
-    <div className="payment-container w-1/2 px-5 py-12 mx-auto">
-      <div className="payment-header">
-        <CheckCircleTwoTone style={{ fontSize: "40px", color: "green" }} />
-        <h1 className="payment-title">Payment Successful !</h1>
-        <p className="payment-subtitle">
-          Thank you! Your payment of {thongTinVeVuaDat.tongTien} has been
-          received.
-        </p>
-        <p className="payment-order-id text-xl">Order ID: {orderId}</p>
-      </div>
-      <div className="payment-details flex flex-col space-y-4">
-        <div className="bg-white p-4 rounded-md shadow-md flex items-center justify-between mb-4 text-start">
-          <img
-            src={thongTinVeVuaDat.hinhAnh}
-            alt={thongTinVeVuaDat.tenPhim}
-            className="w-32 h-32 rounded-md"
-          />
-          <div className="flex-1 ml-4">
-            <h3 className="text-xl font-bold">{thongTinVeVuaDat.tenPhim}</h3>
-            <hr
-              style={{
-                borderTop: "1px solid red",
-                marginTop: "2px",
-                width: "80%",
-              }}
-            />
-            <p className="text-gray-600">
-              Địa điểm: {thongTinVeVuaDat.tenCumRap}
-            </p>
-            <p className="text-gray-600">
-              Ngày đặt: {moment().format("HH:mm  - DD/MM/YYYY")}
-            </p>
-            <p className="text-gray-600">
-              Ngày chiếu: {thongTinVeVuaDat.gioChieu} -{" "}
-              {thongTinVeVuaDat.ngayChieu}
-            </p>
-            <p className="text-gray-600">Ghế: {tenGhe}</p>
-          </div>
-          <div className="text-right">
-            <p className="text-green-600 font-bold text-lg">
-              Giá vé: {thongTinVeVuaDat.tongTien}
-            </p>
-            <CheckCircleTwoTone
-              style={{
-                fontSize: "30px",
-                marginTop: "12px",
-                marginRight: "56px",
-              }}
-            />
-          </div>
-        </div>
-      </div>
-      <button
-        className="ok-button"
-        onClick={() => {
-          navigate("/home");
-          dispatch({ type: "RELOAD_CHECKOUT" });
-        }}
-      >
-        Trang chủ
-      </button>
-    </div>
-  );
-}
-
-function CheckoutTab(props) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { tabActive } = useSelector((state) => state.QuanLyDatVeReducer);
-  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-  const [isPaymentSuccess, setIsPaymentSuccess] = useState(false); // Thêm trạng thái quản lý thanh toán thành công
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    if (queryParams.get("payment") === "success") {
-      const thongTinDatVe = JSON.parse(
-        localStorage.getItem("THONG_TIN_DAT_VE")
-      );
-      if (thongTinDatVe) {
-        dispatch(datVeAction(thongTinDatVe));
-        setIsPaymentSuccess(true); // Cập nhật trạng thái thanh toán thành công
-      }
-    }
-
-    return () => {
-      dispatch({ type: "RELOAD_CHECKOUT" }); // Reset tabActive về 1 khi component unmount
-    };
-  }, []);
-
-  return (
-    <div style={{ backgroundColor: "#FDFCF0" }}>
-      <Header />
-      <div className="p-5 mt-24 ">
-        <Tabs
-          defaultActiveKey="1"
-          activeKey={isPaymentSuccess ? "2" : tabActive.toString()} // Chuyển đổi giữa các tab dựa trên trạng thái thanh toán thành công
-          onChange={onChange}
-        >
-          <TabPane tab="1. CHỌN GHẾ & THANH TOÁN" key="1">
-            <Checkout />
-          </TabPane>
-
-          <TabPane tab="2. KẾT QUẢ ĐẶT VÉ" key="2">
-            <KetQuaDatVe />
-          </TabPane>
-        </Tabs>
-      </div>
-      <Footer />
-    </div>
-  );
-}
-
-export default CheckoutTab;
+export default Checkout;
