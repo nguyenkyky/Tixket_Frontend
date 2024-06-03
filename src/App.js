@@ -45,6 +45,7 @@ import EditNews from "./pages/Admin/News/EditNews";
 import Success from "./pages/payment/Success";
 import Cancel from "./pages/payment/Cancel";
 import Test from "./pages/payment/Test";
+import KetQuaDatVe from "./pages/Checkout/KetQuaDatVe";
 
 export const history = createBrowserHistory();
 
@@ -98,12 +99,12 @@ function App() {
         <Route
           path="checkout/:id"
           exact
-          element={<CheckoutTemplate childComponent={<CheckoutTab />} />}
+          element={<CheckoutTemplate childComponent={<Checkout />} />}
         />
         <Route
           path="checkout/success/:id"
           exact
-          element={<CheckoutTemplate childComponent={<CheckoutTab />} />}
+          element={<CheckoutTemplate childComponent={<KetQuaDatVe />} />}
         />
 
         <Route

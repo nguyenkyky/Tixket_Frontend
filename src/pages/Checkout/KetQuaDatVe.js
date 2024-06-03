@@ -1,17 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useParams, useNavigate } from "react-router-dom";
-
 import {
   layThongTinDatVe,
   setVipAction,
 } from "../../redux/actions/QuanLyNguoiDungAction";
-
+import { datVeAction } from "../../redux/actions/QuanLyDatVeAction";
 import _ from "lodash";
-
 import "./Checkout.css";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-
+import Header from "../../templates/HomeTemplate/Layout/Header/Header";
+import Footer from "../../templates/HomeTemplate/Layout/Footer/Footer";
 import { Tabs } from "antd";
 import moment from "moment";
 
@@ -23,19 +22,25 @@ const onChange = (key) => {
 
 const { TabPane } = Tabs;
 
-function KetQuaDatVe() {
-  const { tabActive } = useSelector((state) => state.QuanLyDatVeReducer);
-  console.log(tabActive);
+function RenderKetQuaDatVe() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { thongTinDatVe } = useSelector(
-    (state) => state.QuanLyNguoiDungReducer
-  );
+
   const { thongTinVeVuaDat } = useSelector((state) => state.QuanLyDatVeReducer);
-  const { orderId } = useSelector((state) => state.QuanLyDatVeReducer);
+  // const { orderId } = useSelector((state) => state.QuanLyDatVeReducer);
   useEffect(() => {
-    const action = layThongTinDatVe();
-    dispatch(action);
+    const queryParams = new URLSearchParams(window.location.search);
+    if (queryParams.get("payment") === "success") {
+      const thongTinDatVe = JSON.parse(
+        localStorage.getItem("THONG_TIN_DAT_VE")
+      );
+      if (thongTinDatVe) {
+        dispatch(datVeAction(thongTinDatVe));
+        localStorage.removeItem("THONG_TIN_DAT_VE");
+      } else {
+        navigate("/home");
+      }
+    }
   }, []);
 
   const tenGhe = thongTinVeVuaDat.danhSachVe?.map((ve) => ve.tenGhe).join(", ");
@@ -50,7 +55,7 @@ function KetQuaDatVe() {
           Thank you! Your payment of {thongTinVeVuaDat.tongTien} has been
           received.
         </p>
-        <p className="payment-subtitle">OrderId: {orderId}</p>
+        <p className="payment-subtitle">OrderId: {thongTinVeVuaDat.orderId}</p>
       </div>
       <div className="payment-details flex flex-col space-y-4">
         <div className="bg-white p-4 rounded-md shadow-md flex items-center justify-between mb-4 text-start">
@@ -98,11 +103,28 @@ function KetQuaDatVe() {
         className="ok-button"
         onClick={() => {
           navigate("/home");
-          dispatch({ type: "RELOAD_CHECKOUT" });
         }}
       >
         Trang chủ
       </button>
+    </div>
+  );
+}
+
+function KetQuaDatVe() {
+  return (
+    <div style={{ backgroundColor: "#FDFCF0" }}>
+      <Header />
+      <div className="p-5 mt-24 ">
+        <Tabs defaultActiveKey="2" activeKey="2">
+          <TabPane tab="1. CHỌN GHẾ & THANH TOÁN" key="1"></TabPane>
+
+          <TabPane tab="2. KẾT QUẢ ĐẶT VÉ" key="2">
+            <RenderKetQuaDatVe />
+          </TabPane>
+        </Tabs>
+      </div>
+      <Footer />
     </div>
   );
 }
