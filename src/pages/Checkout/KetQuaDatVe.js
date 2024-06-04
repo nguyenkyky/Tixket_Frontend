@@ -25,7 +25,7 @@ const { TabPane } = Tabs;
 function RenderKetQuaDatVe() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
   const { thongTinVeVuaDat } = useSelector((state) => state.QuanLyDatVeReducer);
   // const { orderId } = useSelector((state) => state.QuanLyDatVeReducer);
   useEffect(() => {
@@ -37,6 +37,14 @@ function RenderKetQuaDatVe() {
       if (thongTinDatVe) {
         dispatch(datVeAction(thongTinDatVe));
         localStorage.removeItem("THONG_TIN_DAT_VE");
+        if (userLogin.tongChiTieu + thongTinDatVe.tongTien > 10000000) {
+                    const taiKhoanSetVip = userLogin.taiKhoan;
+                    dispatch(setVipAction({ taiKhoanSetVip }));
+
+                    userLogin.maLoaiNguoiDung = "Vip";
+                  } 
+                  userLogin.tongChiTieu = userLogin.tongChiTieu + thongTinDatVe.tongTien;
+                  localStorage.setItem("USER_LOGIN", JSON.stringify(userLogin));
       } else {
         navigate("/home");
       }

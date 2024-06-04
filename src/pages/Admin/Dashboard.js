@@ -262,9 +262,9 @@ function Dashboard(props) {
               </div>
               <div className="flex items-end justify-between">
                 <div style={{ fontSize: "30px", fontWeight: "bold" }}>
-                  {selectedRapAmount?.toLocaleString()} đ
+                  {selectedRapAmount?.toLocaleString()}
                 </div>
-                <div style={{ fontSize: "16px", marginBottom: "6px" }}>
+                <div style={{ fontSize: "14px", marginBottom: "6px" }}>
                   {selectedRapTickets} vé đã bán
                 </div>
               </div>
@@ -309,9 +309,9 @@ function Dashboard(props) {
               </div>
               <div className="flex items-end justify-between">
                 <div style={{ fontSize: "30px", fontWeight: "bold" }}>
-                  {selectedPhimAmount?.toLocaleString()} đ
+                  {selectedPhimAmount?.toLocaleString()}
                 </div>
-                <div style={{ fontSize: "16px", marginBottom: "6px" }}>
+                <div style={{ fontSize: "14px", marginBottom: "6px" }}>
                   {selectedPhimTickets} vé đã bán
                 </div>
               </div>

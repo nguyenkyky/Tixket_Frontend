@@ -135,7 +135,7 @@ function EditCumRap(props) {
             </Form.Item>
             <Form.Item label="Hình ảnh">
               <Input
-                name="hinhanh"
+                name="hinhAnh"
                 onChange={formik.handleChange}
                 value={formik.values.hinhAnh}
               />

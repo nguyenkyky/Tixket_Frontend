@@ -21,7 +21,7 @@ function Footer(props) {
         <hr style={{ borderTop: "1px solid red", marginTop: "20px" }} />
         <div className="mt-8 container px-6 mx-auto space-y-6 divide-y dark:divide-gray-600 md:space-y-12 divide-opacity-50">
           <div className="grid grid-cols-12">
-            <div className="pb-6 flex items-center col-span-full md:pb-0 md:col-span-4">
+            <div className="pb-6 flex items-center col-span-full md:pb-0 md:col-span-3">
               <div
                 rel="noopener noreferrer"
                 href="#"
@@ -41,7 +41,7 @@ function Footer(props) {
               </div>
             </div>
             <div className="col-span-6 text-center md:text-left md:col-span-5">
-              <div className="grid grid-cols-3" style={{ color: "#fff" }}>
+              <div className="grid grid-cols-4" style={{ color: "#fff" }}>
                 {arrHeThongRap.map((heThongRap, index) => {
                   return (
                     <li key={index}>
@@ -51,7 +51,7 @@ function Footer(props) {
                 })}
               </div>
             </div>
-            <div className="col-span-6 flex items-center text-center md:text-left md:col-span-3">
+            <div className="col-span-3 flex items-center justify-center text-center md:text-left  ">
               <ul>
                 <li>
                   <a

@@ -43,8 +43,13 @@ function Create(props) {
         alert("Tạo lịch chiếu thành công");
         window.location.reload();
       } catch (e) {
-        alert("Tạo lịch chiếu thất bại");
-        console.log("ERROR 500:", e.message);
+        if(e.response.status === 400) {
+          alert("Trùng lịch chiếu")
+        } else {
+
+          alert("Tạo lịch chiếu thất bại");
+          console.log("ERROR 500:", e.message);
+        }
       }
     },
   });
