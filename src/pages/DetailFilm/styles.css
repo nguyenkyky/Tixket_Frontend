@@ -41,3 +41,14 @@
 .home-template  footer {
     padding-top: 0;
   }
+
+
+/* Thay đổi màu nền của thanh tiến trình */
+.progress-css {
+  background-color: #ccc; /* Màu nền mặc định */
+}
+
+/* Thay đổi màu của phần đã điền */
+progress::-webkit-progress-value {
+  background-color: #4caf50; /* Màu của phần đã điền */
+}

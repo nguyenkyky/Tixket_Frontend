@@ -4,15 +4,20 @@ import icon from "../../assets/image/images.png";
 import "../../assets/styles/circle.css";
 import { Tabs, Rate, Tag, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useLocation, NavLink } from "react-router-dom";
+import { useParams, useLocation, NavLink, useNavigate } from "react-router-dom";
 import { layThongTinChiTietPhim } from "../../redux/actions/QuanLyRapActions";
 import moment from "moment";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import Rating from "@mui/material/Rating";
+import Stack from "@mui/material/Stack";
+import { ratingAction } from "../../redux/actions/QuanLyPhimAction";
+import { Flex, Progress } from "antd";
 
 dayjs.extend(advancedFormat);
 
 function Detail(props) {
+  const navigate = useNavigate();
   const getNextSevenDays = () => {
     return new Array(7)
       .fill(null)
@@ -20,9 +25,12 @@ function Detail(props) {
   };
   const nextSevenDays = getNextSevenDays(); // Mảng các ngày dưới dạng "YYYY-MM-DD"
   const filmDetail = useSelector((state) => state.QuanLyPhimReducer.filmDetail);
+  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
   const [activeTab, setActiveTab] = useState("1");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cumRap, setCumRap] = useState();
+  const [ratingValue, setRatingValue] = useState(0);
+  console.log(ratingValue);
   const showModal = (cumRap) => {
     setCumRap(cumRap);
     setIsModalVisible(true);
@@ -44,6 +52,40 @@ function Detail(props) {
     }
   };
 
+  const handleChangeRating = (values) => {
+    setRatingValue(values);
+    const action = ratingAction(
+      {
+        taiKhoan: userLogin.taiKhoan,
+        rating: values,
+        maPhim: id,
+      },
+      navigate
+    );
+    dispatch(action);
+    // console.log(values);
+    // console.log(userLogin.taiKhoan);
+  };
+
+  // Hàm tính toán trung bình đánh giá và số lượt đánh giá
+  const calculateRatingStats = (ratings) => {
+    const totalRatings = ratings.length;
+    const ratingSum = ratings.reduce((acc, rating) => acc + rating.rate, 0);
+    const averageRating = ratingSum / totalRatings;
+
+    const ratingCounts = [0, 0, 0, 0, 0];
+    ratings.forEach((rating) => {
+      ratingCounts[rating.rate - 1] += 1;
+    });
+
+    return { totalRatings, averageRating, ratingCounts };
+  };
+
+  const { totalRatings, averageRating, ratingCounts } = calculateRatingStats(
+    filmDetail?.rating || []
+  );
+  console.log(ratingCounts);
+
   useEffect(() => {
     const fetchShowtimes = async () => {
       dispatch(layThongTinChiTietPhim(id));
@@ -57,6 +99,17 @@ function Detail(props) {
     // Hàm dọn dẹp interval khi component bị unmount
     return () => clearInterval(interval);
   }, [id]);
+
+  useEffect(() => {
+    if (filmDetail && userLogin) {
+      const userRating = filmDetail.rating?.find(
+        (rating) => rating.taiKhoan === userLogin.taiKhoan
+      );
+      if (userRating) {
+        setRatingValue(userRating.rate);
+      }
+    }
+  }, [filmDetail]);
 
   const { TabPane } = Tabs;
   return (
@@ -255,7 +308,7 @@ function Detail(props) {
                         className="col-span-2"
                         src={filmDetail.hinhAnh}
                         style={{
-                          height: 350,
+                          height: 500,
                           borderRadius: "10px",
                           width: "100%",
                         }}
@@ -332,6 +385,69 @@ function Detail(props) {
                         <p className="text-black text-base mt-5">
                           {filmDetail.moTa}
                         </p>
+                        <div className="flex justify-around mt-4">
+                          <div className="flex flex-col justify-center items-center">
+                            <p className="font-semibold text-xl">
+                              {averageRating.toFixed(1)}/5
+                            </p>
+                            <Rating
+                              name="disabled"
+                              value={Math.round(averageRating)}
+                              disabled
+                            />
+                            <p className="text-sm">{totalRatings} đánh giá</p>
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "2px",
+                                backgroundColor: "#ccc",
+                              }}
+                              className="line"
+                            ></div>
+                            <p className="text-lg">Đánh giá của bạn</p>
+                            <Rating
+                              name="simple-controlled"
+                              value={ratingValue}
+                              onChange={(event, newValue) =>
+                                handleChangeRating(newValue)
+                              }
+                            />
+                          </div>
+                          <div>
+                            <div
+                              style={{
+                                width: "1px",
+                                height: "100%",
+                                backgroundColor: "#ccc",
+                              }}
+                              className="line"
+                            ></div>
+                          </div>
+                          <Stack spacing={1}>
+                            {ratingCounts.map((count, index) => (
+                              <div key={index} className="flex items-center">
+                                <p style={{ marginTop: "2px" }}>{5 - index}</p>
+                                <Rating
+                                  name={`customized-${5 - index}`}
+                                  defaultValue={1}
+                                  max={1}
+                                  readOnly
+                                />
+                                <Progress
+                                  style={{ width: "200px" }}
+                                  percent={
+                                    (ratingCounts[4 - index] / totalRatings) *
+                                    100
+                                  }
+                                  showInfo={false}
+                                />
+                                <p className="ml-2">
+                                  {ratingCounts[4 - index]} đánh giá
+                                </p>
+                              </div>
+                            ))}
+                          </Stack>
+                        </div>
                       </div>
                     </div>
                   </div>

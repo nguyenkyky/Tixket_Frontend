@@ -46,6 +46,9 @@ export class QuanLyPhimService extends baseService {
   getAllShowTimes = () => {
     return this.get(`api/lichchieuphim/allshowtimes`);
   };
+  rating = (data) => {
+    return this.post(`api/details/rating`, data);
+  };
 }
 
 export const quanLyPhimService = new QuanLyPhimService();

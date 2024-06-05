@@ -1,4 +1,5 @@
 import { quanLyPhimService } from "../../services/QuanLyPhimService";
+import { layThongTinChiTietPhim } from "./QuanLyRapActions";
 import { SET_DANH_SACH_PHIM } from "./types/QuanLyPhimType";
 
 export const layDanhSachPhimAction = () => {
@@ -104,6 +105,24 @@ export const deleteShowtimeAction = (maLichChieu) => {
         payload: maLichChieu,
       });
     } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const ratingAction = (value, navigate) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyPhimService.rating(value);
+      dispatch(layThongTinChiTietPhim(value.maPhim));
+    } catch (errors) {
+      if (errors.response.status === 403) {
+        alert("Vui lòng đăng nhập");
+        localStorage.removeItem("USER_LOGIN");
+        localStorage.removeItem("accessToken");
+        navigate("/login");
+      }
+
       console.log("errors", errors);
     }
   };

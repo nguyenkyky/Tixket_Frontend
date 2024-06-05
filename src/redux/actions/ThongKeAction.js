@@ -36,6 +36,7 @@ export const syncDataAction = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: "DISPLAY_LOADING" });
+      dispatch(thongKe7NgayAction());
       const result = await quanLyThongKeService.layDuLieuThongKeMoi();
       if (result) {
         dispatch({

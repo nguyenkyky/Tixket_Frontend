@@ -135,6 +135,7 @@ function Dashboard(props) {
     return `${(percent * 100).toFixed(0)}%`;
   };
 
+  console.log(revenueDataAmount);
   const dispatch = useDispatch();
 
   const handleChangeRap = (value) => {
