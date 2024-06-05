@@ -1,6 +1,7 @@
 const stateDefault = {
   thongKeTheoThang: {},
   thongKeThangTruoc: {},
+  thongKe7Ngay: [],
 };
 
 export const ThongKeReducer = (state = stateDefault, action) => {
@@ -11,6 +12,10 @@ export const ThongKeReducer = (state = stateDefault, action) => {
     }
     case "THONG_KE_THANG_TRUOC": {
       state.thongKeThangTruoc = action.thongKeThangTruoc;
+      return { ...state };
+    }
+    case "THONG_KE_7_NGAY": {
+      state.thongKe7Ngay = action.payload;
       return { ...state };
     }
 

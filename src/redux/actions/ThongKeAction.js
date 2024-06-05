@@ -50,3 +50,23 @@ export const syncDataAction = () => {
     }
   };
 };
+
+export const thongKe7NgayAction = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: "DISPLAY_LOADING" });
+      const result = await quanLyThongKeService.thongKe7Ngay();
+      if (result) {
+        // console.log(result.data);
+        dispatch({
+          type: "THONG_KE_7_NGAY",
+          payload: result.data,
+        });
+      }
+      dispatch({ type: "HIDE_LOADING" });
+    } catch (err) {
+      dispatch({ type: "HIDE_LOADING" });
+      console.log(err);
+    }
+  };
+};
