@@ -52,7 +52,7 @@ export default function Header(props) {
             <HashLink
               smooth
               to="/home#home"
-              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
+              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600 font-medium"
             >
               Trang chủ
             </HashLink>
@@ -61,7 +61,7 @@ export default function Header(props) {
             <HashLink
               smooth
               to="/home#danh-sach-phim"
-              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
+              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600 font-medium"
             >
               Danh sách phim
             </HashLink>
@@ -70,7 +70,7 @@ export default function Header(props) {
             <HashLink
               smooth
               to="/home#lich-chieu"
-              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
+              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600 font-medium"
             >
               Lịch chiếu
             </HashLink>
@@ -79,7 +79,7 @@ export default function Header(props) {
             <HashLink
               smooth
               to="/home#news"
-              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
+              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600 font-medium"
             >
               Tin tức
             </HashLink>
@@ -87,7 +87,7 @@ export default function Header(props) {
           <li className="flex">
             <NavLink
               to="/theater"
-              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600"
+              className="flex items-center px-4 -mb-1  dark:border- dark:text-violet-600 dark:border-violet-600 font-medium"
             >
               Hệ thống rạp
             </NavLink>

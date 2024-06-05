@@ -16,6 +16,12 @@ export const dangNhapAction = (thongTinDangNhap, navigate) => {
         navigate("/home");
       }
     } catch (error) {
+      if (error.response.status === 404) {
+        alert("Tài khoản không tồn tại");
+      }
+      if (error.response.status === 400) {
+        alert("Mật khẩu không chính xác");
+      }
       console.log("error", error.response.data);
     }
   };
@@ -144,6 +150,20 @@ export const setVipAction = (value) => {
     try {
       const result = await quanLyNguoiDungService.setVip(value);
       console.log("result", result);
+    } catch (errors) {
+      console.log("errors", errors);
+    }
+  };
+};
+
+export const resetPasswordAction = (values, navigate) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.resetPassword(values);
+      if (result) {
+        alert("Đặt lại mật khẩu thành công");
+        navigate("/login");
+      }
     } catch (errors) {
       console.log("errors", errors);
     }

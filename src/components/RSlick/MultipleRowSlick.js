@@ -104,12 +104,6 @@ const MultipleRowSlick = (props) => {
         {props.arrFilm.map((phim, index) => (
           <div className="mt-8" key={index}>
             <FilmFlip item={phim} />
-            <div
-              className="rounded-xl text-center cursor-pointer py-2 bg-indigo-300 my-2 text-success-50 font-bold"
-              style={{ width: "300px" }}
-            >
-              <NavLink to={`/detail/${phim.maPhim}`}>CHI TIẾT</NavLink>
-            </div>
           </div>
         ))}
       </Slider>

@@ -13,6 +13,7 @@ import { quanLyNguoiDungService } from "../../services/QuanLyNguoiDung";
 import { toast, ToastContainer } from "react-toastify";
 import { layThongTinDatVe } from "../../redux/actions/QuanLyNguoiDungAction";
 import "react-toastify/dist/ReactToastify.css";
+import "./style.css";
 import _ from "lodash";
 import moment from "moment";
 import { Pagination } from "antd";
@@ -231,7 +232,10 @@ export default function Profile() {
                   style={{ display: "flex", flexDirection: "column" }}
                 >
                   <div className="flex flex-wrap justify-center">
-                    <div className="flex w-7/12 mt-10">
+                    <div
+                      style={{ marginLeft: "100px" }}
+                      className="flex w-7/12 mt-10"
+                    >
                       <div className="w-full lg:w-1/2">
                         <Form.Item label="Username">
                           <Input
@@ -282,7 +286,10 @@ export default function Profile() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-center">
+                  <div
+                    style={{ marginLeft: "314px" }}
+                    className="flex justify-center"
+                  >
                     <button
                       type="submit"
                       className="bg-blue-400 text-white p-2 rounded-md mr-4"
@@ -321,6 +328,7 @@ export default function Profile() {
       </div>
 
       <Modal
+        className="modal-change-password"
         title="Đổi mật khẩu"
         open={isModalVisible}
         onOk={handleOk}
@@ -334,45 +342,49 @@ export default function Profile() {
           </Button>,
         ]}
       >
-        <Form layout="vertical">
-          <Form.Item
-            label="Mật khẩu hiện tại"
-            name="currentPassword"
-            rules={[
-              { required: true, message: "Vui lòng nhập mật khẩu hiện tại!" },
-            ]}
-          >
-            <Input.Password
+        <div>
+          <Form layout="vertical">
+            <Form.Item
+              label="Mật khẩu hiện tại"
               name="currentPassword"
-              value={passwords.currentPassword}
-              onChange={handlePasswordChange}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Mật khẩu mới"
-            name="newPassword"
-            rules={[{ required: true, message: "Vui lòng nhập mật khẩu mới!" }]}
-          >
-            <Input.Password
+              rules={[
+                { required: true, message: "Vui lòng nhập mật khẩu hiện tại!" },
+              ]}
+            >
+              <Input.Password
+                name="currentPassword"
+                value={passwords.currentPassword}
+                onChange={handlePasswordChange}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Mật khẩu mới"
               name="newPassword"
-              value={passwords.newPassword}
-              onChange={handlePasswordChange}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Xác nhận mật khẩu mới"
-            name="confirmNewPassword"
-            rules={[
-              { required: true, message: "Vui lòng xác nhận mật khẩu mới!" },
-            ]}
-          >
-            <Input.Password
+              rules={[
+                { required: true, message: "Vui lòng nhập mật khẩu mới!" },
+              ]}
+            >
+              <Input.Password
+                name="newPassword"
+                value={passwords.newPassword}
+                onChange={handlePasswordChange}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Xác nhận mật khẩu mới"
               name="confirmNewPassword"
-              value={passwords.confirmNewPassword}
-              onChange={handlePasswordChange}
-            />
-          </Form.Item>
-        </Form>
+              rules={[
+                { required: true, message: "Vui lòng xác nhận mật khẩu mới!" },
+              ]}
+            >
+              <Input.Password
+                name="confirmNewPassword"
+                value={passwords.confirmNewPassword}
+                onChange={handlePasswordChange}
+              />
+            </Form.Item>
+          </Form>
+        </div>
       </Modal>
       <ToastContainer />
     </div>

@@ -101,8 +101,8 @@ const HomeMenu = () => {
                         src={cumRap.hinhAnh}
                         alt={icon}
                         style={{
-                          width: 50,
-                          height: 60,
+                          width: 100,
+                          height: 120,
                           borderRadius: "4px",
                         }}
                       />
@@ -115,6 +115,9 @@ const HomeMenu = () => {
                           }}
                         >
                           <p className="text-red-400 text-base">Chi tiết</p>
+                          <p className="text-red-400 text-base">
+                            {cumRap.hotline}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -167,7 +170,9 @@ const HomeMenu = () => {
                                       {phim.tenPhim}
                                     </NavLink>
                                     <p>{phim.thoiLuong} phút</p>
-                                    <div className="tags-container flex justify-start mt-7">
+                                    <p>{phim.dienVien.join(", ")}</p>
+
+                                    <div className="tags-container flex justify-start mt-1">
                                       {phim.theLoai
                                         .slice(0, 2)
                                         .map((tag, index) => (

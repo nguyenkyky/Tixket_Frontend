@@ -1,0 +1,9 @@
+.modal-change-password {
+    max-width: 300px;
+    padding: 20px;
+    
+}
+
+.ant-modal-root .modal-change-password .ant-modal-content {
+    padding: 20px;
+}

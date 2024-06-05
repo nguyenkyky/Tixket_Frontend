@@ -47,6 +47,7 @@ import Cancel from "./pages/payment/Cancel";
 import Test from "./pages/payment/Test";
 import KetQuaDatVe from "./pages/Checkout/KetQuaDatVe";
 import RecoverPassword from "./pages/RecoverPassword/RecoverPassword";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 export const history = createBrowserHistory();
 
@@ -100,6 +101,11 @@ function App() {
           path="/recover-password"
           exact
           element={<UserTempalte childComponent={<RecoverPassword />} />}
+        />
+        <Route
+          path="/reset-password/:token"
+          exact
+          element={<UserTempalte childComponent={<ResetPassword />} />}
         />
         <Route
           path="checkout/:id"

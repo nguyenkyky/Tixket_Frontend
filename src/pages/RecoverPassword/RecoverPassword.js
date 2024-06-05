@@ -6,8 +6,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { dangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
 import { quanLyNguoiDungService } from "../../services/QuanLyNguoiDung";
-
-
+import { ToastContainer, toast } from "react-toastify";
 
 function RecoverPassword(props) {
   const navigate = useNavigate();
@@ -19,14 +18,16 @@ function RecoverPassword(props) {
     },
     onSubmit: async (values) => {
       try {
-        console.log("values", values.taiKhoan);
-
-        const result = await quanLyNguoiDungService.recoverPassword(values.taiKhoan);
-        console.log(result)
-       
-      } catch (e){
-        if(e.response.status === 404) {
-          alert("Tài khoản không tồn tại")
+        // console.log("values", values.taiKhoan);
+        const result = await quanLyNguoiDungService.recoverPassword(
+          values.taiKhoan
+        );
+        if (result) {
+          alert("Link đặt lại mật khẩu đã được gửi đến Email của bạn");
+        }
+      } catch (e) {
+        if (e.response.status === 404) {
+          alert("Tài khoản không tồn tại");
         }
       }
     },
@@ -72,7 +73,7 @@ function RecoverPassword(props) {
                 placeholder="Nhập vào tài khoản"
               />
             </div>
-            
+
             <div className="mt-10">
               <button
                 className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide

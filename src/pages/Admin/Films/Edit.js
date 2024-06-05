@@ -104,7 +104,7 @@ function Edit(props) {
       sapChieu: thongTinPhim?.sapChieu,
       hot: thongTinPhim?.hot,
       danhGia: thongTinPhim?.danhGia,
-      theLoai: [thongTinPhim?.theLoai],
+      theLoai: thongTinPhim?.theLoai,
     },
     onSubmit: (values) => {
       dispatch(capNhatPhimAction(values, navigate));

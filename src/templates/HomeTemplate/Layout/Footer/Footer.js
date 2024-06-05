@@ -56,7 +56,7 @@ function Footer(props) {
                 <li>
                   <a
                     rel="noopener noreferrer"
-                    href="#"
+                    href="facebook.com/nguyen.kyz"
                     title="Facebook"
                     className="flex items-center justify-center w-10 h-10 rounded-full dark:bg-violet-600 dark:text-gray-50"
                   >

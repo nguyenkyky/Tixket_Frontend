@@ -40,8 +40,11 @@ export class QuanLyNguoiDungService extends baseService {
     return this.post(`api/QuanLyNguoiDung/setvip`, values);
   };
   recoverPassword = (values) => {
-    return this.get(`api/QuanLyNguoiDung/recoverPassword?taiKhoan=${values}`)
-  }
+    return this.get(`api/QuanLyNguoiDung/recoverPassword?taiKhoan=${values}`);
+  };
+  resetPassword = (values) => {
+    return this.post(`api/QuanLyNguoiDung/resetPassword`, values);
+  };
 }
 
 export const quanLyNguoiDungService = new QuanLyNguoiDungService();

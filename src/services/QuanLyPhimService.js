@@ -26,7 +26,7 @@ export class QuanLyPhimService extends baseService {
   };
 
   capNhatPhim = (data) => {
-    return this.put(`api/phim/update`, data);
+    return this.post(`api/phim/update`, data);
   };
 
   xoaPhim = (maPhim) => {

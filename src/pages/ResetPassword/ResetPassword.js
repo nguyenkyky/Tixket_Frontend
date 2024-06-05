@@ -1,33 +1,33 @@
 import React from "react";
-import PropTypes from "prop-types";
+
 import { useFormik } from "formik";
-import ColumnGroup from "antd/es/table/ColumnGroup";
-import { NavLink, useNavigate } from "react-router-dom";
+
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { dangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
+import { resetPasswordAction } from "../../redux/actions/QuanLyNguoiDungAction";
 
-Login.propTypes = {};
-
-function Login(props) {
+function ResetPassword(props) {
+  const { token } = useParams();
+  console.log(token);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-
-  // console.log("userlogin", userLogin);
 
   const formik = useFormik({
     initialValues: {
-      taiKhoan: "",
       matKhau: "",
+      xacNhanMatKhau: "",
     },
     onSubmit: (values) => {
-      const action = dangNhapAction(values, navigate);
+      console.log(values);
+      if (values.matKhau !== values.xacNhanMatKhau) {
+        alert("Mật khẩu không khớp!");
+        return;
+      }
+      const data = { token, matKhau: values.matKhau };
+      const action = resetPasswordAction(data, navigate);
       dispatch(action);
-      // console.log("values", values);
     },
   });
-
-  // console.log(formik);
 
   return (
     <form
@@ -54,62 +54,44 @@ function Login(props) {
           className="text-center text-4xl text-indigo-900 font-display font-semibold lg:text-left xl:text-5xl
               xl:text-bold"
         >
-          Đăng nhập
+          Đặt lại mật khẩu
         </h2>
         <div className="mt-12">
           <div>
             <div>
               <div className="text-sm font-bold text-gray-700 tracking-wide">
-                Tài khoản
-              </div>
-              <input
-                name="taiKhoan"
-                onChange={formik.handleChange}
-                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                placeholder="Nhập vào tài khoản"
-              />
-            </div>
-            <div className="mt-8">
-              <div className="flex justify-between items-center">
-                <div className="text-sm font-bold text-gray-700 tracking-wide">
-                  Mật khẩu
-                </div>
-                <div>
-                  <a
-                    href="/recover-password"
-                    className="text-xs font-display font-semibold text-indigo-600 hover:text-indigo-800
-                                  cursor-pointer"
-                  >
-                    Quên mật khẩu?
-                  </a>
-                </div>
+                Mật khẩu
               </div>
               <input
                 name="matKhau"
                 onChange={formik.handleChange}
                 className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                type="password"
                 placeholder="Nhập vào mật khẩu"
+                type="password"
               />
             </div>
+            <div>
+              <div className="text-sm font-bold text-gray-700 tracking-wide mt-4">
+                Xác nhận mật khẩu
+              </div>
+              <input
+                name="xacNhanMatKhau"
+                onChange={formik.handleChange}
+                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                placeholder="Xác nhận mật khẩu"
+                type="password"
+              />
+            </div>
+
             <div className="mt-10">
               <button
                 className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
                           font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
                           shadow-lg"
               >
-                Đăng nhập
+                Xác nhận
               </button>
             </div>
-          </div>
-          <div className="mt-12 text-sm font-display font-semibold text-gray-700 text-center">
-            Chưa có tài khoản ?{" "}
-            <NavLink
-              to="/register"
-              className="cursor-pointer text-indigo-600 hover:text-indigo-800"
-            >
-              Đăng ký
-            </NavLink>
           </div>
         </div>
       </div>
@@ -117,4 +99,4 @@ function Login(props) {
   );
 }
 
-export default Login;
+export default ResetPassword;

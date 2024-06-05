@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import YouTube from "react-youtube";
-import { PlayCircleOutlined } from "@ant-design/icons";
-import moment from "moment";
+import React, { useState, useRef } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import moment from "moment";
+import { Tag, Modal, Button } from "antd";
 import "./FilmFlip.css";
-import { Button, Tag, Modal } from "antd";
 
 function FilmFlip(props) {
   const { item } = props;
@@ -12,12 +12,13 @@ function FilmFlip(props) {
   const navigate = useNavigate();
 
   const handlePlayClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleDetailClick = () => {
     navigate(`/detail/${item.maPhim}?tab=3`);
   };
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -33,98 +34,76 @@ function FilmFlip(props) {
   };
 
   return (
-    <div className="flip-card bg-blue-300" style={{ height: 280 }}>
-      <div style={{ height: 280 }}>
+    <div className="flip-card bg-blue-300">
+      <div>
         <div className="flip-card-inner rounded-xl">
           <div
             className="flip-card-front"
             style={{ width: "300px", borderRadius: "12px" }}
           >
             <div
-              style={{
-                position: "relative",
-                top: 0,
-                left: 0,
-                borderRadius: "12px",
-              }}
+              className="image-flip-container"
+              style={{ borderRadius: "12px" }}
+              // style={{
+              //   position: "relative",
+              //   top: 0,
+              //   left: 0,
+              //   borderRadius: "12px",
+              // }}
             >
               <img
                 src={item.hinhAnh}
                 alt={item.tenPhim}
-                style={{ height: 200, width: 300, borderRadius: "12px" }}
-              ></img>
+                className="card-image"
+                style={{
+                  height: 380,
+                  width: 300,
+                  borderRadius: "12px",
+                }}
+              />
+              <div className="button-overlay">
+                <Button
+                  icon={<PlayCircleOutlined />}
+                  size="large"
+                  onClick={handlePlayClick}
+                  className="overlay-button"
+                >
+                  Xem Trailer
+                </Button>
+                <Button
+                  icon={<InfoCircleOutlined />}
+                  size="large"
+                  onClick={handleDetailClick}
+                  className="overlay-button"
+                >
+                  Chi Tiết
+                </Button>
+              </div>
             </div>
-            <div className="flex ml-2 justify-between">
+            <div className="flex justify-between">
               <p className="mt-2">
                 {moment(item.ngayKhoiChieu).format("DD-MM-YYYY")}
               </p>
               <div className="tags-container flex justify-end mt-2">
                 {item.theLoai.slice(0, 2).map((tag, index) => (
-                  <Tag color="purple" key={index}>
+                  <Tag
+                    style={{
+                      color: "#000",
+                      // background: "#fff",
+                      // borderColor: "#f6d38b",
+                    }}
+                    key={index}
+                  >
                     {tag}
                   </Tag>
                 ))}
               </div>
             </div>
-            <div className="flex ml-2  flex-start">
+            <div className="flex  flex-start">
               <p className="font-bold text-left">
                 {item.tenPhim.length > 80
                   ? item.tenPhim.substring(0, 80) + "..."
                   : item.tenPhim}
-              </p>
-            </div>
-          </div>
-          <div
-            className="flip-card-back"
-            style={{
-              position: "relative",
-              borderRadius: "12px",
-            }}
-          >
-            <div
-              style={{
-                position: "relative",
-                top: 0,
-                left: 0,
-                borderRadius: "12px",
-              }}
-            >
-              <img
-                src={item.hinhAnh}
-                alt="avatar"
-                style={{ width: 300, height: 200, borderRadius: "12px" }}
-              ></img>
-            </div>
-            <div
-              className="w-full h-full rounded-xl"
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                backgroundColor: "rgba(0,0,0,0)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div className="cursor-pointer mb-20" onClick={showModal}>
-                <PlayCircleOutlined style={{ fontSize: "50px" }} />
-              </div>
-            </div>
-            <div className="flex ml-2">
-              <p className="mt-2 text-black font-bold">
-                Đạo diễn:{" "}
-                {item.daoDien?.length > 25
-                  ? item.daoDien?.substring(0, 25) + "..."
-                  : item.daoDien}
-              </p>
-            </div>
-            <div className="flex ml-2 flex-start">
-              <p className="font-bold text-left text-black">
-                Diễn viên:{" "}
-                {item.dienVien.join(", ").length > 50
-                  ? item.dienVien.join(", ").substring(0, 50) + "..."
-                  : item.dienVien.join(", ")}
               </p>
             </div>
           </div>
@@ -139,6 +118,7 @@ function FilmFlip(props) {
         <div className="modal-content">
           <div style={{ borderRadius: "10px", width: "100%" }}>
             <iframe
+              id="youtube-player"
               width="100%"
               height="500"
               src={getYoutubeEmbedUrl(item.trailer)}
