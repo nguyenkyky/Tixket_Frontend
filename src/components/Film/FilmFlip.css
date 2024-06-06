@@ -32,7 +32,7 @@
   border-radius: 12px;
 }
 
-.flip-card-front:hover .card-image {
+.image-flip-container:hover .card-image {
   opacity: 0.5;
   filter: brightness(0.3);
 }
@@ -53,7 +53,7 @@
   color: #000;
 }
 
-.flip-card-front:hover .button-overlay {
+.image-flip-container:hover .button-overlay {
   display: flex;
 }
 

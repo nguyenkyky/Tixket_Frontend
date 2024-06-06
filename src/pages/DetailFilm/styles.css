@@ -52,3 +52,12 @@
 progress::-webkit-progress-value {
   background-color: #4caf50; /* Màu của phần đã điền */
 }
+
+.tab-2 ,
+.tab-2 p{
+  color: #fff;
+}
+
+.ant-progress .ant-progress-inner {
+  background-color: rgb(255 255 255 / 6%);
+}

@@ -3,6 +3,8 @@ import "./styles.css";
 import icon from "../../assets/image/images.png";
 import "../../assets/styles/circle.css";
 import { Tabs, Rate, Tag, Modal } from "antd";
+import { CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { styled } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useLocation, NavLink, useNavigate } from "react-router-dom";
 import { layThongTinChiTietPhim } from "../../redux/actions/QuanLyRapActions";
@@ -84,7 +86,14 @@ function Detail(props) {
   const { totalRatings, averageRating, ratingCounts } = calculateRatingStats(
     filmDetail?.rating || []
   );
-  console.log(ratingCounts);
+  const StyledRating = styled(Rating)({
+    "& .MuiRating-iconFilled": {
+      color: "#e8fe12",
+    },
+    "& .MuiRating-iconEmpty": {
+      color: "rgb(239 239 239 / 26%)",
+    },
+  });
 
   useEffect(() => {
     const fetchShowtimes = async () => {
@@ -97,7 +106,9 @@ function Detail(props) {
     }, 60000); // Kiểm tra mỗi phút
 
     // Hàm dọn dẹp interval khi component bị unmount
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, [id]);
 
   useEffect(() => {
@@ -107,6 +118,8 @@ function Detail(props) {
       );
       if (userRating) {
         setRatingValue(userRating.rate);
+      } else {
+        setRatingValue(0);
       }
     }
   }, [filmDetail]);
@@ -288,7 +301,7 @@ function Detail(props) {
             <TabPane
               tab={
                 <span
-                  className={`text-2xl ${
+                  className={`text-2xl  ${
                     activeTab === "2" ? "text-red-600" : "text-white"
                   }`}
                 >
@@ -298,8 +311,8 @@ function Detail(props) {
               key="2"
             >
               <div
-                className="mt-20 px-5 py-5 ml-72 w-2/3"
-                style={{ borderRadius: "10px", backgroundColor: "#FDFCF0" }}
+                className="mt-20 px-5 py-5 ml-72 w-2/3 tab-2"
+                style={{ borderRadius: "10px" }}
               >
                 <div className="grid grid-cols-12">
                   <div className="col-span-10 col-start-2">
@@ -315,12 +328,14 @@ function Detail(props) {
                         alt="123"
                       />
                       <div className="col-span-3 ml-5">
-                        <p className="text-xl text-black">
-                          Ngày khởi chiếu:{" "}
-                          {moment(filmDetail.ngayKhoiChieu).format(
-                            "DD.MM.YYYY"
-                          )}
-                        </p>
+                        <div className="flex items-center">
+                          <CalendarOutlined />
+                          <p className="text-xl text-black ml-4">
+                            {moment(filmDetail.ngayKhoiChieu).format(
+                              "DD.MM.YYYY"
+                            )}
+                          </p>
+                        </div>
                         <hr
                           style={{
                             borderTop: "1px solid red",
@@ -356,14 +371,7 @@ function Detail(props) {
                             {filmDetail.dienVien?.join(", ")}
                           </p>
                         </div>
-                        <div className="flex">
-                          <p className="text-black text-base font-medium">
-                            Thời lượng:
-                          </p>
-                          <p className="text-black text-base ml-2">
-                            {filmDetail.thoiLuong} phút
-                          </p>
-                        </div>
+
                         <div className="flex">
                           <p className="text-black text-base font-medium">
                             Thể loại:
@@ -381,6 +389,12 @@ function Detail(props) {
                               ))}
                           </div>
                         </div>
+                        <div className="flex items-center">
+                          <ClockCircleOutlined />
+                          <p className="text-black text-base ml-2">
+                            {filmDetail.thoiLuong} phút
+                          </p>
+                        </div>
 
                         <p className="text-black text-base mt-5">
                           {filmDetail.moTa}
@@ -390,7 +404,7 @@ function Detail(props) {
                             <p className="font-semibold text-xl">
                               {averageRating.toFixed(1)}/5
                             </p>
-                            <Rating
+                            <StyledRating
                               name="disabled"
                               value={Math.round(averageRating)}
                               disabled
@@ -405,7 +419,7 @@ function Detail(props) {
                               className="line"
                             ></div>
                             <p className="text-lg">Đánh giá của bạn</p>
-                            <Rating
+                            <StyledRating
                               name="simple-controlled"
                               value={ratingValue}
                               onChange={(event, newValue) =>

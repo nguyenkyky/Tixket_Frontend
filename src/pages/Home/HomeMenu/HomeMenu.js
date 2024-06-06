@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Radio, Space, Tabs, Select, Tag, Modal } from "antd";
 import { NavLink } from "react-router-dom";
+import { CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import icon from "../../../assets/image/images.png";
 import moment from "moment";
 import dayjs from "dayjs";
@@ -96,27 +98,34 @@ const HomeMenu = () => {
               return (
                 <Tabs.TabPane
                   tab={
-                    <div style={{ width: "320px" }} className="flex">
+                    <div style={{ width: "350px" }} className="flex">
                       <img
                         src={cumRap.hinhAnh}
                         alt={icon}
                         style={{
-                          width: 100,
-                          height: 120,
+                          width: "100px",
+                          height: "120px",
                           borderRadius: "4px",
                         }}
                       />
-                      <div className="text-left ml-2">
-                        {cumRap.tenCumRap}
+                      <div className="text-left ml-2 ">
+                        <div className="text-base font-medium">
+                          {cumRap.tenCumRap}
+                        </div>
+                        <p className="text-black">
+                          <LocationOnOutlinedIcon />
+                          {cumRap.diaChi.length > 50
+                            ? cumRap.diaChi.substring(0, 50) + "..."
+                            : cumRap.diaChi}
+                        </p>
                         <div
                           style={{ width: "70px" }}
                           onClick={() => {
                             showModal(cumRap);
                           }}
                         >
-                          <p className="text-red-400 text-base">Chi tiết</p>
-                          <p className="text-red-400 text-base">
-                            {cumRap.hotline}
+                          <p className="text-blue-400 text-base mt-6">
+                            Chi tiết
                           </p>
                         </div>
                       </div>
@@ -169,16 +178,21 @@ const HomeMenu = () => {
                                     >
                                       {phim.tenPhim}
                                     </NavLink>
-                                    <p>{phim.thoiLuong} phút</p>
-                                    <p>{phim.dienVien.join(", ")}</p>
+                                    <p className="text-base font-medium">
+                                      {phim.dienVien.join(", ")}
+                                    </p>
+                                    <div className="flex">
+                                      <ClockCircleOutlined />
+                                      <p className="ml-1">
+                                        {phim.thoiLuong} phút
+                                      </p>
+                                    </div>
 
                                     <div className="tags-container flex justify-start mt-1">
                                       {phim.theLoai
                                         .slice(0, 2)
                                         .map((tag, index) => (
-                                          <Tag color="purple" key={index}>
-                                            {tag}
-                                          </Tag>
+                                          <Tag key={index}>{tag}</Tag>
                                         ))}
                                     </div>
                                   </div>

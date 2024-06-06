@@ -6,6 +6,7 @@ const stateDefault = {
   filmDetail: {},
   thongTinPhim: {},
   arrShowTimes: [],
+  theLoaiPhimHienTai: null,
 };
 
 export const QuanLyPhimReducer = (state = stateDefault, action) => {
@@ -40,6 +41,35 @@ export const QuanLyPhimReducer = (state = stateDefault, action) => {
       };
     }
 
+    case "SET_PHIM_DEFAULT": {
+      return {
+        ...state,
+        arrFilm: state.arrFilmDefault,
+        dangChieu: false,
+        sapChieu: false,
+        theLoaiPhimHienTai: null,
+      };
+    }
+    case "SET_THE_LOAI_PHIM": {
+      if (state.theLoaiPhimHienTai === action.payload) {
+        // Nếu thể loại hiện tại đã được chọn, đặt lại danh sách phim
+        return {
+          ...state,
+          arrFilm: state.arrFilmDefault,
+          theLoaiPhimHienTai: null, // Đặt lại thể loại hiện tại
+        };
+      } else {
+        // Nếu thể loại mới được chọn, lọc danh sách phim theo thể loại
+        const updatedArrFilm = state.arrFilmDefault.filter((film) =>
+          film.theLoai.includes(action.payload)
+        );
+        return {
+          ...state,
+          arrFilm: updatedArrFilm,
+          theLoaiPhimHienTai: action.payload, // Cập nhật thể loại hiện tại
+        };
+      }
+    }
     case "SET_CHI_TIET_PHIM": {
       state.filmDetail = action.filmDetail;
       return { ...state };

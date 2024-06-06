@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -7,6 +8,7 @@ import { Tag, Modal, Button } from "antd";
 import "./FilmFlip.css";
 
 function FilmFlip(props) {
+  const dispatch = useDispatch();
   const { item } = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
@@ -31,6 +33,10 @@ function FilmFlip(props) {
     } catch (error) {
       return "";
     }
+  };
+
+  const handleTagClick = (tag) => {
+    dispatch({ type: "SET_THE_LOAI_PHIM", payload: tag });
   };
 
   return (
@@ -91,8 +97,10 @@ function FilmFlip(props) {
                       color: "#000",
                       // background: "#fff",
                       // borderColor: "#f6d38b",
+                      cursor: "pointer",
                     }}
                     key={index}
+                    onClick={() => handleTagClick(tag)}
                   >
                     {tag}
                   </Tag>

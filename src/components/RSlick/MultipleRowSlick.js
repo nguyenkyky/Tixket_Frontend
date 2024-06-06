@@ -50,16 +50,28 @@ const MultipleRowSlick = (props) => {
   };
 
   const settings = {
-    className: "center variable-width",
-    centerMode: false,
+    className: "center",
+
+    centerMode: true,
     infinite: false,
     centerPadding: "60px",
-    slidesToShow: 2,
+    slidesToShow: 1,
     speed: 500,
     rows: 2,
-    slidesPerRow: 2,
+    slidesPerRow: 4,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
+  };
+
+  const handleButtonClick = (type) => {
+    if (
+      (type === SET_PHIM_DANG_CHIEU && dangChieu) ||
+      (type === SET_PHIM_SAP_CHIEU && sapChieu)
+    ) {
+      dispatch({ type: "SET_PHIM_DEFAULT" });
+    } else {
+      dispatch({ type });
+    }
   };
 
   return (
@@ -72,20 +84,14 @@ const MultipleRowSlick = (props) => {
           <button
             type="button"
             className={`${activeClassDangChieu} px-8 py-3 font-semibold rounded-xl text-white bg-gray-800 border dark:text-gray-100`}
-            onClick={() => {
-              const action = { type: SET_PHIM_DANG_CHIEU };
-              dispatch(action);
-            }}
+            onClick={() => handleButtonClick(SET_PHIM_DANG_CHIEU)}
           >
             PHIM ĐANG CHIẾU
           </button>
           <button
             type="button"
             className={`${activeClassSapChieu} px-8 py-3 font-semibold rounded-xl text-white bg-white text-gray-800 border dark:text-gray-100`}
-            onClick={() => {
-              const action = { type: SET_PHIM_SAP_CHIEU };
-              dispatch(action);
-            }}
+            onClick={() => handleButtonClick(SET_PHIM_SAP_CHIEU)}
           >
             PHIM SẮP CHIẾU
           </button>

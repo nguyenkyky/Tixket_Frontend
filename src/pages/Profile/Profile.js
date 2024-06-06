@@ -316,7 +316,7 @@ export default function Profile() {
                 <div className="flex justify-end mt-4">
                   <Pagination
                     current={currentPage}
-                    pageSize={itemsPerPage}
+                    pageSize={2}
                     total={totalItems}
                     onChange={handlePageChange}
                   />
