@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Radio, Space, Tabs, Select, Tag, Modal } from "antd";
+import { Radio, Space, Tabs, Select, Tag, Modal, Button } from "antd";
 import { NavLink } from "react-router-dom";
-import { CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  ClockCircleOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import icon from "../../../assets/image/images.png";
 import moment from "moment";
@@ -15,6 +19,8 @@ dayjs.extend(advancedFormat);
 
 const HomeMenu = () => {
   const dispatch = useDispatch();
+  const [isModalMapVisible, setIsModalMapVisible] = useState(false);
+  const [map, setMap] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cumRap, setCumRap] = useState();
   const [tabPosition, setTabPosition] = useState("left");
@@ -33,9 +39,17 @@ const HomeMenu = () => {
     setIsModalVisible(false);
   };
 
+  const handleCancelMap = () => {
+    setIsModalMapVisible(false);
+  };
+
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
+  const handleShowMap = (map) => {
+    setMap(map);
+    setIsModalMapVisible(true);
+  };
   const [activeKey, setActiveKey] = useState("0");
 
   const onChange = (key) => {
@@ -297,17 +311,58 @@ const HomeMenu = () => {
             }}
           >
             <div className="modal-overlay">
-              <div className="modal-info">
-                <p className="font-bold">{cumRap?.tenCumRap}</p>
-                <div className="flex">
-                  <p className="font-semibold">Địa chỉ: </p>
-                  <p style={{ marginLeft: "4px" }}> {cumRap?.diaChi}</p>
+              <div className="modal-info flex items-center justify-between">
+                <div>
+                  <p className="font-bold">{cumRap?.tenCumRap}</p>
+                  <div className="flex">
+                    <p className="font-semibold">Địa chỉ: </p>
+                    <p style={{ marginLeft: "4px" }}> {cumRap?.diaChi}</p>
+                  </div>
+                  <div className="flex">
+                    <p className="font-semibold">Hotline: </p>
+                    <p style={{ marginLeft: "4px" }}> {cumRap?.hotline}</p>
+                  </div>
                 </div>
-                <div className="flex">
-                  <p className="font-semibold">Hotline: </p>
-                  <p style={{ marginLeft: "4px" }}> {cumRap?.hotline}</p>
+                <div>
+                  <Button
+                    className="bg-blue-300"
+                    onClick={() => handleShowMap(cumRap?.map)}
+                  >
+                    Xem Map
+                  </Button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        open={isModalMapVisible}
+        onCancel={handleCancelMap}
+        footer={null}
+        centered
+        // closeIcon={false}
+        closeIcon={<CloseOutlined style={{}} />}
+      >
+        <div className="modal-map">
+          <div
+            style={{
+              marginLeft: "20px",
+              marginRight: "20px",
+              paddingTop: "20px",
+              paddingBottom: "20px",
+            }}
+          >
+            <div className="mb-4">
+              <iframe
+                src={map}
+                width="100%"
+                height="500"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                aria-hidden="false"
+                tabIndex="0"
+              ></iframe>
             </div>
           </div>
         </div>

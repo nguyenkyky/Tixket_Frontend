@@ -161,6 +161,7 @@ function RenderCheckout(props) {
 
   const { thongTinPhim, danhSachGhe } = chiTietPhongVe;
 
+  console.log(thongTinPhim);
   const renderGhe = () => {
     return danhSachGhe?.map((ghe, index) => {
       let gheVip = ghe.loaiGhe === "Vip" ? "gheVip" : "";
@@ -432,6 +433,7 @@ function RenderCheckout(props) {
                   thongTinDatVe.tenPhim = thongTinPhim?.tenPhim;
                   thongTinDatVe.hinhAnh = thongTinPhim?.hinhAnh;
                   thongTinDatVe.tongTien = tongTien;
+                  thongTinDatVe.map = thongTinPhim?.map;
                   console.log("thongTinDatVe", thongTinDatVe);
                   // dispatch(kiemTraDatVeAction(thongTinDatVe));
                   dispatch(

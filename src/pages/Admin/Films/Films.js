@@ -68,6 +68,25 @@ function Films(props) {
       title: "Tên Phim",
       dataIndex: "tenPhim",
       width: "15%",
+      filters: [
+        {
+          text: "Phim đang chiếu",
+          value: "dangChieu",
+        },
+        {
+          text: "Phim sắp chiếu",
+          value: "sapChieu",
+        },
+      ],
+      onFilter: (value, record) => {
+        if (value === "dangChieu") {
+          return record.dangChieu === true;
+        }
+        if (value === "sapChieu") {
+          return record.sapChieu === true;
+        }
+        return true;
+      },
       sorter: (a, b) => {
         let phimA = a.tenPhim.toLowerCase().trim();
         let phimB = b.tenPhim.toLowerCase().trim();
@@ -119,6 +138,7 @@ function Films(props) {
       title: "Action",
       dataIndex: "action",
       render: (text, film) => {
+        const isDisabled = film.sapChieu;
         return (
           <Fragment>
             <NavLink
@@ -149,10 +169,20 @@ function Films(props) {
             </NavLink>
             <NavLink
               key="4"
-              className="text-2xl"
-              to={`/admin/calendar/create/${film.maPhim}`}
+              className={`text-2xl ${isDisabled ? "disabled-link" : ""}`}
+              to={isDisabled ? "#" : `/admin/calendar/create/${film.maPhim}`}
+              onClick={(e) => {
+                if (isDisabled) {
+                  e.preventDefault();
+                }
+              }}
             >
-              <CalendarOutlined style={{ color: "blue", cursor: "pointer" }} />
+              <CalendarOutlined
+                style={{
+                  color: isDisabled ? "gray" : "blue",
+                  cursor: isDisabled ? "not-allowed" : "pointer",
+                }}
+              />
             </NavLink>
           </Fragment>
         );

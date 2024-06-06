@@ -6,8 +6,11 @@ import { useFormik } from "formik";
 import moment from "moment";
 import TextArea from "antd/es/input/TextArea";
 import { quanLyTinTucService } from "../../../services/QuanLyTinTucService";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 function AddNews(props) {
+  const [editorData, setEditorData] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {}, []);
@@ -53,6 +56,31 @@ function AddNews(props) {
               <Form.Item label="Render">
                 <TextArea name="render" onChange={formik.handleChange} />
               </Form.Item>
+            </div>
+            <div>
+              <h2>CKEditor 5 in React</h2>
+              <CKEditor
+                editor={ClassicEditor}
+                data="<p>Type your content here...</p>"
+                onReady={(editor) => {
+                  console.log("Editor is ready to use!", editor);
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  console.log({ event, editor, data });
+                  setEditorData(data);
+                }}
+                onBlur={(event, editor) => {
+                  console.log("Blur.", editor);
+                }}
+                onFocus={(event, editor) => {
+                  console.log("Focus.", editor);
+                }}
+              />
+              <div>
+                <h3>Editor Data (HTML):</h3>
+                <div>{editorData}</div>
+              </div>
             </div>
           </div>
           <button type="submit" className="bg-blue-400 text-white p-2">

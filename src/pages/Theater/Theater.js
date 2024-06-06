@@ -21,7 +21,8 @@ dayjs.extend(advancedFormat);
 
 function Theater(props) {
   const [selectedLocation, setSelectedLocation] = useState("");
-
+  const [map, setMap] = useState();
+  const [isModalMapVisible, setIsModalMapVisible] = useState(false);
   const [selectedTheater, setSelectedTheater] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cumRapTheoKhuVuc, setCumRapTheoKhuVuc] = useState();
@@ -70,6 +71,14 @@ function Theater(props) {
     setIsScheduleModalVisible(true);
   };
 
+  const handleShowMap = (map) => {
+    setMap(map);
+    setIsModalMapVisible(true);
+  };
+
+  const handleCancelMap = () => {
+    setIsModalMapVisible(false);
+  };
   const getNextSevenDays = () => {
     return new Array(7)
       .fill(null)
@@ -342,9 +351,15 @@ function Theater(props) {
                     <p style={{ marginLeft: "4px" }}> {cumRap?.hotline}</p>
                   </div>
                 </div>
-                <div>
+                <div className="flex flex-col">
                   <Button className="bg-blue-300" onClick={handleShowSchedule}>
                     Lịch chiếu
+                  </Button>
+                  <Button
+                    className="bg-blue-300 mt-2"
+                    onClick={() => handleShowMap(cumRap?.map)}
+                  >
+                    Xem Map
                   </Button>
                 </div>
               </div>
@@ -370,6 +385,37 @@ function Theater(props) {
             }}
           >
             {renderLichChieu()}
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        open={isModalMapVisible}
+        onCancel={handleCancelMap}
+        footer={null}
+        centered
+        // closeIcon={false}
+        closeIcon={<CloseOutlined style={{}} />}
+      >
+        <div className="modal-map">
+          <div
+            style={{
+              marginLeft: "20px",
+              marginRight: "20px",
+              paddingTop: "20px",
+              paddingBottom: "20px",
+            }}
+          >
+            <div className="mb-4">
+              <iframe
+                src={map}
+                width="100%"
+                height="500"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                aria-hidden="false"
+                tabIndex="0"
+              ></iframe>
+            </div>
           </div>
         </div>
       </Modal>

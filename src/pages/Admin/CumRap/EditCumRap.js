@@ -54,6 +54,7 @@ function EditCumRap(props) {
       hotline: cumRap?.hotline,
       hinhAnh: cumRap?.hinhAnh,
       khuVuc: cumRap?.khuVuc,
+      map: cumRap?.map,
     },
     onSubmit: (values) => {
       console.log(values);
@@ -124,6 +125,13 @@ function EditCumRap(props) {
                 name="diaChi"
                 onChange={formik.handleChange}
                 value={formik.values.diaChi}
+              />
+            </Form.Item>
+            <Form.Item label="Map">
+              <Input
+                name="map"
+                onChange={formik.handleChange}
+                value={formik.values.map}
               />
             </Form.Item>
             <Form.Item label="Hotline">

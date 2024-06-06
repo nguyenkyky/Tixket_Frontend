@@ -34,6 +34,7 @@ function AddNewCumRap(props) {
       diaChi: "",
       hotline: "",
       hinhAnh: "",
+      map: "",
     },
     onSubmit: (values) => {
       console.log(values);
@@ -87,6 +88,9 @@ function AddNewCumRap(props) {
               </Form.Item>
               <Form.Item label="Địa chỉ">
                 <Input name="diaChi" onChange={formik.handleChange} />
+              </Form.Item>
+              <Form.Item label="Map">
+                <Input name="map" onChange={formik.handleChange} />
               </Form.Item>
               <Form.Item label="Hotline">
                 <Input name="hotline" onChange={formik.handleChange} />

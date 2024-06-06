@@ -12,6 +12,7 @@ import { CheckCircleTwoTone } from "@ant-design/icons";
 import Header from "../../templates/HomeTemplate/Layout/Header/Header";
 import Footer from "../../templates/HomeTemplate/Layout/Footer/Footer";
 import { Tabs } from "antd";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import moment from "moment";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -27,6 +28,7 @@ function RenderKetQuaDatVe() {
   const dispatch = useDispatch();
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
   const { thongTinVeVuaDat } = useSelector((state) => state.QuanLyDatVeReducer);
+  console.log(thongTinVeVuaDat);
   // const { orderId } = useSelector((state) => state.QuanLyDatVeReducer);
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -36,15 +38,15 @@ function RenderKetQuaDatVe() {
       );
       if (thongTinDatVe) {
         dispatch(datVeAction(thongTinDatVe));
-        localStorage.removeItem("THONG_TIN_DAT_VE");
+        // localStorage.removeItem("THONG_TIN_DAT_VE");
         if (userLogin.tongChiTieu + thongTinDatVe.tongTien > 10000000) {
-                    const taiKhoanSetVip = userLogin.taiKhoan;
-                    dispatch(setVipAction({ taiKhoanSetVip }));
+          const taiKhoanSetVip = userLogin.taiKhoan;
+          dispatch(setVipAction({ taiKhoanSetVip }));
 
-                    userLogin.maLoaiNguoiDung = "Vip";
-                  } 
-                  userLogin.tongChiTieu = userLogin.tongChiTieu + thongTinDatVe.tongTien;
-                  localStorage.setItem("USER_LOGIN", JSON.stringify(userLogin));
+          userLogin.maLoaiNguoiDung = "Vip";
+        }
+        userLogin.tongChiTieu = userLogin.tongChiTieu + thongTinDatVe.tongTien;
+        localStorage.setItem("USER_LOGIN", JSON.stringify(userLogin));
       } else {
         navigate("/home");
       }
@@ -54,67 +56,118 @@ function RenderKetQuaDatVe() {
   const tenGhe = thongTinVeVuaDat.danhSachVe?.map((ve) => ve.tenGhe).join(", ");
 
   return (
-    <div className="payment-container w-1/2 px-5 py-12 mx-auto">
-      <div className="payment-header">
-        <CheckCircleTwoTone style={{ fontSize: "40px", color: "green" }} />
-        <h1 className="payment-title">Payment Successful !</h1>
+    <div>
+      <div className="container mx-auto p-4">
+        <div className="checkout grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="col-span-2">
+            <div className="flex items-center mb-8">
+              <div className="mr-2">
+                <CheckCircleOutlineIcon style={{ fontSize: "60px" }} />
+              </div>
+              <div>
+                <p className="text-xl">Mã vé: #{thongTinVeVuaDat.orderId}</p>
+                <h1 className="text-3xl font-bold ">
+                  Cảm ơn {userLogin.hoTen}!
+                </h1>
+              </div>
+            </div>
 
-        <p className="payment-subtitle">
-          Thank you! Your payment of {thongTinVeVuaDat.tongTien} has been
-          received.
-        </p>
-        <p className="payment-subtitle">OrderId: {thongTinVeVuaDat.orderId}</p>
-      </div>
-      <div className="payment-details flex flex-col space-y-4">
-        <div className="bg-white p-4 rounded-md shadow-md flex items-center justify-between mb-4 text-start">
-          <img
-            src={thongTinVeVuaDat.hinhAnh}
-            alt={thongTinVeVuaDat.tenPhim}
-            className="w-32 h-32 rounded-md"
-          />
-          <div className="flex-1 ml-4">
-            <h3 className="text-xl font-bold">{thongTinVeVuaDat.tenPhim}</h3>
-            <hr
-              style={{
-                borderTop: "1px solid red",
-                marginTop: "2px",
-                width: "80%",
-              }}
-            />
-            <p className="text-gray-600">
-              Địa điểm: {thongTinVeVuaDat.tenCumRap}
-            </p>
-            <p className="text-gray-600">
-              Ngày đặt: {moment().format("HH:mm  - DD/MM/YYYY")}
-            </p>
-            <p className="text-gray-600">
-              Ngày chiếu: {thongTinVeVuaDat.gioChieu} -{" "}
-              {thongTinVeVuaDat.ngayChieu}
-            </p>
-            <p className="text-gray-600">Ghế: {tenGhe}</p>
+            <div className="mb-4">
+              <iframe
+                src={thongTinVeVuaDat.map}
+                width="100%"
+                height="300"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                aria-hidden="false"
+                tabIndex="0"
+              ></iframe>
+            </div>
+            <div className="border p-4 rounded">
+              <div className="mb-4 flex items-center">
+                <p
+                  style={{ marginRight: "72px" }}
+                  className="text-xl font-semibold"
+                >
+                  Tên rạp
+                </p>
+                <p className="text-base">{thongTinVeVuaDat.tenCumRap}</p>
+              </div>
+              <div className="border-t pt-4 mb-4 flex items-center">
+                <h3
+                  style={{ marginRight: "76px" }}
+                  className="text-xl font-semibold"
+                >
+                  Địa chỉ
+                </h3>
+                <div>
+                  <p className="text-base">{thongTinVeVuaDat.diaChi}</p>
+                </div>
+              </div>
+              <div className="border-t pt-4 items-center flex">
+                <h3
+                  style={{ marginRight: "44px" }}
+                  className="text-xl font-semibold"
+                >
+                  Suất chiếu
+                </h3>
+                <p className="text-base">
+                  {thongTinVeVuaDat.gioChieu} - {thongTinVeVuaDat.ngayChieu}
+                </p>
+              </div>
+            </div>
+            <button className="bg-black text-white px-4 py-2 rounded mt-4">
+              Trang chủ
+            </button>
           </div>
-          <div className="text-right">
-            <p className="text-green-600 font-bold text-lg">
-              Giá vé: {thongTinVeVuaDat.tongTien}
-            </p>
-            <CheckCircleTwoTone
-              style={{
-                fontSize: "30px",
-                marginTop: "12px",
-                marginRight: "56px",
-              }}
-            />
+          <div className="order-summary p-4 border rounded-lg">
+            <h3 className="text-2xl font-semibold mb-4">Đơn hàng</h3>
+            <div className="order-item flex mb-4">
+              <img
+                src={thongTinVeVuaDat.hinhAnh}
+                alt="hinhAnh"
+                className="w-full h-full"
+                style={{ borderRadius: "5px" }}
+              />
+            </div>
+            <div className="order-infor border-t mt-8">
+              <div className="flex items-center justify-between mt-4">
+                <p className="text-base font-semibold ">Tên phim</p>
+                <p className="text-base">{thongTinVeVuaDat.tenPhim}</p>
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <p className="text-base font-semibold ">Ghế</p>
+                <p className="text-base">{tenGhe}</p>
+              </div>
+            </div>
+            <div className="order-infor border-t mt-8">
+              <div className="flex items-center justify-between mt-4">
+                <p className="text-base font-semibold ">Giá vé</p>
+                <p className="text-base">
+                  {((thongTinVeVuaDat.tongTien * 100) / 85).toLocaleString()} đ
+                </p>
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <p className="text-base font-semibold ">Khuyến mãi</p>
+                <p className="text-base">
+                  {userLogin.maLoaiNguoiDung === "KhachHang" ? 0 : "15%"}
+                </p>
+              </div>
+            </div>
+            <div className="order-infor border-t mt-8">
+              <div className="flex items-center justify-between mt-4">
+                <p className="text-base font-semibold ">Tổng cộng</p>
+                <p className="text-base">
+                  {userLogin.maLoaiNguoiDung === "KhachHang"
+                    ? ((thongTinVeVuaDat.tongTien * 100) / 85).toLocaleString()
+                    : thongTinVeVuaDat?.tongTien?.toLocaleString()}
+                  đ
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <button
-        className="ok-button"
-        onClick={() => {
-          navigate("/home");
-        }}
-      >
-        Trang chủ
-      </button>
     </div>
   );
 }

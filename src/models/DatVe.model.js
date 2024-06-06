@@ -9,5 +9,6 @@ export class DatVe {
   hinhAnh = "";
   diaChi = "";
   tongTien = 0;
+  map = "";
   constructor() {}
 }

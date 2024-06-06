@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+
 import TabPanel from "@mui/lab/TabPanel";
 import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Form, Input, Modal } from "antd";
-import { CheckCircleTwoTone } from "@ant-design/icons";
+import { Button, Form, Input, Modal, Table } from "antd";
+import { CheckCircleTwoTone, CloseOutlined } from "@ant-design/icons";
 import { quanLyNguoiDungService } from "../../services/QuanLyNguoiDung";
 import { toast, ToastContainer } from "react-toastify";
 import { layThongTinDatVe } from "../../redux/actions/QuanLyNguoiDungAction";
@@ -21,12 +23,12 @@ import { Pagination } from "antd";
 export default function Profile() {
   const navigate = useNavigate();
   const [user, setUser] = useState();
-
+  const [data, setData] = useState([]);
   const location = useLocation();
   const initialTab = location.state?.tab?.toString() || "1";
-
+  const [detailTicket, setDetailTicket] = useState();
   const [value, setValue] = React.useState(initialTab);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [isModalTicketVisible, setIsModalTicketVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [passwords, setPasswords] = useState({
     taiKhoan: user?.taiKhoan,
@@ -35,12 +37,17 @@ export default function Profile() {
     confirmNewPassword: "",
   });
 
-  const itemsPerPage = 2;
-
   const dispatch = useDispatch();
   const { thongTinDatVe } = useSelector(
     (state) => state.QuanLyNguoiDungReducer
   );
+
+  const handleShowDetailTicket = (ticket) => {
+    console.log(ticket);
+    setDetailTicket(ticket);
+    setIsModalTicketVisible(true);
+  };
+  // console.log(thongTinDatVe);
 
   useEffect(() => {
     if (localStorage.getItem("USER_LOGIN")) {
@@ -53,12 +60,103 @@ export default function Profile() {
     dispatch(action);
   }, []);
 
+  useEffect(() => {
+    if (thongTinDatVe) {
+      const dataWithKey = thongTinDatVe.thongTinDatVe?.map((ticket, index) => ({
+        ...ticket,
+        key: ticket.orderId,
+      }));
+      setData(dataWithKey);
+    }
+  }, [thongTinDatVe]);
+
+  const columns = [
+    {
+      dataIndex: "hinhAnh",
+      render(text, ticket) {
+        return (
+          <Fragment>
+            <img
+              src={ticket.hinhAnh}
+              alt={ticket.hinhAnh}
+              style={{ width: "150px", height: "150px", borderRadius: "5px" }}
+            />
+          </Fragment>
+        );
+      },
+      width: "10%",
+    },
+    {
+      title: "Tên phim",
+      dataIndex: "tenPhim",
+      width: "20%",
+      sorter: (a, b) => {
+        let userA = a.tenPhim.toLowerCase().trim();
+        let userB = b.tenPhim.toLowerCase().trim();
+        if (userA > userB) {
+          return 1;
+        }
+        return -1;
+      },
+      render(text, ticket) {
+        return (
+          <Fragment>
+            <p className="text-base font-semibold">{ticket.tenPhim}</p>
+          </Fragment>
+        );
+      },
+    },
+    {
+      title: "Cụm rạp",
+      dataIndex: "tenCumRap",
+      width: "15%",
+      render(text, ticket) {
+        return (
+          <Fragment>
+            <p className="text-base font-semibold">{ticket.tenCumRap}</p>
+          </Fragment>
+        );
+      },
+    },
+    {
+      title: "Ngày đặt",
+      dataIndex: "ngayDat",
+      width: "10%",
+      sorter: (a, b) => moment(b.ngayDat).unix() - moment(a.ngayDat).unix(),
+      defaultSortOrder: "ascend",
+      render(text, ticket) {
+        return (
+          <Fragment>
+            <p className="text-base ">
+              {moment(ticket.ngayDat).format("DD/MM/YYYY HH:mm")}
+            </p>
+          </Fragment>
+        );
+      },
+    },
+    {
+      title: "Chi tiết",
+      width: "5%",
+      render(text, ticket) {
+        return (
+          <Fragment>
+            <div
+              onClick={() => {
+                handleShowDetailTicket(ticket);
+              }}
+            >
+              <p className="text-base text-blue-500 cursor-pointer">
+                Xem chi tiết
+              </p>
+            </div>
+          </Fragment>
+        );
+      },
+    },
+  ];
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
   };
 
   const showModal = () => {
@@ -98,6 +196,7 @@ export default function Profile() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setIsModalTicketVisible(false); //
   };
 
   const handlePasswordChange = (e) => {
@@ -106,65 +205,6 @@ export default function Profile() {
       ...prev,
       [name]: value,
     }));
-  };
-
-  const renderTicketItems = () => {
-    const sortedTickets = thongTinDatVe.thongTinDatVe?.sort(
-      (a, b) => new Date(b.ngayDat) - new Date(a.ngayDat)
-    );
-    const offset = (currentPage - 1) * itemsPerPage;
-    const currentPageData =
-      sortedTickets?.slice(offset, offset + itemsPerPage) || [];
-
-    return currentPageData.map((ticket, index) => {
-      const seat = _.first(ticket.danhSachGhe);
-      return (
-        <div
-          className="bg-white p-4 rounded-md shadow-md flex items-center justify-between mb-4"
-          key={index}
-        >
-          <img
-            src={ticket.hinhAnh}
-            alt={ticket.tenPhim}
-            className="w-32 h-32 rounded-md"
-          />
-          <div className="flex-1 ml-4">
-            <h3 className="text-xl font-bold">{ticket.tenPhim}</h3>
-            <hr
-              style={{
-                borderTop: "1px solid red",
-                marginTop: "2px",
-                width: "80%",
-              }}
-            />
-            <p className="text-gray-600">
-              Địa điểm: {seat.maHeThongRap} - {seat.tenRap}
-            </p>
-            <p className="text-gray-600">
-              Ngày đặt: {moment(ticket.ngayDat).format("hh:mm A - DD-MM-YYYY")}
-            </p>
-            <p className="text-gray-600">
-              Ngày chiếu: {ticket.gioChieu} - {ticket.ngayChieu}
-            </p>
-            <p className="text-gray-600">
-              Ghế: {ticket.danhSachGhe.map((ghe) => ghe.tenGhe).join(", ")}
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-green-600 font-bold text-lg">
-              Giá vé: {ticket.giaVe.toLocaleString()}
-            </p>
-            <CheckCircleTwoTone
-              style={{
-                fontSize: "30px",
-                marginTop: "12px",
-                marginRight: "56px",
-              }}
-            />
-          </div>
-        </div>
-      );
-    });
   };
 
   const formik = useFormik({
@@ -198,8 +238,6 @@ export default function Profile() {
       }
     },
   });
-
-  const totalItems = thongTinDatVe.thongTinDatVe?.length || 0;
 
   return (
     <div style={{ backgroundColor: "#FDFCF0", marginTop: "96px" }}>
@@ -310,17 +348,13 @@ export default function Profile() {
 
             <TabPanel value="2">
               <div className="container px-5 py-12 mx-auto">
-                <div className="flex flex-col space-y-4">
-                  {renderTicketItems()}
-                </div>
-                <div className="flex justify-end mt-4">
-                  <Pagination
-                    current={currentPage}
-                    pageSize={2}
-                    total={totalItems}
-                    onChange={handlePageChange}
-                  />
-                </div>
+                <Table
+                  columns={columns}
+                  dataSource={data}
+                  showSorterTooltip={{
+                    target: "sorter-icon",
+                  }}
+                />
               </div>
             </TabPanel>
           </TabContext>
@@ -384,6 +418,148 @@ export default function Profile() {
               />
             </Form.Item>
           </Form>
+        </div>
+      </Modal>
+      <Modal
+        open={isModalTicketVisible}
+        onCancel={handleCancel}
+        footer={null}
+        centered
+        // closeIcon={false}
+        closeIcon={<CloseOutlined style={{}} />}
+      >
+        <div className="modal-ticket-detail">
+          <div
+            style={{
+              marginLeft: "20px",
+              marginRight: "20px",
+              paddingTop: "20px",
+              paddingBottom: "20px",
+            }}
+          >
+            <div>
+              <div className="container mx-auto p-4">
+                <div className="checkout grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="col-span-2">
+                    <div className="flex items-center mb-8">
+                      <div className="mr-2">
+                        <CheckCircleOutlineIcon style={{ fontSize: "60px" }} />
+                      </div>
+                      <div>
+                        <p className="text-xl">
+                          Mã vé: #{detailTicket?.orderId}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <iframe
+                        src={detailTicket?.map}
+                        width="100%"
+                        height="300"
+                        style={{ border: 0 }}
+                        allowFullScreen=""
+                        aria-hidden="false"
+                        tabIndex="0"
+                      ></iframe>
+                    </div>
+                    <div className="border p-4 rounded">
+                      <div className="mb-4 flex items-center">
+                        <p
+                          style={{ marginRight: "72px" }}
+                          className="text-xl font-semibold"
+                        >
+                          Tên rạp
+                        </p>
+                        <p className="text-base">{detailTicket?.tenCumRap}</p>
+                      </div>
+                      <div className="border-t pt-4 mb-4 flex items-center">
+                        <h3
+                          style={{ marginRight: "76px" }}
+                          className="text-xl font-semibold"
+                        >
+                          Địa chỉ
+                        </h3>
+                        <div>
+                          <p className="text-base">{detailTicket?.diaChi}</p>
+                        </div>
+                      </div>
+                      <div className="border-t pt-4 items-center flex">
+                        <h3
+                          style={{ marginRight: "44px" }}
+                          className="text-xl font-semibold"
+                        >
+                          Suất chiếu
+                        </h3>
+                        <p className="text-base">
+                          {detailTicket?.gioChieu} - {detailTicket?.ngayChieu}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="order-summary p-4 border rounded-lg">
+                    <h3 className="text-2xl font-semibold mb-4">Đơn hàng</h3>
+                    <div className="order-item flex mb-4">
+                      <img
+                        src={detailTicket?.hinhAnh}
+                        alt="hinhAnh"
+                        className="w-full h-full"
+                        style={{ borderRadius: "5px" }}
+                      />
+                    </div>
+                    <div className="order-infor border-t mt-8">
+                      <div className="flex items-center justify-between mt-4">
+                        <p className="text-base font-semibold ">Tên phim</p>
+                        <p className="text-base">{detailTicket?.tenPhim}</p>
+                      </div>
+                      <div className="flex items-center justify-between mt-4">
+                        <p className="text-base font-semibold ">Ghế</p>
+                        <p className="text-base">
+                          {detailTicket?.danhSachGhe
+                            ?.map((ve) => ve.tenGhe)
+                            .join(", ")}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="order-infor border-t mt-8">
+                      <div className="flex items-center justify-between mt-4">
+                        <p className="text-base font-semibold ">Giá vé</p>
+                        <p className="text-base">
+                          {(
+                            (parseInt(detailTicket?.giaVe) * 100) /
+                            85
+                          ).toLocaleString()}{" "}
+                          đ
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between mt-4">
+                        <p className="text-base font-semibold ">Khuyến mãi</p>
+                        <p className="text-base">
+                          {user?.maLoaiNguoiDung === "KhachHang" ? 0 : "15%"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="order-infor border-t mt-8">
+                      <div className="flex items-center justify-between mt-4">
+                        <p className="text-base font-semibold ">Tổng cộng</p>
+                        <p className="text-base">
+                          {user?.maLoaiNguoiDung === "KhachHang"
+                            ? (
+                                (parseInt(detailTicket?.giaVe) * 100) /
+                                85
+                              ).toLocaleString()
+                            : parseInt(
+                                detailTicket?.giaVe
+                              ).toLocaleString()}{" "}
+                          đ
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </Modal>
       <ToastContainer />

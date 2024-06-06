@@ -110,14 +110,18 @@ export const createPaymentLinkAction = (
   return async (dispatch) => {
     try {
       dispatch({ type: "DISPLAY_LOADING" });
+
       const response = await quanLyDatVeService.createPaymentLink({
         tongTien,
         orderId,
         id,
         thongTinDatVe,
       });
+
       localStorage.setItem("THONG_TIN_DAT_VE", JSON.stringify(thongTinDatVe));
       window.location.href = response.data.checkoutUrl;
+
+      // window.location.href = `http://localhost:3000/checkout/success/${id}?payment=success`;
       dispatch({ type: "HIDE_LOADING" });
     } catch (e) {
       dispatch({ type: "HIDE_LOADING" });
