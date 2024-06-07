@@ -8,12 +8,18 @@ import { quanLyRapService } from "../../../services/QuanLyRapService";
 import { useFormik } from "formik";
 import { capNhatThongTinHeThongRapAction } from "../../../redux/actions/QuanLyRapActions";
 import moment from "moment";
+import * as Yup from "yup";
 
 function EditHeThongRap(props) {
   const navigate = useNavigate();
   const { maHeThongRap } = useParams();
   //   console.log(taiKhoan);
   const dispatch = useDispatch();
+  const validationSchema = Yup.object({
+    tenHeThongRap: Yup.string().required("Hệ thống rạp là bắt buộc"),
+    maHeThongRap: Yup.string().required("Mã hệ thống rạp là bắt buộc"),
+    logo: Yup.string().required("Hình ảnh là bắt buộc"),
+  });
 
   const [heThongRap, setHeThongRap] = useState();
 
@@ -35,6 +41,7 @@ function EditHeThongRap(props) {
       newMaHeThongRap: heThongRap?.maHeThongRap,
       logo: heThongRap?.logo,
     },
+    validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
       const action = capNhatThongTinHeThongRapAction(values, navigate);
@@ -58,14 +65,28 @@ function EditHeThongRap(props) {
       >
         <div className="flex flex-wrap">
           <div className="w-full lg:w-1/2">
-            <Form.Item label="Tên hệ thống rạp">
+            <Form.Item
+              label="Tên hệ thống rạp *"
+              validateStatus={
+                formik.errors.tenHeThongRap && formik.touched.tenHeThongRap
+                  ? "error"
+                  : ""
+              }
+            >
               <Input
                 name="tenHeThongRap"
                 onChange={formik.handleChange}
                 value={formik.values.tenHeThongRap}
               />
             </Form.Item>
-            <Form.Item label="Mã hệ thống rạp">
+            <Form.Item
+              label="Mã hệ thống rạp *"
+              validateStatus={
+                formik.errors.maHeThongRap && formik.touched.maHeThongRap
+                  ? "error"
+                  : ""
+              }
+            >
               <Input
                 name="newMaHeThongRap"
                 onChange={formik.handleChange}
@@ -73,7 +94,12 @@ function EditHeThongRap(props) {
               />
             </Form.Item>
 
-            <Form.Item label="Hình ảnh">
+            <Form.Item
+              label="Hình ảnh *"
+              validateStatus={
+                formik.errors.logo && formik.touched.logo ? "error" : ""
+              }
+            >
               <Input
                 name="logo"
                 onChange={formik.handleChange}

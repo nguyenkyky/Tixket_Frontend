@@ -49,7 +49,7 @@ function Dashboard(props) {
   const { thongKeThangTruoc } = useSelector((state) => state.ThongKeReducer);
   const { thongKe7Ngay } = useSelector((state) => state.ThongKeReducer);
 
-  console.log(thongKeTheoThang);
+  // console.log(thongKeTheoThang);
   const { arrFilmDefault } = useSelector((state) => state.QuanLyPhimReducer);
 
   const danhSachRap = [
@@ -135,7 +135,7 @@ function Dashboard(props) {
     return `${(percent * 100).toFixed(0)}%`;
   };
 
-  console.log(revenueDataAmount);
+  // console.log(revenueDataAmount);
   const dispatch = useDispatch();
 
   const handleChangeRap = (value) => {

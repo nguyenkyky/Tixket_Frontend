@@ -8,11 +8,18 @@ import { quanLyRapService } from "../../../services/QuanLyRapService";
 import { useFormik } from "formik";
 import { addHeThongRapAction } from "../../../redux/actions/QuanLyRapActions";
 import moment from "moment";
+import * as Yup from "yup";
 
 function AddNewHeThongRap(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {}, []);
+
+  const validationSchema = Yup.object({
+    tenHeThongRap: Yup.string().required("Hệ thống rạp là bắt buộc"),
+    maHeThongRap: Yup.string().required("Mã hệ thống rạp là bắt buộc"),
+    logo: Yup.string().required("Hình ảnh là bắt buộc"),
+  });
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -21,6 +28,7 @@ function AddNewHeThongRap(props) {
       maHeThongRap: "",
       logo: "",
     },
+    validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
       const action = addHeThongRapAction(values, navigate);
@@ -46,14 +54,33 @@ function AddNewHeThongRap(props) {
         >
           <div className="flex flex-wrap justify-center">
             <div className="w-full lg:w-1/2">
-              <Form.Item label="Tên hệ thống rạp">
+              <Form.Item
+                label="Tên hệ thống rạp *"
+                validateStatus={
+                  formik.errors.tenHeThongRap && formik.touched.tenHeThongRap
+                    ? "error"
+                    : ""
+                }
+              >
                 <Input name="tenHeThongRap" onChange={formik.handleChange} />
               </Form.Item>
-              <Form.Item label="Mã hệ thống rạp">
+              <Form.Item
+                label="Mã hệ thống rạp *"
+                validateStatus={
+                  formik.errors.maHeThongRap && formik.touched.maHeThongRap
+                    ? "error"
+                    : ""
+                }
+              >
                 <Input name="maHeThongRap" onChange={formik.handleChange} />
               </Form.Item>
 
-              <Form.Item label="Hình ảnh">
+              <Form.Item
+                label="Hình ảnh *"
+                validateStatus={
+                  formik.errors.logo && formik.touched.logo ? "error" : ""
+                }
+              >
                 <Input name="logo" onChange={formik.handleChange} />
               </Form.Item>
             </div>

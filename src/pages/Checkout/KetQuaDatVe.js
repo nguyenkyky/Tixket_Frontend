@@ -128,8 +128,8 @@ function RenderKetQuaDatVe() {
               <img
                 src={thongTinVeVuaDat.hinhAnh}
                 alt="hinhAnh"
-                className="w-full h-full"
-                style={{ borderRadius: "5px" }}
+                className="w-full"
+                style={{ borderRadius: "5px", maxHeight: "400px" }}
               />
             </div>
             <div className="order-infor border-t mt-8">

@@ -16,6 +16,7 @@ import { quanLyRapService } from "../../../services/QuanLyRapService";
 import { useFormik } from "formik";
 import { capNhatThongTinCumRapAction } from "../../../redux/actions/QuanLyRapActions";
 import moment from "moment";
+import * as Yup from "yup";
 
 function EditCumRap(props) {
   const navigate = useNavigate();
@@ -25,6 +26,16 @@ function EditCumRap(props) {
 
   const [heThongRap, setHeThongRap] = useState();
   const [cumRap, setCumRap] = useState();
+
+  const validationSchema = Yup.object({
+    khuVuc: Yup.string().required("Hệ thống rạp là bắt buộc"),
+    tenCumRap: Yup.string().required("Mã hệ thống rạp là bắt buộc"),
+    maCumRap: Yup.string().required("Mã cụm rạp là bắt buộc"),
+    diaChi: Yup.string().required("Địa chỉ là bắt buộc"),
+    map: Yup.string().required("Map là bắt buộc"),
+    hotline: Yup.string().required("Hotline là bắt buộc"),
+    hinhAnh: Yup.string().required("Hình ảnh là bắt buộc"),
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +67,8 @@ function EditCumRap(props) {
       khuVuc: cumRap?.khuVuc,
       map: cumRap?.map,
     },
+    validationSchema: validationSchema,
+
     onSubmit: (values) => {
       console.log(values);
       const action = capNhatThongTinCumRapAction(values, navigate);
@@ -104,7 +117,14 @@ function EditCumRap(props) {
                 disabled
               />
             </Form.Item>
-            <Form.Item label="Tên cụm rạp">
+            <Form.Item
+              label="Tên cụm rạp *"
+              validateStatus={
+                formik.errors.tenCumRap && formik.touched.tenCumRap
+                  ? "error"
+                  : ""
+              }
+            >
               <Input
                 name="tenCumRap"
                 onChange={formik.handleChange}
@@ -113,42 +133,72 @@ function EditCumRap(props) {
             </Form.Item>
           </div>
           <div className="w-full lg:w-1/2">
-            <Form.Item label="Mã cụm rạp">
+            <Form.Item
+              label="Mã cụm rạp *"
+              validateStatus={
+                formik.errors.maCumRap && formik.touched.maCumRap ? "error" : ""
+              }
+            >
               <Input
                 name="newMaCumRap"
                 onChange={formik.handleChange}
                 value={formik.values.newMaCumRap}
               />
             </Form.Item>
-            <Form.Item label="Địa chỉ">
+            <Form.Item
+              label="Địa chỉ *"
+              validateStatus={
+                formik.errors.diaChi && formik.touched.diaChi ? "error" : ""
+              }
+            >
               <Input
                 name="diaChi"
                 onChange={formik.handleChange}
                 value={formik.values.diaChi}
               />
             </Form.Item>
-            <Form.Item label="Map">
+            <Form.Item
+              label="Map *"
+              validateStatus={
+                formik.errors.map && formik.touched.map ? "error" : ""
+              }
+            >
               <Input
                 name="map"
                 onChange={formik.handleChange}
                 value={formik.values.map}
               />
             </Form.Item>
-            <Form.Item label="Hotline">
+            <Form.Item
+              label="Hotline *"
+              validateStatus={
+                formik.errors.hotline && formik.touched.hotline ? "error" : ""
+              }
+            >
               <Input
                 name="hotline"
                 onChange={formik.handleChange}
                 value={formik.values.hotline}
               />
             </Form.Item>
-            <Form.Item label="Hình ảnh">
+            <Form.Item
+              label="Hình ảnh *"
+              validateStatus={
+                formik.errors.hinhAnh && formik.touched.hinhAnh ? "error" : ""
+              }
+            >
               <Input
                 name="hinhAnh"
                 onChange={formik.handleChange}
                 value={formik.values.hinhAnh}
               />
             </Form.Item>
-            <Form.Item label="Khu vực">
+            <Form.Item
+              label="Khu vực *"
+              validateStatus={
+                formik.errors.khuVuc && formik.touched.khuVuc ? "error" : ""
+              }
+            >
               <Select
                 value={formik.values.khuVuc}
                 name="khuVuc"

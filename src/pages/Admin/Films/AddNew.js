@@ -21,6 +21,7 @@ import {
   Tag,
 } from "antd";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import moment from "moment";
 
@@ -43,12 +44,29 @@ function AddNew(props) {
     "Tâm lý, tình cảm",
   ];
 
+  const validationSchema = Yup.object({
+    tenPhim: Yup.string().required("Tên phim là bắt buộc"),
+    trailer: Yup.string()
+      .url("URL không hợp lệ")
+      .required("Trailer là bắt buộc"),
+    moTa: Yup.string().required("Mô tả là bắt buộc"),
+    ngayKhoiChieu: Yup.string().required("Ngày khởi chiếu là bắt buộc"),
+    danhGia: Yup.number()
+      .min(1, "Đánh giá phải lớn hơn 0")
+      .max(10, "Đánh giá phải nhỏ hơn 10")
+      .required("Đánh giá là bắt buộc"),
+    hinhAnh: Yup.string().required("Hình ảnh là bắt buộc"),
+    daoDien: Yup.string().required("Đạo diễn là bắt buộc"),
+    thoiLuong: Yup.number()
+      .min(1, "Thời lượng phải lớn hơn 0")
+      .required("Thời lượng là bắt buộc"),
+  });
   const [selectedTags, setSelectedTags] = useState([]);
   const handleChange = (tag, checked) => {
     const nextSelectedTags = checked
       ? [...selectedTags, tag]
       : selectedTags.filter((t) => t !== tag);
-    console.log("You are interested in: ", nextSelectedTags);
+    // console.log("You are interested in: ", nextSelectedTags);
     setSelectedTags(nextSelectedTags);
     formik.setFieldValue("theLoai", nextSelectedTags);
   };
@@ -91,6 +109,7 @@ function AddNew(props) {
       danhGia: 0,
       theLoai: [],
     },
+    validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log("values", values);
       dispatch(themPhimAction(values));
@@ -119,19 +138,44 @@ function AddNew(props) {
       >
         <div className="flex flex-wrap">
           <div className="w-full lg:w-1/2">
-            <Form.Item label="Tên phim">
+            <Form.Item
+              label="Tên phim *"
+              validateStatus={
+                formik.errors.tenPhim && formik.touched.tenPhim ? "error" : ""
+              }
+            >
               <Input name="tenPhim" onChange={formik.handleChange} />
             </Form.Item>
-            <Form.Item label="Trailer">
+            <Form.Item
+              label="Trailer *"
+              validateStatus={
+                formik.errors.trailer && formik.touched.trailer ? "error" : ""
+              }
+            >
               <Input name="trailer" onChange={formik.handleChange} />
             </Form.Item>
-            <Form.Item label="Mô tả">
+            <Form.Item
+              label="Mô tả *"
+              validateStatus={
+                formik.errors.moTa && formik.touched.moTa ? "error" : ""
+              }
+            >
               <TextArea name="moTa" rows={4} onChange={formik.handleChange} />
             </Form.Item>
-            <Form.Item label="Hình ảnh">
+            <Form.Item
+              label="Hình ảnh *"
+              validateStatus={
+                formik.errors.hinhAnh && formik.touched.hinhAnh ? "error" : ""
+              }
+            >
               <Input name="hinhAnh" onChange={formik.handleChange} />
             </Form.Item>
-            <Form.Item label="Đạo diễn">
+            <Form.Item
+              label="Đạo diễn *"
+              validateStatus={
+                formik.errors.daoDien && formik.touched.daoDien ? "error" : ""
+              }
+            >
               <Input name="daoDien" onChange={formik.handleChange} />
             </Form.Item>
             {dienVienList.map((dienVien, index) => (
@@ -184,7 +228,14 @@ function AddNew(props) {
                 </Tag.CheckableTag>
               ))}
             </Flex>
-            <Form.Item label="Thời lượng(phút)">
+            <Form.Item
+              label="Thời lượng(phút) *"
+              validateStatus={
+                formik.errors.thoiLuong && formik.touched.thoiLuong
+                  ? "error"
+                  : ""
+              }
+            >
               <InputNumber
                 min={1}
                 max={360}
@@ -193,7 +244,14 @@ function AddNew(props) {
                 }}
               />
             </Form.Item>
-            <Form.Item label="Ngày khởi chiếu">
+            <Form.Item
+              label="Ngày khởi chiếu *"
+              validateStatus={
+                formik.errors.ngayKhoiChieu && formik.touched.ngayKhoiChieu
+                  ? "error"
+                  : ""
+              }
+            >
               <DatePicker
                 format={"DD/MM/YYYY"}
                 onChange={handleChangeDatePicker}
@@ -205,7 +263,12 @@ function AddNew(props) {
             <Form.Item label="Phim Hot" valuePropName="checked">
               <Switch onChange={handleChangeSwitch("hot")} />
             </Form.Item>
-            <Form.Item label="Đánh giá">
+            <Form.Item
+              label="Đánh giá *"
+              validateStatus={
+                formik.errors.danhGia && formik.touched.danhGia ? "error" : ""
+              }
+            >
               <InputNumber
                 min={1}
                 max={10}

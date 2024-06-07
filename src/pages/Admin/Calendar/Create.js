@@ -14,10 +14,21 @@ import { quanLyRapService } from "../../../services/QuanLyRapService";
 import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
 import { quanLyPhimService } from "../../../services/QuanLyPhimService";
+import * as Yup from "yup";
 
 function Create(props) {
   const { id, tenPhim } = useParams();
   const [film, setFilm] = useState({});
+
+  const validationSchema = Yup.object({
+    tenHeThongRap: Yup.string().required("Hệ thống rạp là bắt buộc"),
+    ngayChieuGioChieu: Yup.string().required("Ngày chiếu là bắt buộc"),
+    maRap: Yup.string().required("Mã rạp là bắt buộc"),
+    giaVe: Yup.number()
+      .min(70000, "Giá vé phải lớn hơn hoặc bằng 70,000")
+      .max(200000, "Giá vé phải nhỏ hơn hoặc bằng 200,000")
+      .required("Giá vé là bắt buộc"),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -34,6 +45,7 @@ function Create(props) {
       thoiLuong: 0,
       theLoai: [],
     },
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("values", values);
       try {
@@ -43,10 +55,9 @@ function Create(props) {
         alert("Tạo lịch chiếu thành công");
         window.location.reload();
       } catch (e) {
-        if(e.response.status === 400) {
-          alert("Trùng lịch chiếu")
+        if (e.response.status === 400) {
+          alert("Trùng lịch chiếu");
         } else {
-
           alert("Tạo lịch chiếu thất bại");
           console.log("ERROR 500:", e.message);
         }
@@ -126,7 +137,14 @@ function Create(props) {
           }}
           onSubmitCapture={formik.handleSubmit}
         >
-          <Form.Item label="Hệ thống rạp">
+          <Form.Item
+            label="Hệ thống rạp *"
+            validateStatus={
+              formik.errors.tenHeThongRap && formik.touched.tenHeThongRap
+                ? "error"
+                : ""
+            }
+          >
             <Select
               options={state.heThongRapChieu?.map((htr, index) => {
                 return { label: htr.tenHeThongRap, value: htr.tenHeThongRap };
@@ -135,7 +153,12 @@ function Create(props) {
               onChange={onChaneHeThongRap}
             />
           </Form.Item>
-          <Form.Item label="Cụm rap">
+          <Form.Item
+            label="Cụm rap *"
+            validateStatus={
+              formik.errors.maRap && formik.touched.maRap ? "error" : ""
+            }
+          >
             <Select
               options={state.cumRapChieu?.map((htr, index) => {
                 return { label: htr.tenCumRap, value: htr.maCumRap };
@@ -144,10 +167,23 @@ function Create(props) {
               onChange={onChaneCumRap}
             />
           </Form.Item>
-          <Form.Item label="Lịch chiếu">
+          <Form.Item
+            label="Lịch chiếu *"
+            validateStatus={
+              formik.errors.ngayChieuGioChieu &&
+              formik.touched.ngayChieuGioChieu
+                ? "error"
+                : ""
+            }
+          >
             <DatePicker showWeek showTime onChange={onChangeDate} onOk={onOk} />
           </Form.Item>
-          <Form.Item label="Giá vé">
+          <Form.Item
+            label="Giá vé *"
+            validateStatus={
+              formik.errors.giaVe && formik.touched.giaVe ? "error" : ""
+            }
+          >
             <InputNumber min={70000} max={200000} onChange={onChangeGiaVe} />
           </Form.Item>
           <Form.Item label="Hoàn thành">

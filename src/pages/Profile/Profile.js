@@ -19,6 +19,7 @@ import "./style.css";
 import _ from "lodash";
 import moment from "moment";
 import { Pagination } from "antd";
+import * as Yup from "yup";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -207,6 +208,20 @@ export default function Profile() {
     }));
   };
 
+  const validationSchema = Yup.object({
+    newTaiKhoan: Yup.string().required("Tài khoản rạp là bắt buộc"),
+    hoTen: Yup.string().required("Họ tên là bắt buộc"),
+    avatar: Yup.string().required("Avatar là bắt buộc"),
+    soDT: Yup.string().required("Số điện thoại là bắt buộc"),
+
+    email: Yup.string()
+      .required("Email là bắt buộc")
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
+        "Email phải có đuôi @gmail.com"
+      ),
+  });
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -221,7 +236,9 @@ export default function Profile() {
           ? "Khách Hàng"
           : user?.maLoaiNguoiDung,
     },
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
+      console.log(values);
       try {
         const result = await quanLyNguoiDungService.capNhatThongTinNguoiDung(
           values
@@ -275,14 +292,29 @@ export default function Profile() {
                       className="flex w-7/12 mt-10"
                     >
                       <div className="w-full lg:w-1/2">
-                        <Form.Item label="Username">
+                        <Form.Item
+                          label="Username *"
+                          validateStatus={
+                            formik.errors.newTaiKhoan &&
+                            formik.touched.newTaiKhoan
+                              ? "error"
+                              : ""
+                          }
+                        >
                           <Input
                             name="newTaiKhoan"
                             onChange={formik.handleChange}
                             value={formik.values.newTaiKhoan}
                           />
                         </Form.Item>
-                        <Form.Item label="Họ tên">
+                        <Form.Item
+                          label="Họ tên *"
+                          validateStatus={
+                            formik.errors.hoTen && formik.touched.hoTen
+                              ? "error"
+                              : ""
+                          }
+                        >
                           <Input
                             name="hoTen"
                             onChange={formik.handleChange}
@@ -290,7 +322,14 @@ export default function Profile() {
                           />
                         </Form.Item>
 
-                        <Form.Item label="Email">
+                        <Form.Item
+                          label="Email *"
+                          validateStatus={
+                            formik.errors.email && formik.touched.email
+                              ? "error"
+                              : ""
+                          }
+                        >
                           <Input
                             name="email"
                             onChange={formik.handleChange}
@@ -299,7 +338,14 @@ export default function Profile() {
                         </Form.Item>
                       </div>
                       <div className="w-full lg:w-1/2">
-                        <Form.Item label="Số điện thoại">
+                        <Form.Item
+                          label="Số điện thoại *"
+                          validateStatus={
+                            formik.errors.soDT && formik.touched.soDT
+                              ? "error"
+                              : ""
+                          }
+                        >
                           <Input
                             name="soDT"
                             onChange={formik.handleChange}
