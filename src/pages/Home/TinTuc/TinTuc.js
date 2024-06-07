@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import { quanLyTinTucService } from "../../../services/QuanLyTinTucService";
 import { NavLink } from "react-router-dom";
+import moment from "moment";
 
 function TinTuc() {
   const [news, setNews] = useState([]);
+  // console.log(news);
 
   useEffect(() => {
     async function fetchData() {
@@ -35,7 +37,11 @@ function TinTuc() {
               />
             </NavLink>
             <div className="p-4">
-              <div className="text-gray-400 mb-2">26-5-2024</div>
+              <div className="text-gray-400 mb-2">
+                {item.created_at
+                  ? moment(item.created_at).format("DD-MM-YYYY")
+                  : "01-06-2024"}
+              </div>
               <NavLink
                 to={`/news/${item.maTinTuc}`}
                 className="text-white font-bold"

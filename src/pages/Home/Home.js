@@ -11,7 +11,7 @@ import HomeCarousel from "../../templates/HomeTemplate/Layout/HomeCarousel/HomeC
 export default function Home(props) {
   const { arrFilm } = useSelector((state) => state.QuanLyPhimReducer);
 
-  console.log("arrFilm", arrFilm);
+  // console.log("arrFilm", arrFilm);
   const dispatch = useDispatch();
 
   // const renderFilm = () => {

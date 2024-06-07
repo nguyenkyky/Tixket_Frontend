@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { HashLink } from "react-router-hash-link";
+import { dangXuatAction } from "../../../../redux/actions/QuanLyNguoiDungAction";
 import "./style.css";
 
 export default function Header(props) {
@@ -152,10 +153,7 @@ export default function Header(props) {
                         borderBottomRightRadius: "0.5rem",
                       }}
                       onClick={() => {
-                        dispatch({
-                          type: "DANG_XUAT_ACTION",
-                        });
-                        window.location.reload();
+                        dispatch(dangXuatAction(navigate));
                       }}
                     >
                       <a

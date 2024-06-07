@@ -27,8 +27,9 @@ function RenderKetQuaDatVe() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+
   const { thongTinVeVuaDat } = useSelector((state) => state.QuanLyDatVeReducer);
-  console.log(thongTinVeVuaDat);
+
   // const { orderId } = useSelector((state) => state.QuanLyDatVeReducer);
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -46,6 +47,7 @@ function RenderKetQuaDatVe() {
           userLogin.maLoaiNguoiDung = "Vip";
         }
         userLogin.tongChiTieu = userLogin.tongChiTieu + thongTinDatVe.tongTien;
+        // console.log(userLogin);
         localStorage.setItem("USER_LOGIN", JSON.stringify(userLogin));
       } else {
         navigate("/home");

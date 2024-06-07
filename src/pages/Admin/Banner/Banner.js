@@ -229,10 +229,7 @@ const Banner = () => {
         columns={columns}
       />
       <div className="flex justify-center">
-        <Button
-          className="bg-blue-500 text-white pb-8"
-          onClick={handleComplete}
-        >
+        <Button className="bg-blue-500 text-white " onClick={handleComplete}>
           <p className="text-xl">Hoàn tất</p>
         </Button>
       </div>

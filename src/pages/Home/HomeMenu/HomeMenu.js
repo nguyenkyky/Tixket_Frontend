@@ -96,7 +96,7 @@ const HomeMenu = () => {
       if (filteredCumRapChieu.length === 0) return null;
 
       return (
-        <Tabs.TabPane
+        <items
           tab={
             <img
               src={heThongRap.logo}
@@ -110,7 +110,7 @@ const HomeMenu = () => {
           <Tabs tabPosition={tabPosition}>
             {filteredCumRapChieu.map((cumRap, index) => {
               return (
-                <Tabs.TabPane
+                <items
                   tab={
                     <div style={{ width: "350px" }} className="flex">
                       <img
@@ -250,11 +250,11 @@ const HomeMenu = () => {
                       };
                     })}
                   />
-                </Tabs.TabPane>
+                </items>
               );
             })}
           </Tabs>
-        </Tabs.TabPane>
+        </items>
       );
     });
   };

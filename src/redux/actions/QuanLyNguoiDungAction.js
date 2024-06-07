@@ -27,6 +27,19 @@ export const dangNhapAction = (thongTinDangNhap, navigate) => {
   };
 };
 
+export const dangXuatAction = (navigate) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "DANG_XUAT_ACTION",
+      });
+      navigate("/home");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+};
+
 export const dangKyAction = (thongTinDangKy, navigate) => {
   return async (dispatch) => {
     try {

@@ -24,6 +24,9 @@ function AddNews(props) {
     },
     onSubmit: async (values) => {
       const result = await quanLyTinTucService.addNews(values);
+      if (result) {
+        alert("Thêm tin tức thành công");
+      }
       console.log(values);
     },
   });

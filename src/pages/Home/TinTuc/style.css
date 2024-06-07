@@ -36,6 +36,7 @@
 
   
 .news-card {
+  width: 90%;
   background-color: #1a1a1a;
   border-radius: 8px;
   overflow: hidden;

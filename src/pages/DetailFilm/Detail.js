@@ -212,7 +212,7 @@ function Detail(props) {
                         <Tabs tabPosition="left">
                           {htr.cumRapChieu?.map((cumRap, index) => {
                             return (
-                              <Tabs.TabPane
+                              <items
                                 tab={
                                   <div
                                     style={{ width: "300px" }}
@@ -288,7 +288,7 @@ function Detail(props) {
                                     };
                                   })}
                                 />
-                              </Tabs.TabPane>
+                              </items>
                             );
                           })}
                         </Tabs>

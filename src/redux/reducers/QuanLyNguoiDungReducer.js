@@ -33,8 +33,7 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
     }
 
     case "DANG_XUAT_ACTION": {
-      localStorage.removeItem("USER_LOGIN");
-      localStorage.removeItem("accessToken");
+      localStorage.clear();
       return { ...state };
     }
 

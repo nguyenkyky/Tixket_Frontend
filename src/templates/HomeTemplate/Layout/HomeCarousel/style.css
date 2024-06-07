@@ -3,3 +3,35 @@
     padding: 0 !important;
 }
 
+
+
+.carousel-container {
+    max-width: 100%; /* Đặt kích thước tối đa cho carousel */
+    margin: 0 auto; /* Canh giữa carousel */
+  }
+  
+  .banner-image {
+    width: 100%;
+    max-height: 479px;
+    object-fit: cover;
+   
+  padding: 0 20px; /* Điều chỉnh khoảng cách giữa các hình ảnh */
+  }
+  
+  .custom-arrow {
+    background: rgba(0, 0, 0, 0.5); /* Đặt màu nền cho nút điều hướng */
+    border-radius: 50%;
+    z-index: 1;
+  }
+  
+  .custom-carousel-next-arrow {
+    right: 30px; /* Vị trí nút next */
+  }
+  
+  .custom-carousel-prev-arrow {
+    left: 0 ; /* Vị trí nút previous */
+  }
+
+  .slick-slide {
+    padding: 0 20px; /* Điều chỉnh khoảng cách giữa các slide */
+  }
