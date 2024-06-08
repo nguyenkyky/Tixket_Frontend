@@ -14,6 +14,11 @@ import { useSelector } from "react-redux";
 import { quanLyRapService } from "../../services/QuanLyRapService";
 import dayjs from "dayjs";
 import moment from "moment-timezone";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import "react-multi-carousel/lib/styles.css";
 
 import advancedFormat from "dayjs/plugin/advancedFormat";
 
@@ -39,6 +44,39 @@ function Theater(props) {
     setCumRapTheoKhuVuc([]);
   };
   const { heThongRapChieu } = useSelector((state) => state.QuanLyRapReducer);
+
+  const SampleNextArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={`${className} custom-arrow custom-carousel-next-arrow`}
+        style={{ ...style, display: "block", right: "30px" }}
+        onClick={onClick}
+      />
+    );
+  };
+
+  const SamplePrevArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={`${className} custom-arrow custom-carousel-prev-arrow`}
+        style={{ ...style, display: "block", left: "0" }}
+        onClick={onClick}
+      />
+    );
+  };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    centerMode: true,
+    // centerPadding: "200px",
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+  };
 
   const handleTheaterClick = async (theater) => {
     try {
@@ -326,48 +364,54 @@ function Theater(props) {
         </div>
       </div>
       <Modal
+        className="modal-theater"
         open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
         centered
       >
-        <div className="modal-content">
-          <div
-            className="modal-image"
-            style={{
-              backgroundImage: `url(${cumRap?.hinhAnh})`,
-            }}
-          >
-            <div className="modal-overlay">
-              <div className="modal-info flex items-center justify-between">
-                <div>
-                  <p className="font-bold">{cumRap?.tenCumRap}</p>
-                  <div className="flex">
-                    <p className="font-semibold">Địa chỉ: </p>
-                    <p style={{ marginLeft: "4px" }}> {cumRap?.diaChi}</p>
-                  </div>
-                  <div className="flex">
-                    <p className="font-semibold">Hotline: </p>
-                    <p style={{ marginLeft: "4px" }}> {cumRap?.hotline}</p>
-                  </div>
+        <div style={{ backgroundColor: "FDFCF0" }}>
+          <Slider {...settings}>
+            {cumRap?.banner?.map((bannerImage, index) => (
+              <div key={index} className="modal-image">
+                <img
+                  src={bannerImage}
+                  alt={`Banner ${index}`}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+            ))}
+          </Slider>
+          <div className="modal-overlay">
+            <div className="modal-info flex items-center justify-between">
+              <div>
+                <p className="font-bold">{cumRap?.tenCumRap}</p>
+                <div className="flex">
+                  <p className="font-semibold">Địa chỉ: </p>
+                  <p style={{ marginLeft: "4px" }}> {cumRap?.diaChi}</p>
                 </div>
-                <div className="flex flex-col">
-                  <Button className="bg-blue-300" onClick={handleShowSchedule}>
-                    Lịch chiếu
-                  </Button>
-                  <Button
-                    className="bg-blue-300 mt-2"
-                    onClick={() => handleShowMap(cumRap?.map)}
-                  >
-                    Xem Map
-                  </Button>
+                <div className="flex">
+                  <p className="font-semibold">Hotline: </p>
+                  <p style={{ marginLeft: "4px" }}> {cumRap?.hotline}</p>
                 </div>
+              </div>
+              <div className="flex flex-col">
+                <Button className="bg-blue-300" onClick={handleShowSchedule}>
+                  Lịch chiếu
+                </Button>
+                <Button
+                  className="bg-blue-300 mt-2"
+                  onClick={() => handleShowMap(cumRap?.map)}
+                >
+                  Xem Map
+                </Button>
               </div>
             </div>
           </div>
         </div>
       </Modal>
       <Modal
+        className="schedule-modal"
         open={isScheduleModalVisible}
         onCancel={handleCancel}
         footer={null}

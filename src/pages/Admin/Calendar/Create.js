@@ -44,6 +44,7 @@ function Create(props) {
       giaVe: 0,
       thoiLuong: 0,
       theLoai: [],
+      dienVien: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -109,7 +110,7 @@ function Create(props) {
       formik.setFieldValue("sapChieu", result.data.sapChieu);
       formik.setFieldValue("thoiLuong", result.data.thoiLuong);
       formik.setFieldValue("theLoai", result.data.theLoai);
-
+      formik.setFieldValue("dienVien", result.data.dienVien);
       setFilm(result.data);
       setState({ ...state, heThongRapChieu: response.data.data });
     }

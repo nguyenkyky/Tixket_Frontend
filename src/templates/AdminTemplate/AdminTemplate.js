@@ -12,6 +12,8 @@ import {
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { kiemTraDangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
+
 import "./style.css";
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -45,6 +47,7 @@ const AdminTemplate = ({ childComponent }) => {
   };
 
   useEffect(() => {
+    dispatch(kiemTraDangNhapAction());
     // Thêm event listener để đóng menu khi click ra bên ngoài
     document.addEventListener("mousedown", handleClickOutside);
     return () => {

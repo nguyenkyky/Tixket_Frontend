@@ -48,6 +48,10 @@ function Edit(props) {
       .max(10, "Đánh giá phải nhỏ hơn 10")
       .required("Đánh giá là bắt buộc"),
     hinhAnh: Yup.string().required("Hình ảnh là bắt buộc"),
+    quocGia: Yup.string().required("Quốc gia là bắt buộc"),
+
+    poster: Yup.string().required("Poster là bắt buộc"),
+
     daoDien: Yup.string().required("Đạo diễn là bắt buộc"),
     thoiLuong: Yup.number()
       .min(1, "Thời lượng phải lớn hơn 0")
@@ -116,6 +120,7 @@ function Edit(props) {
         : "",
       danhGia: thongTinPhim?.danhGia,
       hinhAnh: thongTinPhim?.hinhAnh,
+      poster: thongTinPhim?.poster,
       daoDien: thongTinPhim?.daoDien,
       dienVien: thongTinPhim?.dienVien,
       thoiLuong: thongTinPhim?.thoiLuong,
@@ -124,6 +129,7 @@ function Edit(props) {
       hot: thongTinPhim?.hot,
       danhGia: thongTinPhim?.danhGia,
       theLoai: thongTinPhim?.theLoai,
+      quocGia: thongTinPhim?.quocGia,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -204,6 +210,18 @@ function Edit(props) {
               />
             </Form.Item>
             <Form.Item
+              label="Poster *"
+              validateStatus={
+                formik.errors.poster && formik.touched.poster ? "error" : ""
+              }
+            >
+              <Input
+                name="poster"
+                onChange={formik.handleChange}
+                value={formik.values.poster}
+              />
+            </Form.Item>
+            <Form.Item
               label="Đạo diễn *"
               validateStatus={
                 formik.errors.daoDien && formik.touched.daoDien ? "error" : ""
@@ -213,6 +231,18 @@ function Edit(props) {
                 name="daoDien"
                 onChange={formik.handleChange}
                 value={formik.values.daoDien}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Quốc gia *"
+              validateStatus={
+                formik.errors.quocGia && formik.touched.quocGia ? "error" : ""
+              }
+            >
+              <Input
+                name="quocGia"
+                onChange={formik.handleChange}
+                value={formik.values.quocGia}
               />
             </Form.Item>
             {dienVienList.map((dienVien, index) => (

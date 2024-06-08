@@ -45,6 +45,9 @@ export class QuanLyNguoiDungService extends baseService {
   resetPassword = (values) => {
     return this.post(`api/QuanLyNguoiDung/resetPassword`, values);
   };
+  kiemTraDangNhap = () => {
+    return this.post(`api/QuanLyNguoiDung/kiemTraDangNhap`);
+  };
 }
 
 export const quanLyNguoiDungService = new QuanLyNguoiDungService();

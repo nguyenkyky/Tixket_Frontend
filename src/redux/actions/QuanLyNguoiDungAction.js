@@ -182,3 +182,17 @@ export const resetPasswordAction = (values, navigate) => {
     }
   };
 };
+
+export const kiemTraDangNhapAction = () => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.kiemTraDangNhap();
+    } catch (error) {
+      if (error.response.status === 403) {
+        localStorage.removeItem("USER_LOGIN");
+        localStorage.removeItem("accessToken");
+      }
+      console.log("error", error);
+    }
+  };
+};

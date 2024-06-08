@@ -37,6 +37,20 @@ function EditCumRap(props) {
     hinhAnh: Yup.string().required("Hình ảnh là bắt buộc"),
   });
 
+  const [bannerList, setBannerList] = useState([{ banner: "" }]);
+
+  const addBanner = () => {
+    setBannerList([...bannerList, { banner: "" }]);
+  };
+
+  const removeBanner = (index) => {
+    const list = [...bannerList];
+    list.splice(index, 1);
+    setBannerList(list);
+    const bannerLink = list.map((banner) => banner.name);
+    formik.setFieldValue("banner", bannerLink);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const heThongRap = await quanLyRapService.layThongTinChiTietHeThongRap(
@@ -52,6 +66,12 @@ function EditCumRap(props) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (Array.isArray(cumRap?.banner)) {
+      setBannerList(cumRap.banner.map((banner) => ({ name: banner })));
+    }
+  }, [cumRap]);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -66,6 +86,7 @@ function EditCumRap(props) {
       hinhAnh: cumRap?.hinhAnh,
       khuVuc: cumRap?.khuVuc,
       map: cumRap?.map,
+      banner: cumRap?.banner,
     },
     validationSchema: validationSchema,
 
@@ -192,6 +213,36 @@ function EditCumRap(props) {
                 onChange={formik.handleChange}
                 value={formik.values.hinhAnh}
               />
+            </Form.Item>
+            {bannerList.map((banner, index) => (
+              <Form.Item label={`Banner ${index + 1}`} key={index}>
+                <Input
+                  value={banner.name}
+                  onChange={(e) => {
+                    const list = [...bannerList];
+                    list[index].name = e.target.value;
+                    setBannerList(list);
+                    const bannerLink = bannerList.map((banner) => banner.name);
+                    formik.setFieldValue("banner", bannerLink);
+                  }}
+                />
+
+                {bannerList.length > 1 && (
+                  <MinusCircleOutlined
+                    onClick={() => removeBanner(index)}
+                    style={{ color: "red", marginLeft: "10px" }}
+                  />
+                )}
+              </Form.Item>
+            ))}
+            <Form.Item style={{ marginLeft: "136px" }}>
+              <Button
+                type="dashed"
+                onClick={addBanner}
+                style={{ width: "60%" }}
+              >
+                <PlusOutlined /> Thêm Banner
+              </Button>
             </Form.Item>
             <Form.Item
               label="Khu vực *"

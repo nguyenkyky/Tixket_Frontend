@@ -56,7 +56,11 @@ function AddNew(props) {
       .max(10, "Đánh giá phải nhỏ hơn 10")
       .required("Đánh giá là bắt buộc"),
     hinhAnh: Yup.string().required("Hình ảnh là bắt buộc"),
+    poster: Yup.string().required("poster là bắt buộc"),
+
     daoDien: Yup.string().required("Đạo diễn là bắt buộc"),
+    quocGia: Yup.string().required("Quốc gia là bắt buộc"),
+
     thoiLuong: Yup.number()
       .min(1, "Thời lượng phải lớn hơn 0")
       .required("Thời lượng là bắt buộc"),
@@ -81,6 +85,10 @@ function AddNew(props) {
     const list = [...dienVienList];
     list.splice(index, 1);
     setDienVienList(list);
+    formik.setFieldValue(
+      "dienVien",
+      list.map((dv) => dv.name)
+    );
   };
 
   const handleChangeSwitch = (name) => {
@@ -100,6 +108,7 @@ function AddNew(props) {
       ngayKhoiChieu: "",
       danhGia: "",
       hinhAnh: "",
+      poster: "",
       daoDien: "",
       dienVien: [],
       thoiLuong: 0,
@@ -108,6 +117,7 @@ function AddNew(props) {
       hot: false,
       danhGia: 0,
       theLoai: [],
+      quocGia: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -169,6 +179,23 @@ function AddNew(props) {
               }
             >
               <Input name="hinhAnh" onChange={formik.handleChange} />
+            </Form.Item>
+
+            <Form.Item
+              label="Poster *"
+              validateStatus={
+                formik.errors.poster && formik.touched.poster ? "error" : ""
+              }
+            >
+              <Input name="poster" onChange={formik.handleChange} />
+            </Form.Item>
+            <Form.Item
+              label="Quốc gia *"
+              validateStatus={
+                formik.errors.quocGia && formik.touched.quocGia ? "error" : ""
+              }
+            >
+              <Input name="quocGia" onChange={formik.handleChange} />
             </Form.Item>
             <Form.Item
               label="Đạo diễn *"

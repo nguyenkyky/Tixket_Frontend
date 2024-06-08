@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./styles.css";
 import icon from "../../assets/image/images.png";
 import "../../assets/styles/circle.css";
-import { Tabs, Rate, Tag, Modal } from "antd";
-import { CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { Tabs, Rate, Tag, Modal, Button } from "antd";
+import {
+  CalendarOutlined,
+  ClockCircleOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 import { styled } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useLocation, NavLink, useNavigate } from "react-router-dom";
@@ -15,6 +19,10 @@ import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import { ratingAction } from "../../redux/actions/QuanLyPhimAction";
 import { Flex, Progress } from "antd";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "react-multi-carousel/lib/styles.css";
 
 dayjs.extend(advancedFormat);
 
@@ -29,6 +37,8 @@ function Detail(props) {
   const filmDetail = useSelector((state) => state.QuanLyPhimReducer.filmDetail);
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
   const [activeTab, setActiveTab] = useState("1");
+  const [isModalMapVisible, setIsModalMapVisible] = useState(false);
+  const [map, setMap] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cumRap, setCumRap] = useState();
   const [ratingValue, setRatingValue] = useState(0);
@@ -40,7 +50,14 @@ function Detail(props) {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+  const handleShowMap = (map) => {
+    setMap(map);
+    setIsModalMapVisible(true);
+  };
 
+  const handleCancelMap = () => {
+    setIsModalMapVisible(false);
+  };
   let { id } = useParams();
   const dispatch = useDispatch();
 
@@ -52,6 +69,39 @@ function Detail(props) {
     } catch (error) {
       return "";
     }
+  };
+
+  const SampleNextArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={`${className} custom-arrow custom-carousel-next-arrow`}
+        style={{ ...style, display: "block", right: "30px" }}
+        onClick={onClick}
+      />
+    );
+  };
+
+  const SamplePrevArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={`${className} custom-arrow custom-carousel-prev-arrow`}
+        style={{ ...style, display: "block", left: "0" }}
+        onClick={onClick}
+      />
+    );
+  };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    centerMode: true,
+    // centerPadding: "200px",
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
   };
 
   const handleChangeRating = (values) => {
@@ -311,22 +361,19 @@ function Detail(props) {
               key="2"
             >
               <div
-                className="mt-20 px-5 py-5 ml-72 w-2/3 tab-2"
+                className="mt-20 px-5 py-5 ml-20 w-5/6 tab-2"
                 style={{ borderRadius: "10px" }}
               >
                 <div className="grid grid-cols-12">
-                  <div className="col-span-10 col-start-2">
+                  <div className="col-span-11 col-start-2">
                     <div className="grid grid-cols-5">
-                      <img
-                        className="col-span-2"
-                        src={filmDetail.hinhAnh}
-                        style={{
-                          height: 500,
-                          borderRadius: "10px",
-                          width: "100%",
-                        }}
-                        alt="123"
-                      />
+                      <div className="col-span-2  poster-wrapper">
+                        <img
+                          className="poster-image"
+                          src={filmDetail.poster}
+                          alt="123"
+                        />
+                      </div>
                       <div className="col-span-3 ml-5">
                         <div className="flex items-center">
                           <CalendarOutlined />
@@ -369,6 +416,14 @@ function Detail(props) {
                           </p>
                           <p className="text-black text-base ml-2">
                             {filmDetail.dienVien?.join(", ")}
+                          </p>
+                        </div>
+                        <div className="flex">
+                          <p className="text-black text-base font-medium">
+                            Quốc gia:
+                          </p>
+                          <p className="text-black text-base ml-2">
+                            {filmDetail.quocGia}
                           </p>
                         </div>
 
@@ -499,20 +554,27 @@ function Detail(props) {
         </div>
       </div>
       <Modal
+        className="modal-theater"
         open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
         centered
       >
-        <div className="modal-content">
-          <div
-            className="modal-image"
-            style={{
-              backgroundImage: `url(${cumRap?.hinhAnh})`,
-            }}
-          >
-            <div className="modal-overlay">
-              <div className="modal-info">
+        <div style={{ backgroundColor: "FDFCF0" }}>
+          <Slider {...settings}>
+            {cumRap?.banner?.map((bannerImage, index) => (
+              <div key={index} className="modal-image">
+                <img
+                  src={bannerImage}
+                  alt={`Banner ${index}`}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+            ))}
+          </Slider>
+          <div className="modal-overlay">
+            <div className="modal-info flex items-center justify-between">
+              <div>
                 <p className="font-bold">{cumRap?.tenCumRap}</p>
                 <div className="flex">
                   <p className="font-semibold">Địa chỉ: </p>
@@ -523,6 +585,45 @@ function Detail(props) {
                   <p style={{ marginLeft: "4px" }}> {cumRap?.hotline}</p>
                 </div>
               </div>
+              <div>
+                <Button
+                  className="bg-blue-300"
+                  onClick={() => handleShowMap(cumRap?.map)}
+                >
+                  Xem Map
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        open={isModalMapVisible}
+        onCancel={handleCancelMap}
+        footer={null}
+        centered
+        // closeIcon={false}
+        closeIcon={<CloseOutlined style={{}} />}
+      >
+        <div className="modal-map">
+          <div
+            style={{
+              marginLeft: "20px",
+              marginRight: "20px",
+              paddingTop: "20px",
+              paddingBottom: "20px",
+            }}
+          >
+            <div className="mb-4">
+              <iframe
+                src={map}
+                width="100%"
+                height="500"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                aria-hidden="false"
+                tabIndex="0"
+              ></iframe>
             </div>
           </div>
         </div>
