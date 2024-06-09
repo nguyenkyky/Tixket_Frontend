@@ -29,6 +29,7 @@ function RenderKetQuaDatVe() {
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
 
   const { thongTinVeVuaDat } = useSelector((state) => state.QuanLyDatVeReducer);
+  console.log(thongTinVeVuaDat);
 
   // const { orderId } = useSelector((state) => state.QuanLyDatVeReducer);
   useEffect(() => {
@@ -39,7 +40,7 @@ function RenderKetQuaDatVe() {
       );
       if (thongTinDatVe) {
         dispatch(datVeAction(thongTinDatVe));
-        // localStorage.removeItem("THONG_TIN_DAT_VE");
+        localStorage.removeItem("THONG_TIN_DAT_VE");
         if (userLogin.tongChiTieu + thongTinDatVe.tongTien > 10000000) {
           const taiKhoanSetVip = userLogin.taiKhoan;
           dispatch(setVipAction({ taiKhoanSetVip }));
@@ -146,24 +147,19 @@ function RenderKetQuaDatVe() {
               <div className="flex items-center justify-between mt-4">
                 <p className="text-base font-semibold ">Giá vé</p>
                 <p className="text-base">
-                  {((thongTinVeVuaDat.tongTien * 100) / 85).toLocaleString()} đ
+                  {thongTinVeVuaDat?.giaVe?.toLocaleString()} đ
                 </p>
               </div>
               <div className="flex items-center justify-between mt-4">
                 <p className="text-base font-semibold ">Khuyến mãi</p>
-                <p className="text-base">
-                  {userLogin.maLoaiNguoiDung === "KhachHang" ? 0 : "15%"}
-                </p>
+                <p className="text-base">{thongTinVeVuaDat?.khuyenMai} %</p>
               </div>
             </div>
             <div className="order-infor border-t mt-8">
               <div className="flex items-center justify-between mt-4">
                 <p className="text-base font-semibold ">Tổng cộng</p>
                 <p className="text-base">
-                  {userLogin.maLoaiNguoiDung === "KhachHang"
-                    ? ((thongTinVeVuaDat.tongTien * 100) / 85).toLocaleString()
-                    : thongTinVeVuaDat?.tongTien?.toLocaleString()}
-                  đ
+                  {thongTinVeVuaDat?.tongTien?.toLocaleString()} đ
                 </p>
               </div>
             </div>

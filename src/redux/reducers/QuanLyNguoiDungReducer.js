@@ -51,6 +51,16 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
       state.detailUser = action.detailUser;
       return { ...state };
     }
+
+    case "CAP_NHAT_THONG_TIN": {
+      state.userLogin.taiKhoan = action.payload.newTaiKhoan;
+      state.userLogin.hoTen = action.payload.hoTen;
+      state.userLogin.email = action.payload.email;
+      state.userLogin.soDT = action.payload.soDT;
+      state.userLogin.avatar = action.payload.avatar;
+      return { ...state };
+    }
+
     default:
       return { ...state };
   }

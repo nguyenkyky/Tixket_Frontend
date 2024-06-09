@@ -183,14 +183,35 @@ export const resetPasswordAction = (values, navigate) => {
   };
 };
 
+export const capNhatThongTinAction = (values) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.capNhatThongTinNguoiDung(
+        values
+      );
+      if (result) {
+        dispatch({
+          type: "CAP_NHAT_THONG_TIN",
+          payload: values,
+        });
+        return result;
+      }
+    } catch (errors) {
+      console.log("errors", errors);
+      throw errors;
+    }
+  };
+};
+
 export const kiemTraDangNhapAction = () => {
   return async (dispatch) => {
     try {
       const result = await quanLyNguoiDungService.kiemTraDangNhap();
     } catch (error) {
       if (error.response.status === 403) {
-        localStorage.removeItem("USER_LOGIN");
-        localStorage.removeItem("accessToken");
+        dispatch({
+          type: "DANG_XUAT_ACTION",
+        });
       }
       console.log("error", error);
     }

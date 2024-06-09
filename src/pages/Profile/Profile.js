@@ -13,7 +13,10 @@ import { Button, Form, Input, Modal, Table } from "antd";
 import { CheckCircleTwoTone, CloseOutlined } from "@ant-design/icons";
 import { quanLyNguoiDungService } from "../../services/QuanLyNguoiDung";
 import { toast, ToastContainer } from "react-toastify";
-import { layThongTinDatVe } from "../../redux/actions/QuanLyNguoiDungAction";
+import {
+  layThongTinDatVe,
+  capNhatThongTinAction,
+} from "../../redux/actions/QuanLyNguoiDungAction";
 import "react-toastify/dist/ReactToastify.css";
 import "./style.css";
 import _ from "lodash";
@@ -22,6 +25,8 @@ import { Pagination } from "antd";
 import * as Yup from "yup";
 
 export default function Profile() {
+  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+  // console.log(userLogin);
   const navigate = useNavigate();
   const [user, setUser] = useState();
   const [data, setData] = useState([]);
@@ -32,11 +37,13 @@ export default function Profile() {
   const [isModalTicketVisible, setIsModalTicketVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [passwords, setPasswords] = useState({
-    taiKhoan: user?.taiKhoan,
+    taiKhoan: userLogin?.taiKhoan,
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
   });
+
+  console.log(passwords);
 
   const dispatch = useDispatch();
   const { thongTinDatVe } = useSelector(
@@ -53,7 +60,6 @@ export default function Profile() {
   useEffect(() => {
     if (localStorage.getItem("USER_LOGIN")) {
       let user = JSON.parse(localStorage.getItem("USER_LOGIN"));
-      setUser(user);
     } else {
       navigate("/login");
     }
@@ -225,26 +231,31 @@ export default function Profile() {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      hoTen: user?.hoTen,
-      soDT: user?.soDT,
-      email: user?.email,
-      avatar: user?.avatar,
-      taiKhoan: user?.taiKhoan,
-      newTaiKhoan: user?.taiKhoan,
+      hoTen: userLogin?.hoTen,
+      soDT: userLogin?.soDT,
+      email: userLogin?.email,
+      avatar: userLogin?.avatar,
+      taiKhoan: userLogin?.taiKhoan,
+      newTaiKhoan: userLogin?.taiKhoan,
+      tongChiTieu: userLogin?.tongChiTieu,
       maLoaiNguoiDung:
-        user?.maLoaiNguoiDung === "KhachHang"
+        userLogin?.maLoaiNguoiDung === "KhachHang"
           ? "Khách Hàng"
-          : user?.maLoaiNguoiDung,
+          : userLogin?.maLoaiNguoiDung,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
       try {
-        const result = await quanLyNguoiDungService.capNhatThongTinNguoiDung(
-          values
-        );
-        setUser(values);
-        localStorage.setItem("USER_LOGIN", JSON.stringify(values));
+        console.log(values);
+        const result = await dispatch(capNhatThongTinAction(values));
+        console.log(result);
+        let userLogin = JSON.parse(localStorage.getItem("USER_LOGIN"));
+        userLogin.taiKhoan = values.newTaiKhoan;
+        userLogin.hoTen = values.hoTen;
+        userLogin.email = values.email;
+        userLogin.soDT = values.soDT;
+        userLogin.avatar = values.avatar;
+        localStorage.setItem("USER_LOGIN", JSON.stringify(userLogin));
         toast.success("Cập nhật thông tin người dùng thành công!");
       } catch (error) {
         if (error.response && error.response.status === 400) {
@@ -359,12 +370,12 @@ export default function Profile() {
                             value={formik.values.avatar}
                           />
                         </Form.Item>
-                        <Form.Item label="Loại Khách Hàng">
+                        <Form.Item label="Tích lũy">
                           <Input
-                            name="maLoaiNguoiDung"
+                            name="tongChiTieu"
                             onChange={formik.handleChange}
                             disabled
-                            value={formik.values.maLoaiNguoiDung}
+                            value={formik.values.tongChiTieu.toLocaleString()}
                           />
                         </Form.Item>
                       </div>
@@ -581,7 +592,9 @@ export default function Profile() {
                       <div className="flex items-center justify-between mt-4">
                         <p className="text-base font-semibold ">Khuyến mãi</p>
                         <p className="text-base">
-                          {user?.maLoaiNguoiDung === "KhachHang" ? 0 : "15%"}
+                          {userLogin?.maLoaiNguoiDung === "KhachHang"
+                            ? 0
+                            : "15%"}
                         </p>
                       </div>
                     </div>
@@ -589,7 +602,7 @@ export default function Profile() {
                       <div className="flex items-center justify-between mt-4">
                         <p className="text-base font-semibold ">Tổng cộng</p>
                         <p className="text-base">
-                          {user?.maLoaiNguoiDung === "KhachHang"
+                          {userLogin?.maLoaiNguoiDung === "KhachHang"
                             ? (
                                 (parseInt(detailTicket?.giaVe) * 100) /
                                 85

@@ -8,7 +8,9 @@ export class DatVe {
   gioChieu = "";
   hinhAnh = "";
   diaChi = "";
+  giaVe = 0;
   tongTien = 0;
+  khuyenMai = 0;
   map = "";
   constructor() {}
 }

@@ -161,7 +161,7 @@ function RenderCheckout(props) {
 
   const { thongTinPhim, danhSachGhe } = chiTietPhongVe;
 
-  console.log(thongTinPhim);
+  // console.log(thongTinPhim);
   const renderGhe = () => {
     return danhSachGhe?.map((ghe, index) => {
       let gheVip = ghe.loaiGhe === "Vip" ? "gheVip" : "";
@@ -254,6 +254,13 @@ function RenderCheckout(props) {
       );
     }
   };
+
+  const giaVe = danhSachGheDangDat.reduce(
+    (tongTienDatVe, gheDangDat, index) => {
+      return (tongTienDatVe += gheDangDat.giaVe);
+    },
+    0
+  );
 
   return (
     <div className="min-h-full mt-5">
@@ -359,14 +366,7 @@ function RenderCheckout(props) {
               )}
             </div>
             <div className="text-right col-span-1">
-              <span className="text-green-800 text-lg">
-                {danhSachGheDangDat
-                  .reduce((tongTienDatVe, gheDangDat, index) => {
-                    return (tongTienDatVe += gheDangDat.giaVe);
-                  }, 0)
-                  .toLocaleString()}{" "}
-                đ
-              </span>
+              <span className="text-green-800 text-lg">{giaVe} đ</span>
             </div>
           </div>
           <hr />
@@ -432,7 +432,11 @@ function RenderCheckout(props) {
                   thongTinDatVe.tenCumRap = thongTinPhim?.tenCumRap;
                   thongTinDatVe.tenPhim = thongTinPhim?.tenPhim;
                   thongTinDatVe.hinhAnh = thongTinPhim?.hinhAnh;
+                  thongTinDatVe.giaVe = giaVe;
+                  thongTinDatVe.khuyenMai =
+                    userLogin.maLoaiNguoiDung === "KhachHang" ? 0 : 15;
                   thongTinDatVe.tongTien = tongTien;
+
                   thongTinDatVe.map = thongTinPhim?.map;
                   console.log("thongTinDatVe", thongTinDatVe);
                   // dispatch(kiemTraDatVeAction(thongTinDatVe));
