@@ -20,12 +20,6 @@ export const layChiTietPhongVeAction = (maLichChieu, navigate) => {
         });
       }
     } catch (errors) {
-      if (errors.response.status === 403) {
-        alert("Vui lòng đăng nhập");
-        localStorage.removeItem("USER_LOGIN");
-        localStorage.removeItem("accessToken");
-        navigate("/login");
-      }
       console.log("errors", errors.response?.data);
     }
   };

@@ -13,6 +13,7 @@ import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { kiemTraDangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
+import { toast, ToastContainer } from "react-toastify";
 
 import "./style.css";
 
@@ -336,6 +337,7 @@ const AdminTemplate = ({ childComponent }) => {
           </Footer>
         </Layout>
       </Layout>
+      {/* <ToastContainer /> */}
     </div>
   );
 };

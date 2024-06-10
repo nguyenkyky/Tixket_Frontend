@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Radio, Space, Tabs, Select, Tag, Modal, Button } from "antd";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   CalendarOutlined,
   ClockCircleOutlined,
@@ -17,12 +18,13 @@ import { layDanhSachHeThongRapAction } from "../../../redux/actions/QuanLyRapAct
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 import "react-multi-carousel/lib/styles.css";
+import { ToastContainer, toast } from "react-toastify";
 
 dayjs.extend(advancedFormat);
 
 const HomeMenu = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isModalMapVisible, setIsModalMapVisible] = useState(false);
   const [map, setMap] = useState();
@@ -91,6 +93,14 @@ const HomeMenu = () => {
     );
   };
 
+  const handleNavLinkClick = (maLichChieu) => {
+    const userLogin = localStorage.getItem("USER_LOGIN");
+    if (!userLogin) {
+      toast.error("Bạn chưa đăng nhập!", { position: "top-center" });
+    } else {
+      navigate(`/checkout/${maLichChieu}`);
+    }
+  };
   const settings = {
     dots: true,
     infinite: true,
@@ -254,16 +264,20 @@ const HomeMenu = () => {
                                   {lichChieuPhuHop
                                     ?.slice(0, 12)
                                     .map((lichChieu, idx) => (
-                                      <NavLink
+                                      <div
                                         style={{ borderRadius: "5px" }}
-                                        to={`/checkout/${lichChieu.maLichChieu}`}
+                                        onClick={() =>
+                                          handleNavLinkClick(
+                                            lichChieu.maLichChieu
+                                          )
+                                        }
                                         key={idx}
-                                        className="border border-gray-300 p-2 text-center mt-2"
+                                        className="border border-gray-300 p-2 text-center mt-2 cursor-pointer"
                                       >
                                         {moment(
                                           lichChieu.ngayChieuGioChieu
                                         ).format("hh:mm A")}
-                                      </NavLink>
+                                      </div>
                                     ))}
                                 </div>
                               </div>
@@ -415,6 +429,7 @@ const HomeMenu = () => {
           </div>
         </div>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };

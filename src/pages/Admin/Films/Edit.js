@@ -6,6 +6,7 @@ import {
   themPhimAction,
   layThongTinPhimAction,
   capNhatPhimAction,
+  layDanhSachPhimAction,
 } from "../../../redux/actions/QuanLyPhimAction";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import {
@@ -21,6 +22,7 @@ import {
 import { useFormik } from "formik";
 import moment from "moment";
 import * as Yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
 
 function Edit(props) {
   const { id } = useParams();
@@ -132,9 +134,20 @@ function Edit(props) {
       quocGia: thongTinPhim?.quocGia,
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      dispatch(capNhatPhimAction(values, navigate));
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        console.log(values);
+        await dispatch(capNhatPhimAction(values, navigate));
+        toast.success("Cập nhật phim thành công", {
+          position: "top-center",
+          onClose: () => {
+            dispatch(layDanhSachPhimAction());
+            navigate("/admin/films");
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
@@ -360,6 +373,7 @@ function Edit(props) {
           Hoàn tất
         </button>
       </Form>
+      <ToastContainer />
     </div>
   );
 }

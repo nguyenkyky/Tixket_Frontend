@@ -50,9 +50,18 @@ function CumRap() {
         okText: "Đồng ý",
         okType: "danger",
         cancelText: "Hủy",
-        onOk: () => {
-          dispatch(deleteHeThongRapAction(maHeThongRap));
-          toast.success(`Đã xóa hệ thống rạp thành công!`);
+        onOk: async () => {
+          try {
+            await dispatch(deleteHeThongRapAction(maHeThongRap));
+            toast.success("Đã xóa hệ thống rạp thành công!", {
+              position: "top-center",
+              onClose: () => {
+                dispatch(layDanhSachHeThongRapAction());
+              },
+            });
+          } catch (error) {
+            console.log("errors", error);
+          }
         },
       });
     };
@@ -63,9 +72,18 @@ function CumRap() {
         okText: "Đồng ý",
         okType: "danger",
         cancelText: "Hủy",
-        onOk: () => {
-          dispatch(deleteCumRapAction(maCumRap));
-          toast.success(`Đã xóa cụm rạp thành công!`);
+        onOk: async () => {
+          try {
+            await dispatch(deleteCumRapAction(maCumRap));
+            toast.success("Đã xóa cụm rạp thành công!", {
+              position: "top-center",
+              onClose: () => {
+                dispatch(layDanhSachHeThongRapAction());
+              },
+            });
+          } catch (error) {
+            console.log("errors", error);
+          }
         },
       });
     };

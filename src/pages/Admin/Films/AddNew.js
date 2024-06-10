@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { themPhimAction } from "../../../redux/actions/QuanLyPhimAction";
+import { useNavigate } from "react-router-dom";
+import {
+  themPhimAction,
+  layDanhSachPhimAction,
+} from "../../../redux/actions/QuanLyPhimAction";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -22,10 +26,12 @@ import {
 } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { ToastContainer, toast } from "react-toastify";
 
 import moment from "moment";
 
 function AddNew(props) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { RangePicker } = DatePicker;
   const { TextArea } = Input;
@@ -120,9 +126,20 @@ function AddNew(props) {
       quocGia: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log("values", values);
-      dispatch(themPhimAction(values));
+    onSubmit: async (values) => {
+      try {
+        console.log(values);
+        await dispatch(themPhimAction(values));
+        toast.success("Thêm phim thành công", {
+          position: "top-center",
+          onClose: () => {
+            dispatch(layDanhSachPhimAction());
+            navigate("/admin/films");
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
@@ -311,6 +328,7 @@ function AddNew(props) {
           Hoàn tất
         </button>
       </Form>
+      <ToastContainer />
     </div>
   );
 }

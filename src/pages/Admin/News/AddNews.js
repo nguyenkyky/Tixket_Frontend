@@ -6,8 +6,7 @@ import { useFormik } from "formik";
 import moment from "moment";
 import TextArea from "antd/es/input/TextArea";
 import { quanLyTinTucService } from "../../../services/QuanLyTinTucService";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { ToastContainer, toast } from "react-toastify";
 
 function AddNews(props) {
   const [editorData, setEditorData] = useState("");
@@ -25,7 +24,8 @@ function AddNews(props) {
     onSubmit: async (values) => {
       const result = await quanLyTinTucService.addNews(values);
       if (result) {
-        alert("Thêm tin tức thành công");
+        toast.success("Thêm tin tức thành công", { position: "top-center" });
+        navigate("/admin/news");
       }
       console.log(values);
     },
@@ -50,40 +50,19 @@ function AddNews(props) {
           <div className="flex flex-wrap justify-center">
             <div className="w-full lg:w-1/2">
               <Form.Item label="Title">
-                <Input name="title" onChange={formik.handleChange} />
+                <Input name="title" onChange={formik.handleChange} required />
               </Form.Item>
               <Form.Item label="Hình ảnh">
-                <Input name="hinhAnh" onChange={formik.handleChange} />
+                <Input name="hinhAnh" onChange={formik.handleChange} required />
               </Form.Item>
 
               <Form.Item label="Render">
-                <TextArea name="render" onChange={formik.handleChange} />
+                <TextArea
+                  name="render"
+                  onChange={formik.handleChange}
+                  required
+                />
               </Form.Item>
-            </div>
-            <div>
-              <h2>CKEditor 5 in React</h2>
-              <CKEditor
-                editor={ClassicEditor}
-                data="<p>Type your content here...</p>"
-                onReady={(editor) => {
-                  console.log("Editor is ready to use!", editor);
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  console.log({ event, editor, data });
-                  setEditorData(data);
-                }}
-                onBlur={(event, editor) => {
-                  console.log("Blur.", editor);
-                }}
-                onFocus={(event, editor) => {
-                  console.log("Focus.", editor);
-                }}
-              />
-              <div>
-                <h3>Editor Data (HTML):</h3>
-                <div>{editorData}</div>
-              </div>
             </div>
           </div>
           <button type="submit" className="bg-blue-400 text-white p-2">
@@ -91,6 +70,7 @@ function AddNews(props) {
           </button>
         </Form>
       </div>
+      <ToastContainer />
     </div>
   );
 }

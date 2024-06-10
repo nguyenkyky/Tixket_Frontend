@@ -22,7 +22,7 @@ export const themPhimAction = (data) => {
     try {
       const result = await quanLyPhimService.themPhim(data);
     } catch (errors) {
-      console.log("errors", errors);
+      throw errors;
     }
   };
 };
@@ -45,11 +45,8 @@ export const capNhatPhimAction = (data, navigate) => {
   return async (dispatch) => {
     try {
       const result = await quanLyPhimService.capNhatPhim(data);
-      alert("capNhatPhimAction thành công");
-      dispatch(layDanhSachPhimAction());
-      navigate("/admin/films");
     } catch (errors) {
-      console.log("errors", errors);
+      throw errors;
     }
   };
 };
@@ -58,8 +55,6 @@ export const xoaPhimAction = (maPhim) => {
   return async (dispatch) => {
     try {
       const result = await quanLyPhimService.xoaPhim(maPhim);
-
-      dispatch(layDanhSachPhimAction());
     } catch (errors) {
       console.log("errors", errors);
     }
@@ -116,14 +111,7 @@ export const ratingAction = (value, navigate) => {
       const result = await quanLyPhimService.rating(value);
       dispatch(layThongTinChiTietPhim(value.maPhim));
     } catch (errors) {
-      if (errors.response.status === 403) {
-        alert("Vui lòng đăng nhập");
-        localStorage.removeItem("USER_LOGIN");
-        localStorage.removeItem("accessToken");
-        navigate("/login");
-      }
-
-      console.log("errors", errors);
+      throw errors;
     }
   };
 };

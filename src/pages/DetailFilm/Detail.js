@@ -23,6 +23,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "react-multi-carousel/lib/styles.css";
+import { ToastContainer, toast } from "react-toastify";
 
 dayjs.extend(advancedFormat);
 
@@ -42,7 +43,7 @@ function Detail(props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cumRap, setCumRap] = useState();
   const [ratingValue, setRatingValue] = useState(0);
-  console.log(ratingValue);
+  // console.log(ratingValue);
   const showModal = (cumRap) => {
     setCumRap(cumRap);
     setIsModalVisible(true);
@@ -93,6 +94,15 @@ function Detail(props) {
     );
   };
 
+  const handleNavLinkClick = (maLichChieu) => {
+    const userLogin = localStorage.getItem("USER_LOGIN");
+    if (!userLogin) {
+      toast.error("Bạn chưa đăng nhập!", { position: "top-center" });
+    } else {
+      navigate(`/checkout/${maLichChieu}`);
+    }
+  };
+
   const settings = {
     dots: true,
     infinite: true,
@@ -104,17 +114,24 @@ function Detail(props) {
     prevArrow: <SamplePrevArrow />,
   };
 
-  const handleChangeRating = (values) => {
-    setRatingValue(values);
-    const action = ratingAction(
-      {
-        taiKhoan: userLogin.taiKhoan,
-        rating: values,
-        maPhim: id,
-      },
-      navigate
-    );
-    dispatch(action);
+  const handleChangeRating = async (values) => {
+    try {
+      setRatingValue(values);
+      const action = ratingAction(
+        {
+          taiKhoan: userLogin.taiKhoan,
+          rating: values,
+          maPhim: id,
+        },
+        navigate
+      );
+      await dispatch(action);
+    } catch (errors) {
+      if (errors.response.status === 403) {
+        toast.error("Bạn chưa đăng nhập", { position: "top-center" });
+      }
+      console.log("errors", errors);
+    }
     // console.log(values);
     // console.log(userLogin.taiKhoan);
   };
@@ -315,15 +332,18 @@ function Detail(props) {
                                       )
                                       ?.slice(0, 12)
                                       .map((lich, index) => (
-                                        <NavLink
-                                          to={`/checkout/${lich.maLichChieu}`}
+                                        <div
+                                          style={{ borderRadius: "5px" }}
+                                          onClick={() =>
+                                            handleNavLinkClick(lich.maLichChieu)
+                                          }
                                           key={index}
-                                          className="border border-gray-300 p-2 text-center mt-2"
+                                          className="border border-gray-300 p-2 text-center mt-2 cursor-pointer"
                                         >
                                           {moment(
                                             lich.ngayChieuGioChieu
                                           ).format("hh:mm A")}
-                                        </NavLink>
+                                        </div>
                                       ));
                                     return {
                                       label: dayjs(date).format("ddd D-M"),
@@ -628,6 +648,7 @@ function Detail(props) {
           </div>
         </div>
       </Modal>
+      <ToastContainer />
     </div>
   );
 }

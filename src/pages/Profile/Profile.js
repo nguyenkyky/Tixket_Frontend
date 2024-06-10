@@ -58,13 +58,18 @@ export default function Profile() {
   // console.log(thongTinDatVe);
 
   useEffect(() => {
-    if (localStorage.getItem("USER_LOGIN")) {
-      let user = JSON.parse(localStorage.getItem("USER_LOGIN"));
-    } else {
-      navigate("/login");
-    }
-    const action = layThongTinDatVe();
-    dispatch(action);
+    const fetchData = async () => {
+      try {
+        const action = layThongTinDatVe();
+        await dispatch(action);
+      } catch (error) {
+        if (error.response && error.response.status === 403) {
+          navigate("/login");
+        }
+        console.log("error", error);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -248,7 +253,6 @@ export default function Profile() {
       try {
         console.log(values);
         const result = await dispatch(capNhatThongTinAction(values));
-        console.log(result);
         let userLogin = JSON.parse(localStorage.getItem("USER_LOGIN"));
         userLogin.taiKhoan = values.newTaiKhoan;
         userLogin.hoTen = values.hoTen;
@@ -375,7 +379,7 @@ export default function Profile() {
                             name="tongChiTieu"
                             onChange={formik.handleChange}
                             disabled
-                            value={formik.values.tongChiTieu.toLocaleString()}
+                            value={formik.values.tongChiTieu?.toLocaleString()}
                           />
                         </Form.Item>
                       </div>

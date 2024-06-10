@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
 import { quanLyPhimService } from "../../../services/QuanLyPhimService";
 import * as Yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
 
 function Create(props) {
   const { id, tenPhim } = useParams();
@@ -51,17 +52,24 @@ function Create(props) {
       console.log("values", values);
       try {
         const result = await quanLyPhimService.taoLichChieuPhim(values);
-        console.log("result", result);
-        formik.resetForm();
-        alert("Tạo lịch chiếu thành công");
-        window.location.reload();
+        // console.log("result", result);
+        if (result) {
+          toast.success("Tạo lịch chiếu thành công", {
+            position: "top-center",
+            onClose: () => {
+              formik.resetForm();
+              window.location.reload();
+            },
+          });
+        }
       } catch (e) {
         if (e.response.status === 400) {
-          alert("Trùng lịch chiếu");
+          // console.log("trùng lịch chiếu");
+          toast.error("Trùng lịch chiếu", { position: "top-center" });
         } else {
-          alert("Tạo lịch chiếu thất bại");
-          console.log("ERROR 500:", e.message);
+          toast.error("Tạo lịch chiếu thất bại", { position: "top-center" });
         }
+        console.log("ERROR 500:", e.message);
       }
     },
   });
@@ -196,6 +204,7 @@ function Create(props) {
           style={{ width: "500px", height: "400px" }}
         ></img>
       </div>
+      <ToastContainer />
     </div>
   );
 }

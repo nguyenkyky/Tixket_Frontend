@@ -18,6 +18,7 @@ import { quanLyPhimService } from "../../../services/QuanLyPhimService";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import dayjs from "dayjs";
 import moment from "moment-timezone";
+import { ToastContainer, toast } from "react-toastify";
 
 dayjs.extend(advancedFormat);
 
@@ -68,7 +69,9 @@ function Calendar(props) {
         lichChieu: result.data,
       });
     } else {
-      alert("Vui lòng chọn đúng cụm rạp");
+      toast.warning("Vui lòng chọn đầy đủ thông tin", {
+        position: "top-center",
+      });
     }
   };
 
@@ -244,6 +247,7 @@ function Calendar(props) {
       </div>
 
       <div className="mt-10">{renderLichChieu()}</div>
+      <ToastContainer />
     </div>
   );
 }

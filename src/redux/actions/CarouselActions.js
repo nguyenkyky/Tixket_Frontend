@@ -23,9 +23,9 @@ export const saveDanhSachBannerAction = (data) => {
   return async (dispatch) => {
     try {
       const result = await quanLyPhimService.saveDanhSachBanner(data);
-      dispatch(getCarouselAction);
+      // dispatch(getCarouselAction);
     } catch (errors) {
-      console.log("errors", errors);
+      throw errors;
     }
   };
 };

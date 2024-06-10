@@ -48,6 +48,9 @@ export class QuanLyNguoiDungService extends baseService {
   kiemTraDangNhap = () => {
     return this.post(`api/QuanLyNguoiDung/kiemTraDangNhap`);
   };
+  kiemtraAdmin = () => {
+    return this.post(`api/QuanLyNguoiDung/kiemTraAdmin`);
+  };
 }
 
 export const quanLyNguoiDungService = new QuanLyNguoiDungService();

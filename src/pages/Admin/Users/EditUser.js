@@ -6,11 +6,13 @@ import { useSelector } from "react-redux";
 import {
   chiTietNguoiDungAction,
   capNhatThongTinNguoiDungAction,
+  layThongTinAllNguoiDungAction,
 } from "../../../redux/actions/QuanLyNguoiDungAction";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Form, Input, InputNumber, Switch } from "antd";
 import { useFormik } from "formik";
 import moment from "moment";
+import { ToastContainer, toast } from "react-toastify";
 
 function EditUser(props) {
   const { detailUser } = useSelector((state) => state.QuanLyNguoiDungReducer);
@@ -34,9 +36,20 @@ function EditUser(props) {
       maLoaiNguoiDung: detailUser.maLoaiNguoiDung,
       hoTen: detailUser.hoTen,
     },
-    onSubmit: (values) => {
-      console.log(values);
-      dispatch(capNhatThongTinNguoiDungAction(values, navigate));
+    onSubmit: async (values) => {
+      try {
+        console.log(values);
+        await dispatch(capNhatThongTinNguoiDungAction(values, navigate));
+        toast.success("Cập nhật thông tin người dùng thành công", {
+          position: "top-center",
+          onClose: () => {
+            dispatch(layThongTinAllNguoiDungAction());
+            navigate("/admin/users");
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
   return (
@@ -115,6 +128,7 @@ function EditUser(props) {
           Hoàn tất
         </button>
       </Form>
+      <ToastContainer />
     </div>
   );
 }

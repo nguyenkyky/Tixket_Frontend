@@ -49,9 +49,18 @@ function Films(props) {
       okText: "Đồng ý",
       okType: "danger",
       cancelText: "Hủy",
-      onOk: () => {
-        dispatch(xoaPhimAction(film.maPhim));
-        toast.success(`Đã xóa phim ${film.tenPhim} thành công!`);
+      onOk: async () => {
+        try {
+          dispatch(xoaPhimAction(film.maPhim));
+          toast.success(`Đã xóa phim ${film.tenPhim} thành công!`, {
+            position: "top-center",
+            onClose: () => {
+              dispatch(layDanhSachPhimAction());
+            },
+          });
+        } catch (errors) {
+          console.log("errors", errors);
+        }
       },
     });
   };

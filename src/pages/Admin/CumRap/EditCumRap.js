@@ -14,9 +14,13 @@ import {
 } from "antd";
 import { quanLyRapService } from "../../../services/QuanLyRapService";
 import { useFormik } from "formik";
-import { capNhatThongTinCumRapAction } from "../../../redux/actions/QuanLyRapActions";
+import {
+  capNhatThongTinCumRapAction,
+  layDanhSachHeThongRapAction,
+} from "../../../redux/actions/QuanLyRapActions";
 import moment from "moment";
 import * as Yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
 
 function EditCumRap(props) {
   const navigate = useNavigate();
@@ -90,10 +94,21 @@ function EditCumRap(props) {
     },
     validationSchema: validationSchema,
 
-    onSubmit: (values) => {
-      console.log(values);
-      const action = capNhatThongTinCumRapAction(values, navigate);
-      dispatch(action);
+    onSubmit: async (values) => {
+      try {
+        console.log(values);
+        const action = capNhatThongTinCumRapAction(values, navigate);
+        await dispatch(action);
+        toast.success("Cập nhật thông tin cụm rạp thành công", {
+          position: "top-center",
+          onClose: () => {
+            dispatch(layDanhSachHeThongRapAction());
+            navigate("/admin/cumrap");
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
   return (
@@ -268,6 +283,7 @@ function EditCumRap(props) {
           Hoàn tất
         </button>
       </Form>
+      <ToastContainer />
     </div>
   );
 }

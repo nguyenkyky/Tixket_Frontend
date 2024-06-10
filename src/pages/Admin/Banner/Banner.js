@@ -2,8 +2,13 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Form, Input, Popconfirm, Table } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { quanLyPhimService } from "../../../services/QuanLyPhimService";
-import { saveDanhSachBannerAction } from "../../../redux/actions/CarouselActions";
+import {
+  saveDanhSachBannerAction,
+  getCarouselAction,
+} from "../../../redux/actions/CarouselActions";
 import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+
 const EditableContext = React.createContext(null);
 
 const EditableRow = ({ index, ...props }) => {
@@ -203,11 +208,20 @@ const Banner = () => {
     };
   });
 
-  const handleComplete = () => {
-    console.log(dataSource);
-    const action = saveDanhSachBannerAction(dataSource);
-    dispatch(action);
-    alert("Cập nhật thành công");
+  const handleComplete = async () => {
+    try {
+      console.log(dataSource);
+      const action = saveDanhSachBannerAction(dataSource);
+      await dispatch(action);
+      toast.success("Cập nhật thành công", {
+        position: "top-center",
+        onClose: () => {
+          dispatch(getCarouselAction);
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -233,6 +247,7 @@ const Banner = () => {
           <p className="text-xl">Hoàn tất</p>
         </Button>
       </div>
+      <ToastContainer />
     </div>
   );
 };

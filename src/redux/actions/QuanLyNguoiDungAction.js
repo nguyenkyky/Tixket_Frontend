@@ -16,13 +16,7 @@ export const dangNhapAction = (thongTinDangNhap, navigate) => {
         navigate("/home");
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        alert("Tài khoản không tồn tại");
-      }
-      if (error.response.status === 400) {
-        alert("Mật khẩu không chính xác");
-      }
-      console.log("error", error.response.data);
+      throw error;
     }
   };
 };
@@ -45,18 +39,10 @@ export const dangKyAction = (thongTinDangKy, navigate) => {
     try {
       const result = await quanLyNguoiDungService.dangKy(thongTinDangKy);
       if (result) {
-        alert("Đăng ký thành công");
-        navigate("/login");
+        return result;
       }
-    } catch (error) {
-      if (error.response.status === 402) {
-        alert("Username already exists");
-      }
-      if (error.response.status === 400) {
-        alert("Passwords do not match");
-      } else {
-        console.log("error", error.response.data);
-      }
+    } catch (errors) {
+      throw errors;
     }
   };
 };
@@ -73,12 +59,7 @@ export const layThongTinDatVe = () => {
         });
       }
     } catch (error) {
-      if (error.response.status === 403) {
-        alert("Vui lòng đăng nhập");
-        localStorage.removeItem("USER_LOGIN");
-        localStorage.removeItem("accessToken");
-      }
-      console.log("error", error.response.data);
+      throw error;
     }
   };
 };
@@ -136,13 +117,8 @@ export const capNhatThongTinNguoiDungAction = (values, navigate) => {
       const result = await quanLyNguoiDungService.capNhatThongTinNguoiDung(
         values
       );
-      if (result) {
-        alert("Cập nhật thông tin người dùng thành công");
-        dispatch(layThongTinAllNguoiDungAction());
-        navigate("/admin/users");
-      }
     } catch (errors) {
-      console.log("errors", errors);
+      throw errors;
     }
   };
 };
@@ -173,12 +149,8 @@ export const resetPasswordAction = (values, navigate) => {
   return async (dispatch) => {
     try {
       const result = await quanLyNguoiDungService.resetPassword(values);
-      if (result) {
-        alert("Đặt lại mật khẩu thành công");
-        navigate("/login");
-      }
     } catch (errors) {
-      console.log("errors", errors);
+      throw errors;
     }
   };
 };
@@ -213,7 +185,23 @@ export const kiemTraDangNhapAction = () => {
           type: "DANG_XUAT_ACTION",
         });
       }
-      console.log("error", error);
+
+      // console.log("error", error);
+    }
+  };
+};
+
+export const kiemTraAdminAction = () => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.kiemTraAdmin();
+    } catch (error) {
+      if (error.response.status === 403) {
+        dispatch({
+          type: "DANG_XUAT_ACTION",
+        });
+      }
+      throw error;
     }
   };
 };

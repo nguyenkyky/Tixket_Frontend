@@ -6,9 +6,13 @@ import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Form, Input, InputNumber, Switch } from "antd";
 import { quanLyRapService } from "../../../services/QuanLyRapService";
 import { useFormik } from "formik";
-import { capNhatThongTinHeThongRapAction } from "../../../redux/actions/QuanLyRapActions";
+import {
+  capNhatThongTinHeThongRapAction,
+  layDanhSachHeThongRapAction,
+} from "../../../redux/actions/QuanLyRapActions";
 import moment from "moment";
 import * as Yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
 
 function EditHeThongRap(props) {
   const navigate = useNavigate();
@@ -42,10 +46,21 @@ function EditHeThongRap(props) {
       logo: heThongRap?.logo,
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-      const action = capNhatThongTinHeThongRapAction(values, navigate);
-      dispatch(action);
+    onSubmit: async (values) => {
+      try {
+        console.log(values);
+        const action = capNhatThongTinHeThongRapAction(values, navigate);
+        await dispatch(action);
+        toast.success("Cập nhật thông tin hệ thống rạp thành công", {
+          position: "top-center",
+          onClose: () => {
+            dispatch(layDanhSachHeThongRapAction());
+            navigate("/admin/cumrap");
+          },
+        });
+      } catch (error) {
+        console.log("errors", error);
+      }
     },
   });
   return (
@@ -113,6 +128,7 @@ function EditHeThongRap(props) {
           Hoàn tất
         </button>
       </Form>
+      <ToastContainer />
     </div>
   );
 }

@@ -32,7 +32,9 @@ function NewsManage(props) {
       cancelText: "Hủy",
       onOk: async () => {
         const result = await quanLyTinTucService.deleteNews(maTinTuc);
-        toast.success(`Đã xóa bài viết thành công!`);
+        toast.success(`Đã xóa bài viết thành công!`, {
+          position: "top-center",
+        });
       },
     });
   };

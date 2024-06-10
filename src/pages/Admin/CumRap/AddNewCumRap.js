@@ -14,9 +14,13 @@ import {
 } from "antd";
 import { quanLyRapService } from "../../../services/QuanLyRapService";
 import { useFormik } from "formik";
-import { addCumRapAction } from "../../../redux/actions/QuanLyRapActions";
+import {
+  addCumRapAction,
+  layDanhSachHeThongRapAction,
+} from "../../../redux/actions/QuanLyRapActions";
 import moment from "moment";
 import * as Yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
 
 function AddNewCumRap(props) {
   const navigate = useNavigate();
@@ -63,10 +67,21 @@ function AddNewCumRap(props) {
       banner: [],
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-      const action = addCumRapAction(values, navigate);
-      dispatch(action);
+    onSubmit: async (values) => {
+      try {
+        console.log(values);
+        const action = addCumRapAction(values, navigate);
+        await dispatch(action);
+        toast.success("Thêm cụm rạp thành công", {
+          position: "top-center",
+          onClose: () => {
+            navigate("/admin/cumrap");
+          },
+        });
+        dispatch(layDanhSachHeThongRapAction());
+      } catch (errors) {
+        console.log("errors", errors);
+      }
     },
   });
   return (
@@ -203,6 +218,7 @@ function AddNewCumRap(props) {
           </button>
         </Form>
       </div>
+      <ToastContainer />
     </div>
   );
 }
