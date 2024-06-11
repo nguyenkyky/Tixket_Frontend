@@ -47,6 +47,7 @@ function RenderCheckout(props) {
     danhSachGheKhachDangDat,
     gheDaDuocNguoiKhacDat,
   } = useSelector((state) => state.QuanLyDatVeReducer);
+  console.log("ds ghe dang dat", danhSachGheDangDat)
 
   const [orderId, setOrderId] = useState();
   const dispatch = useDispatch();
@@ -157,6 +158,7 @@ function RenderCheckout(props) {
 
   const clearGhe = function (event) {
     connection.invoke("huyDat", userLogin.taiKhoan);
+    dispatch({type:"HOAN_TAT_DAT_VE"})
   };
 
   const { thongTinPhim, danhSachGhe } = chiTietPhongVe;

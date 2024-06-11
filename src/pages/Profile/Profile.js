@@ -27,6 +27,7 @@ import * as Yup from "yup";
 export default function Profile() {
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
   // console.log(userLogin);
+  const [previewUrl,setPreviewUrl] = useState(null);
   const navigate = useNavigate();
   const [user, setUser] = useState();
   const [data, setData] = useState([]);
@@ -56,6 +57,16 @@ export default function Profile() {
     setIsModalTicketVisible(true);
   };
   // console.log(thongTinDatVe);
+
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewUrl(previewUrl);
+    }
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -307,6 +318,10 @@ export default function Profile() {
                       className="flex w-7/12 mt-10"
                     >
                       <div className="w-full lg:w-1/2">
+                        <div>
+                          <input type="file" onChange={handleFileChange} />
+                          {previewUrl && <img src={previewUrl} alt="Preview" />}
+                        </div>
                         <Form.Item
                           label="Username *"
                           validateStatus={
