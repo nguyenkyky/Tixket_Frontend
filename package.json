@@ -17,6 +17,7 @@
     "@types/history": "^4.7.11",
     "antd": "^5.18.0",
     "axios": "^1.6.8",
+    "cloudinary-react": "^1.8.1",
     "craco": "^0.0.3",
     "dayjs": "^1.11.11",
     "formik": "^2.4.6",

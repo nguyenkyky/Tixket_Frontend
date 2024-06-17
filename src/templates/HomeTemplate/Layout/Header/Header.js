@@ -1,17 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { HashLink } from "react-router-hash-link";
 import { dangXuatAction } from "../../../../redux/actions/QuanLyNguoiDungAction";
 import "./style.css";
+import { DownOutlined } from "@ant-design/icons";
+import { Dropdown, Space, Menu } from "antd";
+import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
+import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
+import { layThongTinDatVe } from "../../../../redux/actions/QuanLyNguoiDungAction";
+import { layDanhSachHeThongRapAction } from "../../../../redux/actions/QuanLyRapActions";
 
 export default function Header(props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNotificationsRead, setIsNotificationsRead] = useState(true);
+  const [readNotifications, setReadNotifications] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = JSON.parse(localStorage.getItem("USER_LOGIN"));
   const dropdownRef = useRef(null);
+  const [data, setData] = useState([]);
+  const [notifications, setNotifications] = useState([]);
 
   // Hàm để đóng menu khi click ra bên ngoài
   const handleClickOutside = (event) => {
@@ -20,6 +30,33 @@ export default function Header(props) {
     }
   };
 
+  // const items = [
+  //   {
+  //     label: <a href="https://www.antgroup.com">1st menu item</a>,
+  //     key: "0",
+  //   },
+  //   {
+  //     label: <a href="https://www.aliyun.com">2nd menu item</a>,
+  //     key: "1",
+  //   },
+  //   {
+  //     type: "divider",
+  //   },
+  //   {
+  //     label: "3rd menu item",
+  //     key: "3",
+  //   },
+  // ];
+
+  // const items = notifications;
+
+  // console.log("item", items);
+  // console.log("notifications", notifications);
+
+  const { thongTinDatVe } = useSelector(
+    (state) => state.QuanLyNguoiDungReducer
+  );
+  // console.log("thongTinDatVe", thongTinDatVe);
   useEffect(() => {
     // Thêm event listener để đóng menu khi click ra bên ngoài
     document.addEventListener("mousedown", handleClickOutside);
@@ -28,6 +65,23 @@ export default function Header(props) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    if (thongTinDatVe) {
+      const dataWithKey = thongTinDatVe.thongTinDatVe?.map((ticket, index) => ({
+        ...ticket,
+        key: ticket.orderId,
+      }));
+      setData(dataWithKey);
+    }
+  }, [thongTinDatVe]);
+
+  const { heThongRapChieu } = useSelector((state) => state.QuanLyRapReducer);
+  // console.log("heThongRapChieu", heThongRapChieu);
+  // console.log("data", data);
+
+  // useEffect(() => {
+  //   checkShowtimeNotifications();
+  // }, [data]);
 
   return (
     <header
@@ -97,21 +151,23 @@ export default function Header(props) {
         <div className="items-center flex-shrink-0 hidden lg:flex">
           {userInfo ? (
             <div ref={dropdownRef}>
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)} // Toggle menu
-                id="dropdownAvatarNameButton"
-                data-dropdown-toggle="dropdownAvatarName"
-                className="flex items-center text-sm pe-1 font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:me-0 focus:ring-0 focus:ring-gray-100 dark:focus:ring-0 dark:text-white"
-                type="button"
-              >
-                <span className="sr-only">Open user menu</span>
-                <img
-                  className="w-10 h-10 me-2 rounded-full"
-                  src={userInfo.avatar}
-                  alt="user photo"
-                />
-                <p className="text-black text-xl">{userInfo.hoTen}</p>
-              </button>
+              <div className="flex items-center">
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)} // Toggle menu
+                  id="dropdownAvatarNameButton"
+                  data-dropdown-toggle="dropdownAvatarName"
+                  className="flex items-center text-sm pe-1 font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:me-0 focus:ring-0 focus:ring-gray-100 dark:focus:ring-0 dark:text-white"
+                  type="button"
+                >
+                  <span className="sr-only">Open user menu</span>
+                  <img
+                    className="w-10 h-10 me-2 rounded-full"
+                    src={userInfo.avatar}
+                    alt="user photo"
+                  />
+                  <p className="text-black text-xl">{userInfo.hoTen}</p>
+                </button>
+              </div>
               {isMenuOpen && (
                 <div
                   id="dropdownAvatarName"

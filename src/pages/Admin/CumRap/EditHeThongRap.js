@@ -59,6 +59,11 @@ function EditHeThongRap(props) {
           },
         });
       } catch (error) {
+        if (error.response.status === 400) {
+          toast.error("Trùng mã hệ thống rạp", {
+            position: "top-center",
+          });
+        }
         console.log("errors", error);
       }
     },

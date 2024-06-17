@@ -4,30 +4,30 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-
 import TabPanel from "@mui/lab/TabPanel";
 import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Form, Input, Modal, Table } from "antd";
-import { CheckCircleTwoTone, CloseOutlined } from "@ant-design/icons";
-import { quanLyNguoiDungService } from "../../services/QuanLyNguoiDung";
+import { CloseOutlined } from "@ant-design/icons";
 import { toast, ToastContainer } from "react-toastify";
 import {
   layThongTinDatVe,
   capNhatThongTinAction,
 } from "../../redux/actions/QuanLyNguoiDungAction";
+import { quanLyNguoiDungService } from "../../services/QuanLyNguoiDung";
 import "react-toastify/dist/ReactToastify.css";
 import "./style.css";
 import _ from "lodash";
 import moment from "moment";
 import { Pagination } from "antd";
 import * as Yup from "yup";
+import { uploadImageToCloudinary } from "../../services/uploadImage";
 
 export default function Profile() {
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-  // console.log(userLogin);
-  const [previewUrl,setPreviewUrl] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [uploading, setUploading] = useState(false); // for showing loading state
   const navigate = useNavigate();
   const [user, setUser] = useState();
   const [data, setData] = useState([]);
@@ -44,29 +44,35 @@ export default function Profile() {
     confirmNewPassword: "",
   });
 
-  console.log(passwords);
-
   const dispatch = useDispatch();
   const { thongTinDatVe } = useSelector(
     (state) => state.QuanLyNguoiDungReducer
   );
 
   const handleShowDetailTicket = (ticket) => {
-    console.log(ticket);
     setDetailTicket(ticket);
     setIsModalTicketVisible(true);
   };
-  // console.log(thongTinDatVe);
 
-
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       setPreviewUrl(previewUrl);
+
+      // Upload to Cloudinary
+      setUploading(true);
+      try {
+        const response = await uploadImageToCloudinary(file);
+        formik.setFieldValue("avatar", response.secure_url);
+        toast.success("Upload ảnh thành công!");
+      } catch (error) {
+        toast.error("Có lỗi xảy ra khi upload ảnh. Vui lòng thử lại.");
+      } finally {
+        setUploading(false);
+      }
     }
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -187,21 +193,18 @@ export default function Profile() {
   };
 
   const handleOk = async () => {
-    console.log(passwords);
     const { currentPassword, newPassword, confirmNewPassword } = passwords;
 
-    // Kiểm tra mật khẩu mới không được giống mật khẩu hiện tại
     if (currentPassword === newPassword) {
       toast.error("Mật khẩu mới không được giống mật khẩu hiện tại!");
       return;
     }
 
-    // Kiểm tra xác nhận mật khẩu mới phải khớp với mật khẩu mới
     if (newPassword !== confirmNewPassword) {
       toast.error("Xác nhận mật khẩu mới không khớp!");
       return;
     }
-    // Nếu các kiểm tra đều hợp lệ, tiến hành gọi API
+
     try {
       const result = await quanLyNguoiDungService.doiMatKhau(passwords);
       if (result) {
@@ -219,7 +222,7 @@ export default function Profile() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    setIsModalTicketVisible(false); //
+    setIsModalTicketVisible(false);
   };
 
   const handlePasswordChange = (e) => {
@@ -235,7 +238,6 @@ export default function Profile() {
     hoTen: Yup.string().required("Họ tên là bắt buộc"),
     avatar: Yup.string().required("Avatar là bắt buộc"),
     soDT: Yup.string().required("Số điện thoại là bắt buộc"),
-
     email: Yup.string()
       .required("Email là bắt buộc")
       .matches(
@@ -262,7 +264,6 @@ export default function Profile() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        console.log(values);
         const result = await dispatch(capNhatThongTinAction(values));
         let userLogin = JSON.parse(localStorage.getItem("USER_LOGIN"));
         userLogin.taiKhoan = values.newTaiKhoan;
@@ -303,12 +304,8 @@ export default function Profile() {
               >
                 <Form
                   onSubmitCapture={formik.handleSubmit}
-                  labelCol={{
-                    span: 12,
-                  }}
-                  wrapperCol={{
-                    span: 14,
-                  }}
+                  labelCol={{ span: 12 }}
+                  wrapperCol={{ span: 14 }}
                   layout="vertical"
                   style={{ display: "flex", flexDirection: "column" }}
                 >
@@ -318,10 +315,34 @@ export default function Profile() {
                       className="flex w-7/12 mt-10"
                     >
                       <div className="w-full lg:w-1/2">
-                        <div>
-                          <input type="file" onChange={handleFileChange} />
-                          {previewUrl && <img src={previewUrl} alt="Preview" />}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginBottom: "16px",
+                          }}
+                        >
+                          {formik.values.avatar && (
+                            <img
+                              src={formik.values.avatar}
+                              alt="Current Avatar"
+                              className="avatar-preview"
+                            />
+                          )}
+                          <label
+                            htmlFor="file-upload"
+                            className="custom-file-upload"
+                          >
+                            Chọn tệp
+                          </label>
+                          <input
+                            id="file-upload"
+                            type="file"
+                            className="file-input"
+                            onChange={handleFileChange}
+                          />
                         </div>
+                        {uploading && <p>Uploading...</p>}
                         <Form.Item
                           label="Username *"
                           validateStatus={
@@ -351,7 +372,8 @@ export default function Profile() {
                             value={formik.values.hoTen}
                           />
                         </Form.Item>
-
+                      </div>
+                      <div className="w-full lg:w-1/2">
                         <Form.Item
                           label="Email *"
                           validateStatus={
@@ -366,8 +388,6 @@ export default function Profile() {
                             value={formik.values.email}
                           />
                         </Form.Item>
-                      </div>
-                      <div className="w-full lg:w-1/2">
                         <Form.Item
                           label="Số điện thoại *"
                           validateStatus={
@@ -382,13 +402,7 @@ export default function Profile() {
                             value={formik.values.soDT}
                           />
                         </Form.Item>
-                        <Form.Item label="Avatar">
-                          <Input
-                            name="avatar"
-                            onChange={formik.handleChange}
-                            value={formik.values.avatar}
-                          />
-                        </Form.Item>
+
                         <Form.Item label="Tích lũy">
                           <Input
                             name="tongChiTieu"
@@ -421,22 +435,18 @@ export default function Profile() {
                 </Form>
               </div>
             </TabPanel>
-
             <TabPanel value="2">
               <div className="container px-5 py-12 mx-auto">
                 <Table
                   columns={columns}
                   dataSource={data}
-                  showSorterTooltip={{
-                    target: "sorter-icon",
-                  }}
+                  showSorterTooltip={{ target: "sorter-icon" }}
                 />
               </div>
             </TabPanel>
           </TabContext>
         </Box>
       </div>
-
       <Modal
         className="modal-change-password"
         title="Đổi mật khẩu"
@@ -501,7 +511,6 @@ export default function Profile() {
         onCancel={handleCancel}
         footer={null}
         centered
-        // closeIcon={false}
         closeIcon={<CloseOutlined style={{}} />}
       >
         <div className="modal-ticket-detail">
@@ -527,7 +536,6 @@ export default function Profile() {
                         </p>
                       </div>
                     </div>
-
                     <div className="mb-4">
                       <iframe
                         src={detailTicket?.map}

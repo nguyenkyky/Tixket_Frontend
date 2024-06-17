@@ -107,6 +107,11 @@ function EditCumRap(props) {
           },
         });
       } catch (error) {
+        if (error.response.status === 400) {
+          toast.error("Trùng mã cụm rạp", {
+            position: "top-center",
+          });
+        }
         console.log(error);
       }
     },

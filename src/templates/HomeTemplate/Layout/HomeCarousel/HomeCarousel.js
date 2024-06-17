@@ -8,8 +8,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import "react-multi-carousel/lib/styles.css";
-
 function HomeCarousel(props) {
   const { arrImg } = useSelector((state) => state.CarouselReducer);
   const dispatch = useDispatch();

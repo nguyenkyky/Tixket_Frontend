@@ -41,7 +41,10 @@ function RenderKetQuaDatVe() {
       if (thongTinDatVe) {
         dispatch(datVeAction(thongTinDatVe));
         localStorage.removeItem("THONG_TIN_DAT_VE");
-        if (userLogin.tongChiTieu + thongTinDatVe.tongTien > 10000000) {
+        if (
+          userLogin.tongChiTieu + thongTinDatVe.tongTien > 10000000 &&
+          userLogin.maLoaiNguoiDung === "KhachHang"
+        ) {
           const taiKhoanSetVip = userLogin.taiKhoan;
           dispatch(setVipAction({ taiKhoanSetVip }));
 
@@ -119,7 +122,12 @@ function RenderKetQuaDatVe() {
                 </p>
               </div>
             </div>
-            <button className="bg-black text-white px-4 py-2 rounded mt-4">
+            <button
+              onClick={() => {
+                navigate("/home");
+              }}
+              className="bg-black text-white px-4 py-2 rounded mt-4"
+            >
               Trang chủ
             </button>
           </div>

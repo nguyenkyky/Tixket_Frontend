@@ -80,6 +80,11 @@ function AddNewCumRap(props) {
         });
         dispatch(layDanhSachHeThongRapAction());
       } catch (errors) {
+        if (errors.response.status === 400) {
+          toast.error("Trùng mã cụm rạp", {
+            position: "top-center",
+          });
+        }
         console.log("errors", errors);
       }
     },
