@@ -233,19 +233,6 @@ export default function Profile() {
     }));
   };
 
-  const validationSchema = Yup.object({
-    newTaiKhoan: Yup.string().required("Tài khoản rạp là bắt buộc"),
-    hoTen: Yup.string().required("Họ tên là bắt buộc"),
-    avatar: Yup.string().required("Avatar là bắt buộc"),
-    soDT: Yup.string().required("Số điện thoại là bắt buộc"),
-    email: Yup.string()
-      .required("Email là bắt buộc")
-      .matches(
-        /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
-        "Email phải có đuôi @gmail.com"
-      ),
-  });
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -255,27 +242,29 @@ export default function Profile() {
       avatar: userLogin?.avatar,
       taiKhoan: userLogin?.taiKhoan,
       newTaiKhoan: userLogin?.taiKhoan,
+      newEmail: userLogin?.email,
       tongChiTieu: userLogin?.tongChiTieu,
       maLoaiNguoiDung:
         userLogin?.maLoaiNguoiDung === "KhachHang"
           ? "Khách Hàng"
           : userLogin?.maLoaiNguoiDung,
     },
-    validationSchema: validationSchema,
+
     onSubmit: async (values) => {
       try {
+        console.log(values);
         const result = await dispatch(capNhatThongTinAction(values));
         let userLogin = JSON.parse(localStorage.getItem("USER_LOGIN"));
         userLogin.taiKhoan = values.newTaiKhoan;
         userLogin.hoTen = values.hoTen;
-        userLogin.email = values.email;
+        userLogin.email = values.newEmail;
         userLogin.soDT = values.soDT;
         userLogin.avatar = values.avatar;
         localStorage.setItem("USER_LOGIN", JSON.stringify(userLogin));
         toast.success("Cập nhật thông tin người dùng thành công!");
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          toast.error("Tên tài khoản đã tồn tại!");
+          toast.error(error.response.data.message);
         } else {
           toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
         }
@@ -343,29 +332,14 @@ export default function Profile() {
                           />
                         </div>
                         {uploading && <p>Uploading...</p>}
-                        <Form.Item
-                          label="Username *"
-                          validateStatus={
-                            formik.errors.newTaiKhoan &&
-                            formik.touched.newTaiKhoan
-                              ? "error"
-                              : ""
-                          }
-                        >
+                        <Form.Item label="Username *">
                           <Input
                             name="newTaiKhoan"
                             onChange={formik.handleChange}
                             value={formik.values.newTaiKhoan}
                           />
                         </Form.Item>
-                        <Form.Item
-                          label="Họ tên *"
-                          validateStatus={
-                            formik.errors.hoTen && formik.touched.hoTen
-                              ? "error"
-                              : ""
-                          }
-                        >
+                        <Form.Item label="Họ tên *">
                           <Input
                             name="hoTen"
                             onChange={formik.handleChange}
@@ -374,28 +348,14 @@ export default function Profile() {
                         </Form.Item>
                       </div>
                       <div className="w-full lg:w-1/2">
-                        <Form.Item
-                          label="Email *"
-                          validateStatus={
-                            formik.errors.email && formik.touched.email
-                              ? "error"
-                              : ""
-                          }
-                        >
+                        <Form.Item label="Email *">
                           <Input
-                            name="email"
+                            name="newEmail"
                             onChange={formik.handleChange}
-                            value={formik.values.email}
+                            value={formik.values.newEmail}
                           />
                         </Form.Item>
-                        <Form.Item
-                          label="Số điện thoại *"
-                          validateStatus={
-                            formik.errors.soDT && formik.touched.soDT
-                              ? "error"
-                              : ""
-                          }
-                        >
+                        <Form.Item label="Số điện thoại *">
                           <Input
                             name="soDT"
                             onChange={formik.handleChange}

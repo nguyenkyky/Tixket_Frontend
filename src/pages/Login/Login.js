@@ -87,6 +87,7 @@ function Login(props) {
                   Tài khoản
                 </div>
                 <input
+                  required
                   name="taiKhoan"
                   onChange={formik.handleChange}
                   className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
@@ -109,6 +110,7 @@ function Login(props) {
                   </div>
                 </div>
                 <input
+                  required
                   name="matKhau"
                   onChange={formik.handleChange}
                   className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
