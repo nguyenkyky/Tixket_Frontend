@@ -81,7 +81,7 @@ export default function Profile() {
         await dispatch(action);
       } catch (error) {
         if (error.response && error.response.status === 403) {
-          navigate("/login");
+          // navigate("/login");
         }
         console.log("error", error);
       }
@@ -609,19 +609,13 @@ export default function Profile() {
                       <div className="flex items-center justify-between mt-4">
                         <p className="text-base font-semibold ">Giá vé</p>
                         <p className="text-base">
-                          {(
-                            (parseInt(detailTicket?.giaVe) * 100) /
-                            85
-                          ).toLocaleString()}{" "}
-                          đ
+                          {detailTicket?.giaVe?.toLocaleString()} đ
                         </p>
                       </div>
                       <div className="flex items-center justify-between mt-4">
                         <p className="text-base font-semibold ">Khuyến mãi</p>
                         <p className="text-base">
-                          {userLogin?.maLoaiNguoiDung === "KhachHang"
-                            ? 0
-                            : "15%"}
+                          {detailTicket?.khuyenMai?.toLocaleString()} %
                         </p>
                       </div>
                     </div>
@@ -629,15 +623,7 @@ export default function Profile() {
                       <div className="flex items-center justify-between mt-4">
                         <p className="text-base font-semibold ">Tổng cộng</p>
                         <p className="text-base">
-                          {userLogin?.maLoaiNguoiDung === "KhachHang"
-                            ? (
-                                (parseInt(detailTicket?.giaVe) * 100) /
-                                85
-                              ).toLocaleString()
-                            : parseInt(
-                                detailTicket?.giaVe
-                              ).toLocaleString()}{" "}
-                          đ
+                          {detailTicket?.tongTien?.toLocaleString()} đ
                         </p>
                       </div>
                     </div>

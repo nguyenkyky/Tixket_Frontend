@@ -32,8 +32,22 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
       return { ...state, userLogin: thongTinDangNhap };
     }
 
+    case "FIREBASE_LOGIN": {
+      const { thongTinDangNhap } = action;
+      localStorage.setItem(USER_LOGIN, JSON.stringify(thongTinDangNhap.user));
+      localStorage.setItem(TOKEN, thongTinDangNhap.accessToken);
+      setTimeout(() => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("USER_LOGIN");
+
+        console.log("Token has been removed");
+      }, 10800000);
+      return { ...state, userLogin: thongTinDangNhap };
+    }
+
     case "DANG_XUAT_ACTION": {
-      localStorage.clear();
+      // localStorage.clear();
+      localStorage.removeItem("USER_LOGIN");
       return { ...state };
     }
 

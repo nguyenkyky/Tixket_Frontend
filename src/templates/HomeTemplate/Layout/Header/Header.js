@@ -11,6 +11,7 @@ import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsAct
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
 import { layThongTinDatVe } from "../../../../redux/actions/QuanLyNguoiDungAction";
 import { layDanhSachHeThongRapAction } from "../../../../redux/actions/QuanLyRapActions";
+import { logo } from "../../../../assets/image/logo.png";
 
 export default function Header(props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

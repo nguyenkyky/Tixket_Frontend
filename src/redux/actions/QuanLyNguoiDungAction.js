@@ -21,6 +21,25 @@ export const dangNhapAction = (thongTinDangNhap, navigate) => {
   };
 };
 
+export const firebaseLoginAction = (thongTinDangNhap, navigate) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyNguoiDungService.firebaseLogin(
+        thongTinDangNhap
+      );
+      if (result.status === 200) {
+        dispatch({
+          type: "FIREBASE_LOGIN",
+          thongTinDangNhap: result.data,
+        });
+        navigate("/home");
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+};
+
 export const dangXuatAction = (navigate) => {
   return async (dispatch) => {
     try {
@@ -182,7 +201,7 @@ export const kiemTraDangNhapAction = () => {
     } catch (error) {
       if (error.response.status === 403) {
         dispatch({
-          type: "DANG_XUAT_ACTION",
+          type: "DANG_XUAT_ACTIO",
         });
       }
 
@@ -198,7 +217,7 @@ export const kiemTraAdminAction = () => {
     } catch (error) {
       if (error.response.status === 403) {
         dispatch({
-          type: "DANG_XUAT_ACTION",
+          type: "DANG_XUAT_ACTIO",
         });
       }
       throw error;

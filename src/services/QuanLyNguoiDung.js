@@ -51,6 +51,9 @@ export class QuanLyNguoiDungService extends baseService {
   kiemtraAdmin = () => {
     return this.post(`api/QuanLyNguoiDung/kiemTraAdmin`);
   };
+  firebaseLogin = (token) => {
+    return this.post(`api/QuanLyNguoiDung/firebaseLogin`, token);
+  };
 }
 
 export const quanLyNguoiDungService = new QuanLyNguoiDungService();

@@ -296,6 +296,8 @@ const HomeMenu = () => {
                         );
                       }
 
+                      console.log(filteredMovies);
+
                       return {
                         label: dayjs(date).format("ddd D-M"),
                         key: `tab-${i + 1}`,

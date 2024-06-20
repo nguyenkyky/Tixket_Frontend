@@ -20,6 +20,7 @@
     "cloudinary-react": "^1.8.1",
     "craco": "^0.0.3",
     "dayjs": "^1.11.11",
+    "firebase": "^10.12.2",
     "formik": "^2.4.6",
     "history": "^4.10.1",
     "i18next": "^23.11.4",

@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 import { quanLyPhimService } from "../../../services/QuanLyPhimService";
 import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
+import dayjs from "dayjs";
 
 function Create(props) {
   const { id, tenPhim } = useParams();
@@ -107,6 +108,11 @@ function Create(props) {
     cumRapChieu: [],
   });
 
+  const disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < dayjs().startOf("day");
+  };
+
   useEffect(() => {
     async function fetchData() {
       const response = await quanLyRapService.layThongTinHeThongRap();
@@ -185,7 +191,13 @@ function Create(props) {
                 : ""
             }
           >
-            <DatePicker showWeek showTime onChange={onChangeDate} onOk={onOk} />
+            <DatePicker
+              disabledDate={disabledDate}
+              showWeek
+              showTime
+              onChange={onChangeDate}
+              onOk={onOk}
+            />
           </Form.Item>
           <Form.Item
             label="Giá vé *"

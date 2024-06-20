@@ -1,11 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useFormik } from "formik";
-import ColumnGroup from "antd/es/table/ColumnGroup";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { dangNhapAction } from "../../redux/actions/QuanLyNguoiDungAction";
+import {
+  dangNhapAction,
+  firebaseLoginAction,
+} from "../../redux/actions/QuanLyNguoiDungAction";
 import { ToastContainer, toast } from "react-toastify";
+import { auth, provider, signInWithPopup } from "../../util/firebase/firebase";
+import { quanLyNguoiDungService } from "../../services/QuanLyNguoiDung";
+import axios from "axios";
 
 Login.propTypes = {};
 
@@ -13,8 +18,6 @@ function Login(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-
-  // console.log("userlogin", userLogin);
 
   const formik = useFormik({
     initialValues: {
@@ -37,7 +40,20 @@ function Login(props) {
     },
   });
 
-  // console.log(formik);
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const token = await user.getIdToken();
+      await dispatch(firebaseLoginAction({ token: token }, navigate));
+
+      toast.success("Đăng nhập thành công!", { position: "top-center" });
+      navigate("/home");
+    } catch (error) {
+      console.log("errors", error);
+      toast.error("Đăng nhập thất bại", { position: "top-center" });
+    }
+  };
 
   return (
     <div className="lg:w-1/2 xl:max-w-screen-sm">
@@ -86,7 +102,7 @@ function Login(props) {
                     <a
                       href="/recover-password"
                       className="text-xs font-display font-semibold text-indigo-600 hover:text-indigo-800
-                                  cursor-pointer"
+                                cursor-pointer"
                     >
                       Quên mật khẩu?
                     </a>
@@ -103,10 +119,21 @@ function Login(props) {
               <div className="mt-10">
                 <button
                   className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
-                          font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
-                          shadow-lg"
+                        font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
+                        shadow-lg"
                 >
                   Đăng nhập
+                </button>
+              </div>
+              <div className="mt-4">
+                <button
+                  type="button"
+                  className="bg-red-500 text-gray-100 p-4 w-full rounded-full tracking-wide
+                        font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-red-600
+                        shadow-lg"
+                  onClick={handleGoogleSignIn}
+                >
+                  Đăng nhập bằng Google
                 </button>
               </div>
             </div>
