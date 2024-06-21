@@ -47,7 +47,7 @@ function RenderCheckout(props) {
     danhSachGheKhachDangDat,
     gheDaDuocNguoiKhacDat,
   } = useSelector((state) => state.QuanLyDatVeReducer);
-  console.log("ds ghe dang dat", danhSachGheDangDat)
+  // console.log("ds ghe dang dat", danhSachGheDangDat);
 
   const [orderId, setOrderId] = useState();
   const dispatch = useDispatch();
@@ -158,7 +158,7 @@ function RenderCheckout(props) {
 
   const clearGhe = function (event) {
     connection.invoke("huyDat", userLogin.taiKhoan);
-    dispatch({type:"HOAN_TAT_DAT_VE"})
+    dispatch({ type: "HOAN_TAT_DAT_VE" });
   };
 
   const { thongTinPhim, danhSachGhe } = chiTietPhongVe;
@@ -436,12 +436,13 @@ function RenderCheckout(props) {
                   thongTinDatVe.hinhAnh = thongTinPhim?.hinhAnh;
                   thongTinDatVe.giaVe = giaVe;
                   thongTinDatVe.khuyenMai =
-                    userLogin.maLoaiNguoiDung === "KhachHang" ? 0 : 15;
+                    userLogin?.maLoaiNguoiDung === "KhachHang" ? 0 : 15;
                   thongTinDatVe.tongTien = tongTien;
 
                   thongTinDatVe.map = thongTinPhim?.map;
-                  console.log("thongTinDatVe", thongTinDatVe);
-                  // dispatch(kiemTraDatVeAction(thongTinDatVe));
+                  // console.log("user", userLogin);
+                  // console.log("thongTinDatVe", thongTinDatVe);
+                  dispatch(kiemTraDatVeAction(thongTinDatVe));
                   dispatch(
                     createPaymentLinkAction(
                       tongTien,

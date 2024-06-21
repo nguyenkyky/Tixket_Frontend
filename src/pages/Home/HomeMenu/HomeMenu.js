@@ -199,9 +199,8 @@ const HomeMenu = () => {
                   <Tabs
                     type="card"
                     items={nextSevenDays.map((date, i) => {
-                      const filteredMovies = cumRap.danhSachPhim
-                        .slice(0, 6)
-                        .reduce((acc, phim, index) => {
+                      const filteredMovies = cumRap.danhSachPhim.reduce(
+                        (acc, phim, index) => {
                           const lichChieuPhuHop = filterExpiredShowtimes(
                             phim.lstLichChieuTheoPhim
                           )
@@ -285,7 +284,9 @@ const HomeMenu = () => {
                             acc.push(movieDetails);
                           }
                           return acc;
-                        }, []);
+                        },
+                        []
+                      );
 
                       if (filteredMovies.length === 0) {
                         filteredMovies.push(

@@ -20,6 +20,7 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
   switch (action.type) {
     case DANG_NHAP_ACTION: {
       const { thongTinDangNhap } = action;
+
       localStorage.setItem(USER_LOGIN, JSON.stringify(thongTinDangNhap));
       localStorage.setItem(TOKEN, thongTinDangNhap.accessToken);
       // localStorage.removeItem("accessToken");
@@ -34,6 +35,7 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
 
     case "FIREBASE_LOGIN": {
       const { thongTinDangNhap } = action;
+
       localStorage.setItem(USER_LOGIN, JSON.stringify(thongTinDangNhap.user));
       localStorage.setItem(TOKEN, thongTinDangNhap.accessToken);
       setTimeout(() => {
@@ -42,13 +44,11 @@ export const QuanLyNguoiDungReducer = (state = stateDefault, action) => {
 
         console.log("Token has been removed");
       }, 10800000);
-      return { ...state, userLogin: thongTinDangNhap };
+      return { ...state, userLogin: thongTinDangNhap.user };
     }
 
     case "DANG_XUAT_ACTION": {
-      // localStorage.clear();
-      localStorage.removeItem("USER_LOGIN");
-      return { ...state };
+      localStorage.clear();
     }
 
     case THONG_TIN_DAT_VE: {

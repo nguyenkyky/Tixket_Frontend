@@ -201,7 +201,7 @@ export const kiemTraDangNhapAction = () => {
     } catch (error) {
       if (error.response.status === 403) {
         dispatch({
-          type: "DANG_XUAT_ACTIO",
+          type: "DANG_XUAT_ACTION",
         });
       }
 
@@ -217,7 +217,7 @@ export const kiemTraAdminAction = () => {
     } catch (error) {
       if (error.response.status === 403) {
         dispatch({
-          type: "DANG_XUAT_ACTIO",
+          type: "DANG_XUAT_ACTION",
         });
       }
       throw error;
