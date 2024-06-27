@@ -249,6 +249,12 @@ export default function Profile() {
           ? "Khách Hàng"
           : userLogin?.maLoaiNguoiDung,
     },
+    validationSchema: Yup.object({
+      newTaiKhoan: Yup.string().required("Vui lòng nhập Username"),
+      hoTen: Yup.string().required("Vui lòng nhập Họ tên"),
+      email: Yup.string().required("Vui lòng nhập Email"),
+      soDT: Yup.string().required("Vui lòng nhập Số điện thoại"),
+    }),
 
     onSubmit: async (values) => {
       try {
@@ -332,14 +338,26 @@ export default function Profile() {
                           />
                         </div>
                         {uploading && <p>Uploading...</p>}
-                        <Form.Item label="Username *">
+                        <Form.Item
+                          label="Username"
+                          required
+                          validateStatus={
+                            formik.errors.newTaiKhoan ? "error" : ""
+                          }
+                          help={formik.errors.newTaiKhoan}
+                        >
                           <Input
                             name="newTaiKhoan"
                             onChange={formik.handleChange}
                             value={formik.values.newTaiKhoan}
                           />
                         </Form.Item>
-                        <Form.Item label="Họ tên *">
+                        <Form.Item
+                          label="Họ tên"
+                          required
+                          validateStatus={formik.errors.hoTen ? "error" : ""}
+                          help={formik.errors.hoTen}
+                        >
                           <Input
                             name="hoTen"
                             onChange={formik.handleChange}
@@ -348,14 +366,24 @@ export default function Profile() {
                         </Form.Item>
                       </div>
                       <div className="w-full lg:w-1/2">
-                        <Form.Item label="Email *">
+                        <Form.Item
+                          label="Email"
+                          required
+                          validateStatus={formik.errors.email ? "error" : ""}
+                          help={formik.errors.email}
+                        >
                           <Input
                             name="newEmail"
                             onChange={formik.handleChange}
                             value={formik.values.newEmail}
                           />
                         </Form.Item>
-                        <Form.Item label="Số điện thoại *">
+                        <Form.Item
+                          label="Số điện thoại"
+                          required
+                          validateStatus={formik.errors.soDT ? "error" : ""}
+                          help={formik.errors.soDT}
+                        >
                           <Input
                             name="soDT"
                             onChange={formik.handleChange}

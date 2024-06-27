@@ -13,6 +13,7 @@ import { Button, DatePicker, Form, Input, InputNumber, Switch } from "antd";
 import { useFormik } from "formik";
 import moment from "moment";
 import { ToastContainer, toast } from "react-toastify";
+import * as Yup from "yup";
 
 function EditUser(props) {
   const { detailUser } = useSelector((state) => state.QuanLyNguoiDungReducer);
@@ -28,6 +29,7 @@ function EditUser(props) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
+      newEmail: detailUser.email,
       newTaiKhoan: detailUser.taiKhoan,
       taiKhoan: detailUser.taiKhoan,
       email: detailUser.email,
@@ -36,6 +38,9 @@ function EditUser(props) {
       maLoaiNguoiDung: detailUser.maLoaiNguoiDung,
       hoTen: detailUser.hoTen,
     },
+    validationSchema: Yup.object({
+      hoTen: Yup.string().required("Họ tên là bắt buộc"),
+    }),
     onSubmit: async (values) => {
       try {
         console.log(values);
@@ -77,7 +82,12 @@ function EditUser(props) {
                 disabled
               />
             </Form.Item>
-            <Form.Item label="Họ tên">
+            <Form.Item
+              label="Họ tên"
+              required
+              validateStatus={formik.errors.hoTen ? "error" : ""}
+              help={formik.errors.hoTen}
+            >
               <Input
                 name="hoTen"
                 onChange={formik.handleChange}
@@ -87,9 +97,9 @@ function EditUser(props) {
 
             <Form.Item label="email">
               <Input
-                name="email"
+                name="newEmail"
                 onChange={formik.handleChange}
-                value={formik.values.email}
+                value={formik.values.newEmail}
               />
             </Form.Item>
             <Form.Item label="Lịch sử đặt vé">

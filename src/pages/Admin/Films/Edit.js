@@ -174,10 +174,10 @@ function Edit(props) {
         <div className="flex flex-wrap">
           <div className="w-full lg:w-1/2">
             <Form.Item
-              label="Tên phim *"
-              validateStatus={
-                formik.errors.tenPhim && formik.touched.tenPhim ? "error" : ""
-              }
+              label="Tên phim"
+              required
+              validateStatus={formik.errors.tenPhim ? "error" : ""}
+              help={formik.errors.tenPhim}
             >
               <Input
                 name="tenPhim"
@@ -186,10 +186,10 @@ function Edit(props) {
               />
             </Form.Item>
             <Form.Item
-              label="Trailer *"
-              validateStatus={
-                formik.errors.trailer && formik.touched.trailer ? "error" : ""
-              }
+              label="Trailer"
+              required
+              validateStatus={formik.errors.trailer ? "error" : ""}
+              help={formik.errors.trailer}
             >
               <Input
                 name="trailer"
@@ -198,10 +198,10 @@ function Edit(props) {
               />
             </Form.Item>
             <Form.Item
-              label="Mô tả *"
-              validateStatus={
-                formik.errors.moTa && formik.touched.moTa ? "error" : ""
-              }
+              label="Mô tả"
+              required
+              validateStatus={formik.errors.moTa ? "error" : ""}
+              help={formik.errors.moTa}
             >
               <TextArea
                 name="moTa"
@@ -211,10 +211,10 @@ function Edit(props) {
               />
             </Form.Item>
             <Form.Item
-              label="Hình ảnh *"
-              validateStatus={
-                formik.errors.hinhAnh && formik.touched.hinhAnh ? "error" : ""
-              }
+              label="Hình ảnh"
+              required
+              validateStatus={formik.errors.hinhAnh ? "error" : ""}
+              help={formik.errors.hinhAnh}
             >
               <Input
                 name="hinhAnh"
@@ -223,10 +223,10 @@ function Edit(props) {
               />
             </Form.Item>
             <Form.Item
-              label="Poster *"
-              validateStatus={
-                formik.errors.poster && formik.touched.poster ? "error" : ""
-              }
+              label="Poster"
+              required
+              validateStatus={formik.errors.poster ? "error" : ""}
+              help={formik.errors.poster}
             >
               <Input
                 name="poster"
@@ -235,10 +235,10 @@ function Edit(props) {
               />
             </Form.Item>
             <Form.Item
-              label="Đạo diễn *"
-              validateStatus={
-                formik.errors.daoDien && formik.touched.daoDien ? "error" : ""
-              }
+              label="Đạo diễn"
+              required
+              validateStatus={formik.errors.daoDien ? "error" : ""}
+              help={formik.errors.daoDien}
             >
               <Input
                 name="daoDien"
@@ -247,10 +247,10 @@ function Edit(props) {
               />
             </Form.Item>
             <Form.Item
-              label="Quốc gia *"
-              validateStatus={
-                formik.errors.quocGia && formik.touched.quocGia ? "error" : ""
-              }
+              label="Quốc gia"
+              required
+              validateStatus={formik.errors.quocGia ? "error" : ""}
+              help={formik.errors.quocGia}
             >
               <Input
                 name="quocGia"
@@ -310,12 +310,10 @@ function Edit(props) {
               ))}
             </Flex>
             <Form.Item
-              label="Thời lượng(phút) *"
-              validateStatus={
-                formik.errors.thoiLuong && formik.touched.thoiLuong
-                  ? "error"
-                  : ""
-              }
+              label="Thời lượng(phút)"
+              required
+              validateStatus={formik.errors.thoiLuong ? "error" : ""}
+              help={formik.errors.thoiLuong}
             >
               <InputNumber
                 min={1}
@@ -327,12 +325,10 @@ function Edit(props) {
               />
             </Form.Item>
             <Form.Item
-              label="Ngày khởi chiếu *"
-              validateStatus={
-                formik.errors.ngayKhoiChieu && formik.touched.ngayKhoiChieu
-                  ? "error"
-                  : ""
-              }
+              label="Ngày khởi chiếu"
+              required
+              validateStatus={formik.errors.ngayKhoiChieu ? "error" : ""}
+              help={formik.errors.ngayKhoiChieu}
             >
               <DatePicker
                 format={"DD/MM/YYYY"}
@@ -352,10 +348,10 @@ function Edit(props) {
               />
             </Form.Item>
             <Form.Item
-              label="Đánh giá *"
-              validateStatus={
-                formik.errors.danhGia && formik.touched.danhGia ? "error" : ""
-              }
+              label="Đánh giá"
+              required
+              validateStatus={formik.errors.danhGia ? "error" : ""}
+              help={formik.errors.danhGia}
             >
               <InputNumber
                 min={1}

@@ -50,27 +50,6 @@ function AddNew(props) {
     "Tâm lý, tình cảm",
   ];
 
-  const validationSchema = Yup.object({
-    tenPhim: Yup.string().required("Tên phim là bắt buộc"),
-    trailer: Yup.string()
-      .url("URL không hợp lệ")
-      .required("Trailer là bắt buộc"),
-    moTa: Yup.string().required("Mô tả là bắt buộc"),
-    ngayKhoiChieu: Yup.string().required("Ngày khởi chiếu là bắt buộc"),
-    danhGia: Yup.number()
-      .min(1, "Đánh giá phải lớn hơn 0")
-      .max(10, "Đánh giá phải nhỏ hơn 10")
-      .required("Đánh giá là bắt buộc"),
-    hinhAnh: Yup.string().required("Hình ảnh là bắt buộc"),
-    poster: Yup.string().required("poster là bắt buộc"),
-
-    daoDien: Yup.string().required("Đạo diễn là bắt buộc"),
-    quocGia: Yup.string().required("Quốc gia là bắt buộc"),
-
-    thoiLuong: Yup.number()
-      .min(1, "Thời lượng phải lớn hơn 0")
-      .required("Thời lượng là bắt buộc"),
-  });
   const [selectedTags, setSelectedTags] = useState([]);
   const handleChange = (tag, checked) => {
     const nextSelectedTags = checked
@@ -125,7 +104,28 @@ function AddNew(props) {
       theLoai: [],
       quocGia: "",
     },
-    validationSchema: validationSchema,
+    validationSchema: Yup.object({
+      tenPhim: Yup.string().required("Tên phim là bắt buộc"),
+      trailer: Yup.string()
+        .url("URL không hợp lệ")
+        .required("Trailer là bắt buộc"),
+      moTa: Yup.string().required("Mô tả là bắt buộc"),
+      ngayKhoiChieu: Yup.string().required("Ngày khởi chiếu là bắt buộc"),
+      danhGia: Yup.number()
+        .min(1, "Đánh giá phải lớn hơn 0")
+        .max(10, "Đánh giá phải nhỏ hơn 10")
+        .required("Đánh giá là bắt buộc"),
+      hinhAnh: Yup.string().required("Hình ảnh là bắt buộc"),
+      quocGia: Yup.string().required("Quốc gia là bắt buộc"),
+
+      poster: Yup.string().required("Poster là bắt buộc"),
+
+      daoDien: Yup.string().required("Đạo diễn là bắt buộc"),
+      thoiLuong: Yup.number()
+        .min(1, "Thời lượng phải lớn hơn 0")
+        .required("Thời lượng là bắt buộc"),
+    }),
+
     onSubmit: async (values) => {
       try {
         console.log(values);
@@ -166,59 +166,59 @@ function AddNew(props) {
         <div className="flex flex-wrap">
           <div className="w-full lg:w-1/2">
             <Form.Item
-              label="Tên phim *"
-              validateStatus={
-                formik.errors.tenPhim && formik.touched.tenPhim ? "error" : ""
-              }
+              label="Tên phim"
+              required
+              validateStatus={formik.errors.tenPhim ? "error" : ""}
+              help={formik.errors.tenPhim}
             >
               <Input name="tenPhim" onChange={formik.handleChange} />
             </Form.Item>
             <Form.Item
-              label="Trailer *"
-              validateStatus={
-                formik.errors.trailer && formik.touched.trailer ? "error" : ""
-              }
+              label="Trailer"
+              required
+              validateStatus={formik.errors.trailer ? "error" : ""}
+              help={formik.errors.trailer}
             >
               <Input name="trailer" onChange={formik.handleChange} />
             </Form.Item>
             <Form.Item
-              label="Mô tả *"
-              validateStatus={
-                formik.errors.moTa && formik.touched.moTa ? "error" : ""
-              }
+              label="Mô tả"
+              required
+              validateStatus={formik.errors.moTa ? "error" : ""}
+              help={formik.errors.moTa}
             >
               <TextArea name="moTa" rows={4} onChange={formik.handleChange} />
             </Form.Item>
             <Form.Item
-              label="Hình ảnh *"
-              validateStatus={
-                formik.errors.hinhAnh && formik.touched.hinhAnh ? "error" : ""
-              }
+              label="Hình ảnh"
+              required
+              validateStatus={formik.errors.hinhAnh ? "error" : ""}
+              help={formik.errors.hinhAnh}
             >
               <Input name="hinhAnh" onChange={formik.handleChange} />
             </Form.Item>
 
             <Form.Item
-              label="Poster *"
-              validateStatus={
-                formik.errors.poster && formik.touched.poster ? "error" : ""
-              }
+              label="Poster"
+              required
+              validateStatus={formik.errors.poster ? "error" : ""}
+              help={formik.errors.poster}
             >
               <Input name="poster" onChange={formik.handleChange} />
             </Form.Item>
             <Form.Item
-              label="Quốc gia *"
-              validateStatus={
-                formik.errors.quocGia && formik.touched.quocGia ? "error" : ""
-              }
+              label="Quốc gia"
+              required
+              validateStatus={formik.errors.quocGia ? "error" : ""}
+              help={formik.errors.quocGia}
             >
               <Input name="quocGia" onChange={formik.handleChange} />
             </Form.Item>
             <Form.Item
-              label="Đạo diễn *"
-              validateStatus={
-                formik.errors.daoDien && formik.touched.daoDien ? "error" : ""
-              }
+              label="Đạo diễn"
+              required
+              validateStatus={formik.errors.daoDien ? "error" : ""}
+              help={formik.errors.daoDien}
             >
               <Input name="daoDien" onChange={formik.handleChange} />
             </Form.Item>
@@ -273,12 +273,10 @@ function AddNew(props) {
               ))}
             </Flex>
             <Form.Item
-              label="Thời lượng(phút) *"
-              validateStatus={
-                formik.errors.thoiLuong && formik.touched.thoiLuong
-                  ? "error"
-                  : ""
-              }
+              label="Thời lượng(phút)"
+              required
+              validateStatus={formik.errors.thoiLuong ? "error" : ""}
+              help={formik.errors.thoiLuong}
             >
               <InputNumber
                 min={1}
@@ -289,12 +287,10 @@ function AddNew(props) {
               />
             </Form.Item>
             <Form.Item
-              label="Ngày khởi chiếu *"
-              validateStatus={
-                formik.errors.ngayKhoiChieu && formik.touched.ngayKhoiChieu
-                  ? "error"
-                  : ""
-              }
+              label="Ngày khởi chiếu"
+              required
+              validateStatus={formik.errors.ngayKhoiChieu ? "error" : ""}
+              help={formik.errors.ngayKhoiChieu}
             >
               <DatePicker
                 format={"DD/MM/YYYY"}
@@ -308,10 +304,10 @@ function AddNew(props) {
               <Switch onChange={handleChangeSwitch("hot")} />
             </Form.Item>
             <Form.Item
-              label="Đánh giá *"
-              validateStatus={
-                formik.errors.danhGia && formik.touched.danhGia ? "error" : ""
-              }
+              label="Đánh giá"
+              required
+              validateStatus={formik.errors.danhGia ? "error" : ""}
+              help={formik.errors.danhGia}
             >
               <InputNumber
                 min={1}

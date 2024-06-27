@@ -75,31 +75,24 @@ function AddNewHeThongRap(props) {
           <div className="flex flex-wrap justify-center">
             <div className="w-full lg:w-1/2">
               <Form.Item
-                label="Tên hệ thống rạp *"
-                validateStatus={
-                  formik.errors.tenHeThongRap && formik.touched.tenHeThongRap
-                    ? "error"
-                    : ""
-                }
+                label="Tên hệ thống rạp"
+                validateStatus={formik.errors.tenHeThongRap ? "error" : ""}
+                help={formik.errors.tenHeThongRap}
               >
                 <Input name="tenHeThongRap" onChange={formik.handleChange} />
               </Form.Item>
               <Form.Item
-                label="Mã hệ thống rạp *"
-                validateStatus={
-                  formik.errors.maHeThongRap && formik.touched.maHeThongRap
-                    ? "error"
-                    : ""
-                }
+                label="Mã hệ thống rạp"
+                validateStatus={formik.errors.maHeThongRap ? "error" : ""}
+                help={formik.errors.maHeThongRap}
               >
                 <Input name="maHeThongRap" onChange={formik.handleChange} />
               </Form.Item>
 
               <Form.Item
-                label="Hình ảnh *"
-                validateStatus={
-                  formik.errors.logo && formik.touched.logo ? "error" : ""
-                }
+                label="Hình ảnh"
+                validateStatus={formik.errors.logo ? "error" : ""}
+                help={formik.errors.logo}
               >
                 <Input name="logo" onChange={formik.handleChange} />
               </Form.Item>
