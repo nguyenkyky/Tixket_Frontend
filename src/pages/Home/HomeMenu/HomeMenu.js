@@ -113,6 +113,24 @@ const HomeMenu = () => {
   };
 
   useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const firstContentHolder = document.querySelector(
+        ".render-tab .ant-tabs .ant-tabs-content-holder .ant-tabs-nav"
+      );
+      if (firstContentHolder) {
+        firstContentHolder.classList.add("first-content-holder");
+        observer.disconnect(); // Ngừng quan sát sau khi tìm thấy phần tử
+      }
+    });
+
+    // Bắt đầu quan sát các thay đổi trong toàn bộ cây DOM
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Ngừng quan sát khi component bị unmount
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const fetchShowtimes = async () => {
       dispatch(layDanhSachHeThongRapAction());
     };

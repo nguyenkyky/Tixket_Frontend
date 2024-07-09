@@ -29,7 +29,7 @@ function RenderKetQuaDatVe() {
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
 
   const { thongTinVeVuaDat } = useSelector((state) => state.QuanLyDatVeReducer);
-  console.log("thongtinvevuadat", thongTinVeVuaDat);
+  // console.log("thongtinvevuadat", thongTinVeVuaDat);
 
   // const { orderId } = useSelector((state) => state.QuanLyDatVeReducer);
   useEffect(() => {

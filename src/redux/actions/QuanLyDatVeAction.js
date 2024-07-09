@@ -31,7 +31,7 @@ export const kiemTraDatVeAction = (thongTinDatVe = new DatVe()) => {
       try {
         const result = await quanLyDatVeService.kiemTraDatVe(thongTinDatVe);
         if (result.status === 200) {
-          console.log("result", result);
+          // console.log("result", result);
           resolve(result);
         }
       } catch (errors) {
@@ -113,9 +113,9 @@ export const createPaymentLinkAction = (
       });
 
       localStorage.setItem("THONG_TIN_DAT_VE", JSON.stringify(thongTinDatVe));
-      window.location.href = response.data.checkoutUrl;
+      // window.location.href = response.data.checkoutUrl;
 
-      // window.location.href = `http://localhost:3000/checkout/success/${id}?payment=success`;
+      window.location.href = `http://localhost:3000/checkout/success/${id}?payment=success`;
       dispatch({ type: "HIDE_LOADING" });
     } catch (e) {
       dispatch({ type: "HIDE_LOADING" });

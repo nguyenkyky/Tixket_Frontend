@@ -141,7 +141,7 @@ function RenderCheckout(props) {
         },
         []
       );
-      console.log(arrGheKhachDangDat);
+      // console.log(arrGheKhachDangDat);
 
       dispatch({
         type: "DAT_GHE",
@@ -423,7 +423,7 @@ function RenderCheckout(props) {
                     tongTien = tongTien * 0.85;
                   }
 
-                  console.log("tong tien", tongTien);
+                  // console.log("tong tien", tongTien);
                   const thongTinDatVe = new DatVe();
                   thongTinDatVe.orderId = orderId;
                   thongTinDatVe.maLichChieu = id;

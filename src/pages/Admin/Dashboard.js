@@ -50,6 +50,7 @@ function Dashboard(props) {
   const { thongKe7Ngay } = useSelector((state) => state.ThongKeReducer);
 
   // console.log(thongKeTheoThang);
+  console.log(thongKe7Ngay);
   const { arrFilmDefault } = useSelector((state) => state.QuanLyPhimReducer);
 
   const danhSachRap = [
