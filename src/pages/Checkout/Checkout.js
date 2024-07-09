@@ -309,7 +309,7 @@ function RenderCheckout(props) {
                   </td>
                   <td>
                     <button className="ghe gheDaDat ml-20 text-center">
-                      00
+                      X
                     </button>
                   </td>
                   <td>

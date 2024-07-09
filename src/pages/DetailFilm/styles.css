@@ -95,3 +95,13 @@ progress::-webkit-progress-value {
   );
   pointer-events: none; /* Ensure the gradient overlay does not interfere with interactions */
 }
+
+
+.blur-effect .ant-tabs .ant-tabs-content-holder .ant-tabs-nav {
+  max-height: 500px;
+  
+}
+
+.blur-effect .ant-tabs .ant-tabs-content-holder .ant-tabs-top .ant-tabs-nav {
+  overflow: hidden;
+}

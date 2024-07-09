@@ -34,6 +34,9 @@ function RecoverPassword(props) {
         if (e.response.status === 404) {
           toast.error("Tài khoản không tồn tại", { position: "top-center" });
         }
+        if (e.response.status === 403) {
+          toast.error("Tài khoản chưa đăng ký email, không thể lấy lại", { position: "top-center" });
+        }
       }
     },
   });

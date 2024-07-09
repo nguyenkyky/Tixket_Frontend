@@ -168,6 +168,7 @@ const AdminTemplate = ({ childComponent }) => {
         }}
       >
         <Sider
+        
           collapsible
           collapsed={collapsed}
           onCollapse={(value) => setCollapsed(value)}

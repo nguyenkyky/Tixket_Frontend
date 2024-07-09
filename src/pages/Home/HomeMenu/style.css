@@ -47,9 +47,13 @@
   }
 
   
-  .first-content-holder {
+  .render-tab .ant-tabs .ant-tabs-content-holder .ant-tabs-nav {
     max-height: 700px;
-    overflow-y: auto;
+    
+  }
+
+  .render-tab .ant-tabs .ant-tabs-content-holder .ant-tabs-top .ant-tabs-nav {
+    overflow: hidden;
   }
 
   .ant-tabs .ant-tabs-content-holder .ant-tabs-content-holder .ant-tabs-content-holder {

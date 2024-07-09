@@ -440,8 +440,8 @@ function Dashboard(props) {
       <div ref={chartRef} className="mt-4 flex justify-between">
         <div className="flex justify-center flex-col items-center">
           <LineChart
-            width={600}
-            height={600}
+            width={580}
+            height={570}
             series={[
               {
                 data: revenueDataAmount["BHD Star Cineplex"],
@@ -482,8 +482,8 @@ function Dashboard(props) {
         </div>
         <div className="flex justify-center flex-col items-center">
           <LineChart
-            width={600}
-            height={600}
+            width={500}
+            height={500}
             series={[
               {
                 data: revenueDataTickets["BHD Star Cineplex"],
